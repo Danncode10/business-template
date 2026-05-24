@@ -95,13 +95,14 @@
 **Est. time:** 1-2 weeks  
 **Blockers:** None
 
-- [x] **Gmail SMTP Setup** ✅
+- [x] **Gmail SMTP Setup** ✅ (2026-05-24)
   - [x] Enable 2-Step Verification on Google Account
   - [x] Create Gmail App Password
   - [x] Configure Supabase SMTP (Host, Port, Username, Password)
   - [x] Enable email templates in Supabase (Reset Password, Confirm Sign Up)
-  - [x] Test email delivery via Supabase
-  - [x] Document setup steps in TEST.md (see README.md line 374)
+  - [x] Test email delivery via Supabase (verified: signup → login → email)
+  - [x] Document setup steps in TEST.md
+  - [x] Sender name: "Dann"
 
 - [ ] **Magic Link Auth Flow**
   - [ ] Create `/auth/request-magic-link` API route
@@ -115,6 +116,7 @@
   - [ ] Test session persistence across pages
   - [ ] Add logout functionality
   - [ ] Test: Session expires → redirects to login
+  - [ ] Set `app.id` context for RLS enforcement
 
 - [ ] **Type Safety for Auth**
   - [ ] Extend `src/types/supabase.ts` with `auth_users` type
@@ -126,6 +128,7 @@
 - [ ] User can set password once, change anytime
 - [ ] Sessions persist correctly
 - [ ] Forgot password works end-to-end
+- [ ] RLS context set via middleware for org isolation
 
 ---
 
@@ -267,11 +270,46 @@
 
 ---
 
-## **PHASE 5: Admin Dashboard Pages** (CMS Foundation)
+## **PHASE 5: Landing Page & Admin Dashboard** (UI & CMS Foundation)
 
-**Goal:** Editable landing page sections  
-**Est. time:** 2 weeks  
+**Goal:** Rebrand landing page to Dann Digital + build professional admin dashboard  
+**Est. time:** 3 weeks  
 **Blockers:** Phase 1, 4 complete
+
+- [ ] **Landing Page Customization (Dann Digital Brand)**
+  - [ ] Update hero section: "Help Small Businesses Go Digital" headline
+  - [ ] Replace DannFlow references with Dann Digital
+  - [ ] Update features section: Show business problem → solution
+  - [ ] Update CTA: "Start Your Digital Journey" (instead of DannFlow signup)
+  - [ ] Update footer: Company info for Dann Digital
+  - [ ] Maintain: Dark-premium theme, glass navbar, magnetic CTAs (from [[landing-design-system]])
+  - [ ] Test: Mobile responsive, Safari + Chrome, <10% CPU idle
+
+- [ ] **Dashboard Layout & Navigation** (Using attyjuan-sched format)
+  - [ ] Create layout structure:
+    - [ ] Fixed left sidebar (collapsible on mobile)
+    - [ ] Main content area with breadcrumbs
+    - [ ] Top bar with: user profile, org switcher, notifications
+  - [ ] Sidebar navigation: Pages, Team, Settings, Analytics
+  - [ ] Profile dropdown: Organization, Account Settings, Logout
+  - [ ] RLS context: Set `app.id` and `organization_id` for dashboard queries
+  - [ ] Test: Switching orgs → data updates correctly
+
+- [ ] **Dashboard Components (Premium Style)**
+  - [ ] Create dashboard card component (double-bezel, glass effect)
+  - [ ] Create data table component (sortable columns, filters)
+  - [ ] Create form components (inputs, selects, file upload)
+  - [ ] Create modal dialogs (create, edit, delete)
+  - [ ] Dark theme: Match landing page tokens (OLED black, purple accents)
+  - [ ] Test: All components responsive (375px—2560px)
+
+- [ ] **Dashboard Pages**
+  - [ ] `/dashboard` → Overview (stats, recent activity)
+  - [ ] `/dashboard/pages` → List all landing pages
+  - [ ] `/dashboard/team` → Manage team members, roles
+  - [ ] `/dashboard/settings` → Organization branding, SMTP, domain
+  - [ ] `/dashboard/leads` → Lead inbox + CRM
+  - [ ] `/dashboard/analytics` → Traffic, conversions (placeholder for Phase 6+)
 
 - [ ] **Pages & Sections Schema**
   - [ ] Verify `pages` table: id, org_id, slug, title, created_at
@@ -281,21 +319,23 @@
 
 - [ ] **Admin Page Editor**
   - [ ] Create `/admin/pages` listing all pages (hero, about, services, etc.)
-  - [ ] Create `/admin/pages/[slug]/edit` editor
+  - [ ] Create `/admin/pages/[slug]/edit` editor (drag-to-reorder sections)
   - [ ] For each section: show form with fields (title, description, CTA, image)
   - [ ] Save to Supabase on submit
+  - [ ] Live preview: Side-by-side editor + preview
   - [ ] Test: Edit hero title → appears on live site
 
 - [ ] **Page Sections Display**
   - [ ] Create `<PageSection>` component (reusable for all section types)
-  - [ ] Create hero, about, services, contact components
+  - [ ] Create hero, about, services, contact, testimonial components
   - [ ] Homepage `/` displays sections from `pages.home`
   - [ ] Test: Live edit hero → homepage updates
 
-- [ ] **Image Upload**
-  - [ ] Integrate Cloudinary or R2 (or simple Supabase storage)
+- [ ] **Image Upload & Optimization**
+  - [ ] Integrate Cloudinary or Supabase storage
   - [ ] Admin can upload image for each section
   - [ ] Store URL in `sections.image_url`
+  - [ ] Auto-optimize: Convert to WebP, responsive sizes
   - [ ] Display optimized images on frontend
 
 - [ ] **Form Submissions (Contact, Lead Capture)**
@@ -306,10 +346,17 @@
   - [ ] Test: Submit contact form → appears in admin inbox
 
 **Acceptance Criteria:**
+- [ ] Landing page rebranded to "Dann Digital" (headline, CTA, footer updated)
+- [ ] Landing page maintains dark-premium theme (OLED black, purple, glass nav)
+- [ ] Dashboard layout: sidebar + main content + top bar (responsive, mobile-friendly)
+- [ ] Dashboard pages: Overview, Pages, Team, Settings, Leads load correctly
+- [ ] Org switcher in dashboard → data updates for correct org
 - [ ] Admin can edit hero, about, services pages
 - [ ] Changes appear live within 2-3 seconds
-- [ ] Team members (employee role) can edit pages (if assigned)
+- [ ] Team members can edit pages (if assigned role)
 - [ ] Contact forms submit → appear in lead inbox
+- [ ] All dashboard components styled consistently (dark theme, glass effects)
+- [ ] Mobile responsive: 375px → 2560px
 
 ---
 
