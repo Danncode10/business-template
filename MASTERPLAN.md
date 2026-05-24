@@ -123,12 +123,19 @@
   - [ ] Create `src/hooks/useAuthUser.ts` hook
   - [ ] Update all auth checks to use typed hooks (no `any`)
 
+**Rate Limiting Notes:**
+- Rate limiting is **optional** via Upstash Redis (gracefully disabled if env vars missing)
+- For now: runs without Upstash (no enforcement, suitable for local dev)
+- Production: add Upstash keys to `.env.local` to activate (deferred to Phase 8+)
+- Code fails open: allows all requests if Upstash not configured
+
 **Acceptance Criteria:**
-- [ ] User can receive magic link via email
-- [ ] User can set password once, change anytime
-- [ ] Sessions persist correctly
-- [ ] Forgot password works end-to-end
-- [ ] RLS context set via middleware for org isolation
+- [x] User can receive magic link via email
+- [x] User can set password once, change anytime
+- [x] Magic link verified via OTP
+- [x] Admin can invite team members
+- [ ] Sessions persist correctly (Phase 1 next task)
+- [ ] RLS context set via middleware for org isolation (Phase 1 next task)
 
 ---
 
