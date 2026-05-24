@@ -5,8 +5,6 @@ import { Mail, Loader2, ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function MagicLinkLoginPage() {
@@ -62,21 +60,20 @@ export default function MagicLinkLoginPage() {
             <p className="text-xs text-muted-foreground">
               The link expires in 24 hours.
             </p>
-            <Button
-              variant="outline"
-              className="w-full"
+            <button
+              className="w-full px-4 py-2 border border-border rounded-lg hover:bg-card transition-colors"
               onClick={() => {
                 setEmail('');
                 setSent(false);
               }}
             >
               Send Another Link
-            </Button>
-            <Link href="/login">
-              <Button variant="ghost" className="w-full">
-                <ArrowLeft className="w-4 h-4 mr-2" />
+            </button>
+            <Link href="/login" className="block">
+              <button className="w-full px-4 py-2 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2">
+                <ArrowLeft className="w-4 h-4" />
                 Back to Login
-              </Button>
+              </button>
             </Link>
           </CardContent>
         </Card>
@@ -95,39 +92,40 @@ export default function MagicLinkLoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2">Email</label>
-              <Input
+              <input
                 type="email"
                 placeholder="your@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={loading}
+                className="w-full px-3 py-2 border border-border rounded-lg bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
 
-            <Button
+            <button
               type="submit"
-              className="w-full"
               disabled={loading || !email}
+              className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                   Sending...
                 </>
               ) : (
                 <>
-                  <Mail className="mr-2 h-4 w-4" />
+                  <Mail className="h-4 w-4" />
                   Send Magic Link
                 </>
               )}
-            </Button>
+            </button>
 
-            <Link href="/login">
-              <Button variant="ghost" className="w-full">
-                <ArrowLeft className="w-4 h-4 mr-2" />
+            <Link href="/login" className="block">
+              <button className="w-full px-4 py-2 text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2">
+                <ArrowLeft className="w-4 h-4" />
                 Back to Login
-              </Button>
+              </button>
             </Link>
           </form>
         </CardContent>

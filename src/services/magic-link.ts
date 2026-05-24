@@ -16,13 +16,14 @@ export async function requestMagicLink(email: string, redirectUrl: string) {
   return { success: true, message: 'Magic link sent to email' };
 }
 
-export async function verifyMagicLink(token: string) {
+export async function verifyMagicLink(token: string, email?: string) {
   const supabase = await createClient();
 
   const { data, error } = await supabase.auth.verifyOtp({
     token,
     type: 'recovery',
-  });
+    email: email || undefined,
+  } as any);
 
   if (error) throw error;
   return data;
