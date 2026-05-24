@@ -14,16 +14,16 @@ export function ContactBlock() {
       opacity: 1,
       transition: { staggerChildren: 0.06, delayChildren: 0.1 },
     },
-  };
+  } as const;
 
   const itemVariants = {
     hidden: { opacity: 0, y: 16 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as any },
     },
-  };
+  } as const;
 
   const contactInfo = [
     {
@@ -59,7 +59,7 @@ export function ContactBlock() {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] as any }}
           viewport={{ once: true, margin: '-60px' }}
           className="text-center mb-16"
         >
@@ -122,7 +122,7 @@ export function ContactBlock() {
                       width="100%"
                       height="100%"
                       style={{ border: 0 }}
-                      allowFullScreen=""
+                      allowFullScreen
                       loading="lazy"
                       referrerPolicy="no-referrer-when-downgrade"
                       className="rounded-[calc(1.5rem-0.375rem)]"

@@ -72,7 +72,7 @@ export function Testimonials() {
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] as any }}
           className="text-center mb-16"
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.02] px-3 py-1 text-[10px] font-medium text-foreground/70 uppercase tracking-[0.2em]">
@@ -98,7 +98,7 @@ export function Testimonials() {
               transition={{
                 duration: 0.6,
                 delay: i * 0.08,
-                ease: [0.16, 1, 0.3, 1],
+                ease: [0.16, 1, 0.3, 1] as any,
               }}
               className={`relative overflow-hidden rounded-2xl border border-white/[0.06] bg-card p-6 flex flex-col gap-4 ${
                 i === 2 ? "md:col-span-2 lg:col-span-1" : ""

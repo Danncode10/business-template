@@ -38,7 +38,7 @@ export function Services() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as any },
     },
   };
 
@@ -52,7 +52,7 @@ export function Services() {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] as any }}
           viewport={{ once: true, margin: '-60px' }}
           className="text-center mb-16"
         >
@@ -125,14 +125,14 @@ export function Services() {
                       <motion.a
                         href="#"
                         whileHover={{ x: 4 }}
-                        transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+                        transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] as any }}
                         className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
                       >
                         Learn more
                         <motion.span
                           initial={{ x: 0 }}
                           whileHover={{ x: 4 }}
-                          transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+                          transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] as any }}
                         >
                           →
                         </motion.span>

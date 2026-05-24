@@ -58,7 +58,7 @@ export function Navbar({ user }: { user: User | null }) {
         <motion.div
           initial={{ y: -16, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] as any }}
           style={{ transform: "translateZ(0)" }}
           className={`pointer-events-auto mt-4 flex items-center gap-1 rounded-full border border-white/[0.08] bg-[#0A0A12]/95 px-1.5 py-1.5 transition-shadow duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] inner-highlight ${
             scrolled
@@ -208,7 +208,7 @@ export function Navbar({ user }: { user: User | null }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+            transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] as any }}
             className="md:hidden fixed inset-0 z-40 bg-background/95 pt-24 px-6"
           >
             <nav className="flex flex-col gap-1">
@@ -223,7 +223,7 @@ export function Navbar({ user }: { user: User | null }) {
                   transition={{
                     duration: 0.35,
                     delay: 0.05 + i * 0.04,
-                    ease: [0.16, 1, 0.3, 1],
+                    ease: [0.16, 1, 0.3, 1] as any,
                   }}
                   className="flex items-center justify-between px-5 py-5 rounded-2xl border border-white/[0.04] hover:border-white/10 hover:bg-white/[0.02] transition-colors"
                 >
@@ -237,7 +237,7 @@ export function Navbar({ user }: { user: User | null }) {
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.35, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.35, delay: 0.2, ease: [0.16, 1, 0.3, 1] as any }}
                 className="mt-6 flex flex-col gap-3"
               >
                 {user ? (

@@ -52,7 +52,7 @@ export function HowItWorks() {
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] as any }}
           className="text-center mb-24"
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.02] px-3 py-1 text-[10px] font-medium text-foreground/70 uppercase tracking-[0.2em]">
@@ -76,7 +76,7 @@ export function HowItWorks() {
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{
                   duration: 0.75,
-                  ease: [0.34, 1.3, 0.64, 1],
+                  ease: [0.34, 1.3, 0.64, 1] as any,
                 }}
                 className={`relative grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center ${
                   !isEven ? "lg:[&>*:first-child]:order-2" : ""

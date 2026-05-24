@@ -77,7 +77,7 @@ export function Pricing({ isAuthed }: PricingProps) {
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] as any }}
           className="text-center mb-20"
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.02] px-3 py-1 text-[10px] font-medium text-foreground/70 uppercase tracking-[0.2em]">
@@ -102,7 +102,7 @@ export function Pricing({ isAuthed }: PricingProps) {
               transition={{
                 duration: 0.7,
                 delay: i * 0.1,
-                ease: [0.34, 1.35, 0.64, 1],
+                ease: [0.34, 1.35, 0.64, 1] as any,
               }}
               style={{ willChange: "transform" }}
               className="relative group transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-1"

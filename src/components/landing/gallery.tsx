@@ -30,7 +30,7 @@ export function Gallery() {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as any },
     },
   };
 
@@ -44,7 +44,7 @@ export function Gallery() {
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] as any }}
           viewport={{ once: true, margin: '-60px' }}
           className="text-center mb-16"
         >
@@ -74,7 +74,7 @@ export function Gallery() {
               onMouseEnter={() => setHoveredId(item.id)}
               onMouseLeave={() => setHoveredId(null)}
               whileHover={{ scale: 1.04, y: -8 }}
-              transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+              transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] as any }}
               className={`${item.cols} group relative cursor-pointer`}
             >
               {/* Double-bezel card: outer shell */}
@@ -117,7 +117,7 @@ export function Gallery() {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: hoveredId === item.id ? 1 : 0 }}
-                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] as any }}
                     className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-transparent/30 flex flex-col items-end justify-end p-6 z-20 backdrop-blur-sm"
                   >
                     <motion.div
@@ -127,7 +127,7 @@ export function Gallery() {
                         opacity: hoveredId === item.id ? 1 : 0,
                         scale: hoveredId === item.id ? 1 : 0.9,
                       }}
-                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
+                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] as any, delay: 0.05 }}
                     >
                       <motion.span
                         className="inline-block text-xs font-bold text-primary uppercase tracking-[0.15em] mb-3"

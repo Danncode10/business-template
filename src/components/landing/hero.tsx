@@ -130,7 +130,7 @@ export function Hero({ isAuthed }: HeroProps) {
           transition={{
             duration: 0.7,
             delay: typingDone ? 0 : 0,
-            ease: [0.16, 1, 0.3, 1],
+            ease: [0.16, 1, 0.3, 1] as any,
           }}
           className="group inline-flex items-center gap-2 text-[13px] text-muted-foreground hover:text-foreground transition-colors"
         >
@@ -164,7 +164,7 @@ export function Hero({ isAuthed }: HeroProps) {
           transition={{
             duration: 0.8,
             delay: typingDone ? 0.05 : 0,
-            ease: [0.16, 1, 0.3, 1],
+            ease: [0.16, 1, 0.3, 1] as any,
           }}
           className="mt-8 max-w-xl text-[17px] text-muted-foreground leading-relaxed"
         >
@@ -184,7 +184,7 @@ export function Hero({ isAuthed }: HeroProps) {
           transition={{
             duration: 0.8,
             delay: typingDone ? 0.18 : 0,
-            ease: [0.16, 1, 0.3, 1],
+            ease: [0.16, 1, 0.3, 1] as any,
           }}
           className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-7"
         >
@@ -219,7 +219,7 @@ export function Hero({ isAuthed }: HeroProps) {
           transition={{
             duration: 0.8,
             delay: typingDone ? 0.32 : 0,
-            ease: [0.16, 1, 0.3, 1],
+            ease: [0.16, 1, 0.3, 1] as any,
           }}
           className="mt-16 flex flex-col gap-5"
         >
@@ -257,7 +257,7 @@ export function Hero({ isAuthed }: HeroProps) {
           transition={{
             duration: 1.0,
             delay: typingDone ? 0.5 : 0,
-            ease: [0.34, 1.3, 0.64, 1],
+            ease: [0.34, 1.3, 0.64, 1] as any,
           }}
           className="relative mt-24"
           style={{ perspective: "1500px" }}

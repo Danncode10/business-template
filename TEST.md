@@ -255,20 +255,20 @@ Magic link authentication allows users to log in via email without remembering a
 #### Manual Verification Steps
 
 1. **Test: Anchor navigation skips intro**
-   - [ ] Open `http://localhost:3000/#gallery` directly (not via link)
-   - [ ] You should land on the gallery section **without** the hero typing animation or blur
-   - [ ] The hero headline "Help small businesses go digital." should appear instantly
-   - [ ] Try `/#services`, `/#contact` — same behavior
+   - [x] Open `http://localhost:3000/#gallery` directly (not via link)
+   - [x] You should land on the gallery section **without** the hero typing animation or blur
+   - [x] The hero headline "Help small businesses go digital." should appear instantly
+   - [x] Try `/#services`, `/#contact` — same behavior
 
 2. **Test: Home anchor shows intro**
-   - [ ] Open `http://localhost:3000/#home` or just `http://localhost:3000`
-   - [ ] You **should** see the typewriter animation typing out the headline
-   - [ ] The navbar should blur while typing completes
+   - [x] Open `http://localhost:3000/#home` or just `http://localhost:3000`
+   - [x] You **should** see the typewriter animation typing out the headline
+   - [x] The navbar should blur while typing completes
 
 3. **Test: Page reload at anchor preserves anchor position**
-   - [ ] Navigate to `http://localhost:3000/#gallery`
-   - [ ] Press Cmd+R (or F5) to reload
-   - [ ] You should stay on the gallery section (intro skipped, no blur)
+   - [x] Navigate to `http://localhost:3000/#gallery`
+   - [x] Press Cmd+R (or F5) to reload
+   - [x] You should stay on the gallery section (intro skipped, no blur)
 
 ### Social Proof Bar ✅
 
