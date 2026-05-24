@@ -10,42 +10,89 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.4"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
+      organizations: {
+        Row: {
+          app_id: string
+          created_at: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          slug: string
+          updated_at: string | null
+          website: string | null
+        }
+        Insert: {
+          app_id?: string
+          created_at?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          slug: string
+          updated_at?: string | null
+          website?: string | null
+        }
+        Update: {
+          app_id?: string
+          created_at?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          slug?: string
+          updated_at?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           age: number | null
+          app_id: string
           birthday: string | null
           created_at: string
           email: string | null
           full_name: string | null
           gender: string | null
           id: string
+          organization_id: string | null
           role: Database["public"]["Enums"]["user_role"] | null
         }
         Insert: {
           age?: number | null
+          app_id?: string
           birthday?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
           gender?: string | null
           id: string
+          organization_id?: string | null
           role?: Database["public"]["Enums"]["user_role"] | null
         }
         Update: {
           age?: number | null
+          app_id?: string
           birthday?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
           gender?: string | null
           id?: string
+          organization_id?: string | null
           role?: Database["public"]["Enums"]["user_role"] | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {

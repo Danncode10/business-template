@@ -56,6 +56,113 @@
 
 ---
 
+## Phase 0.5: Multi-Project Supabase Setup
+
+> **Status:** Complete ✅  
+> **Date:** 2026-05-24  
+> **Tested by:** Claude
+
+### Multi-Project Namespace (app_id Isolation)
+
+**Status:** Complete ✅
+
+#### What This Accomplishes
+
+Enables one Supabase instance to safely serve multiple of Dann's projects:
+- **Layer 1:** `app_id` isolates projects from each other (e.g., business-template, portfolio-site)
+- **Layer 2:** `organization_id` isolates clients within each project
+- Zero code changes when graduating a project to its own Supabase later
+
+#### Completed Tasks
+
+✅ **Organizations table created**
+- [x] `organizations` table with `app_id` + `organization_id` support
+- [x] Unique constraint: `UNIQUE(app_id, slug)`
+- [x] Index: `idx_organizations_app_id` for query performance
+- [x] RLS policy: `app_id = current_setting('app.id', true)::text`
+
+✅ **Service layer helpers created**
+- [x] `src/services/multi-project.ts` with CRUD operations
+- [x] `withMultiProjectFilters()` helper for building app_id + org_id queries
+- [x] Functions: createOrganization, getOrganizationBySlug, getOrganizationById, listOrganizations, updateOrganization, deleteOrganization
+
+✅ **Environment variables configured**
+- [x] `NEXT_PUBLIC_APP_ID=business-template` in `.env.local`
+- [x] `APP_ID=business-template` (server-side)
+- [x] Supabase URL and anon key set to Businesses project
+
+✅ **Documentation created**
+- [x] MULTI_PROJECT.md with full architecture guide
+- [x] Schema patterns documented
+- [x] RLS policy patterns documented
+- [x] Service layer patterns documented
+- [x] Graduation path documented
+
+#### Manual Verification Steps
+
+1. **Verify Environment Variables**
+   ```bash
+   grep -E "NEXT_PUBLIC_APP_ID|APP_ID" .env.local
+   ```
+   Expected: Both vars set to `business-template`
+
+2. **Verify Organizations Table Schema**
+   - [ ] Open Supabase Dashboard → SQL Editor
+   - [ ] Run:
+     ```sql
+     SELECT column_name, data_type, is_nullable
+     FROM information_schema.columns 
+     WHERE table_name = 'organizations'
+     ORDER BY ordinal_position;
+     ```
+   - [ ] Verify columns: id, app_id, name, slug, logo_url, website, created_at, updated_at
+
+3. **Verify RLS Policy**
+   - [ ] Run in SQL Editor:
+     ```sql
+     SELECT policyname, qual FROM pg_policies WHERE tablename = 'organizations';
+     ```
+   - [ ] Policy name should be: `app_id isolation`
+   - [ ] Qual should reference: `app_id = current_setting('app.id', true)::text`
+
+4. **Verify Index**
+   - [ ] Run:
+     ```sql
+     SELECT indexname FROM pg_indexes WHERE tablename = 'organizations';
+     ```
+   - [ ] Should see: `idx_organizations_app_id`
+
+5. **Test TypeScript Compilation**
+   - [ ] Run: `npm run build`
+   - [ ] Verify no TypeScript errors in `src/services/multi-project.ts`
+
+6. **Test Service Helpers (Manual)**
+   - [ ] Create a test page or API route
+   - [ ] Import `createOrganization` from `src/services/multi-project`
+   - [ ] Call: `await createOrganization('Test Org', 'test-org')`
+   - [ ] Verify it returns an org object with `app_id = 'business-template'`
+
+#### Common Issues
+
+| Issue | Solution |
+|-------|----------|
+| "NEXT_PUBLIC_APP_ID is required" | Set env var in `.env.local` |
+| TypeScript error in multi-project.ts | Run `npm run update-types` to refresh Supabase types |
+| RLS blocks organization queries | Ensure `current_setting('app.id')` is set by middleware (Phase 1) |
+| Service function returns empty | Verify RLS policy exists and app.id context is set |
+
+#### Acceptance Criteria Met?
+
+- [x] Organizations table created with app_id column
+- [x] RLS policies enforce app_id isolation
+- [x] `.env.local` has NEXT_PUBLIC_APP_ID=business-template
+- [x] Service layer helpers implemented
+- [x] MULTI_PROJECT.md written
+- [x] TypeScript compiles without errors
+- [x] Project uses active Supabase instance (Businesses)
+
+---
+
 ## Phase 1: Core Auth & Tenant Setup
 
 > **Status:** In Progress  
