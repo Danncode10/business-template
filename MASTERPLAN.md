@@ -6,6 +6,45 @@
 
 ---
 
+## **PHASE 0: Testing Infrastructure** (Prerequisites)
+
+**Goal:** Build `/masterplan-task` command + TEST.md structure for systematic development  
+**Est. time:** 3-4 hours  
+**Blockers:** None (do this first!)
+
+- [x] **Create `/masterplan-task` Command** ✅ Completed
+  - [x] Reads task from MASTERPLAN.md (exact spec, no hallucination)
+  - [x] Implements feature (code changes)
+  - [x] Auto-generates TEST.md section
+  - [x] Marks task [x] in MASTERPLAN.md
+  - [x] Commits with conventional message
+
+- [x] **Create TEST.md Template** ✅ Completed
+  - [x] Sections for each phase
+  - [x] Automated + manual test checklists
+  - [x] Step-by-step verification guides
+  - [x] Common issues + troubleshooting
+
+- [ ] **Create npm Test Scripts**
+  - [ ] `npm run test:auth` (Phase 1 tests)
+  - [ ] `npm run test:roles` (Phase 2 tests)
+  - [ ] `npm run test:domain` (Phase 3 tests)
+  - [ ] `npm run test:rls` (Phase 4 tests)
+  - [ ] `npm run test:dashboard` (Phase 5 tests)
+  - [ ] `npm run test:blog` (Phase 6 tests)
+  - [ ] `npm run test:multi-tenant` (full isolation test)
+
+**Acceptance Criteria:**
+- [x] `/masterplan-task` command available and working
+- [x] TEST.md created with Phase 0 completed section
+- [ ] All npm test scripts created and runnable
+
+**Notes:**
+- Phase 0 is *already complete* — the command/skill/TEST.md are built and in place
+- Start Phase 1 by running: `/masterplan-task "Phase 1: Core Auth & Tenant Setup - Gmail SMTP Setup"`
+
+---
+
 ## **PHASE 1: Core Auth & Tenant Setup** (Foundation)
 
 **Goal:** Magic link auth + tenant isolation + email infrastructure  
