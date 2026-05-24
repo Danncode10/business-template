@@ -6,6 +6,8 @@ Scan the repo for cruft and report what's safe to remove.
 
 **Procedure:**
 
+0. **Check ruflo memory** — search for any prior decisions related to code cleanup, unused exports, orphaned components, or dead code removal before scanning. Apply stored patterns rather than re-inventing them.
+
 **Parallel scan** — steps 1–5 are independent. Spawn agents simultaneously:
 - Agent A → steps 1–3 (unused exports, orphaned components, dead service functions)
 - Agent B → steps 4–5 (stale routes, unused dependencies)

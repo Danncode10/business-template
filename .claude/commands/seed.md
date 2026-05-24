@@ -7,6 +7,8 @@ Generate type-safe seed data for the table(s) named in `$ARGUMENTS`. Output as S
 
 ## Procedure
 
+0. **Check ruflo memory** — search for any prior decisions related to seed data generation, table dependency ordering, or realistic value strategies before generating. Apply stored patterns rather than re-inventing them.
+
 1. **Parse `$ARGUMENTS`** — extract table name(s) and optional `--count=N` (default 10 rows per table). `all` means every table in the `public` schema.
 
 2. **Read `src/types/supabase.ts`** — this is the source of truth for table shapes, column types, nullability, and enums. **Never** infer schema from anywhere else.

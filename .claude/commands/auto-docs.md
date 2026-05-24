@@ -7,6 +7,10 @@ Audit DannFlow's documentation surface for drift against the real state of the c
 
 > **Relationship to `/sync-commands`:** `/sync-commands` only audits commands. `/auto-docs` audits everything below. If you only changed `.claude/commands/`, prefer `/sync-commands` — it's faster.
 
+## Procedure
+
+0. **Check ruflo memory** — search for any prior decisions related to documentation drift detection, DannFlow updates, or doc sync strategies before auditing. Apply stored patterns rather than re-inventing them.
+
 ## Scope
 
 By default audit all six surfaces. Use `--scope=<name>` to narrow.

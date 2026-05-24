@@ -23,15 +23,15 @@
 **Manual Verification Steps:**
 
 1. **Command Availability**
-   - [ ] Open terminal
-   - [ ] Type `/masterplan-task "Phase 1:` (tab-complete should show full text)
-   - [ ] Verify it's listed in available commands
+   - [x] Open terminal
+   - [x] Type `/masterplan-task "Phase 1:` (tab-complete should show full text)
+   - [x] Verify it's listed in available commands
 
 2. **Test the Command**
-   - [ ] Run: `/masterplan-task "Phase 1: Core Auth & Tenant Setup - Gmail SMTP Setup"`
-   - [ ] Claude should read MASTERPLAN.md, not guess
-   - [ ] Command generates code (src/lib/email.ts, etc.)
-   - [ ] New TEST.md section appears below
+   - [x] Run: `/masterplan-task "Phase 1: Core Auth & Tenant Setup - Gmail SMTP Setup"`
+   - [x] Claude should read MASTERPLAN.md, not guess
+   - [x] Command generates code (src/lib/email.ts, etc.)
+   - [x] New TEST.md section appears below
    - [ ] Task marked [x] in MASTERPLAN.md
    - [ ] Git commit created with "feat: implement gmail smtp setup"
 
