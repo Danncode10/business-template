@@ -9,6 +9,9 @@ import { CtaBanner } from "@/components/landing/cta-banner";
 import { Typewriter } from "@/components/landing/typewriter";
 import { SocialProofBar } from "@/components/landing/social-proof-bar";
 import { Testimonials } from "@/components/landing/testimonials";
+import { Services } from "@/components/landing/services";
+import { Gallery } from "@/components/landing/gallery";
+import { ContactBlock } from "@/components/landing/contact-block";
 
 
 export default async function Home() {
@@ -58,7 +61,13 @@ export default async function Home() {
 
       <Testimonials />
 
+      <Services />
+
+      <Gallery />
+
       <Pricing isAuthed={!!user} />
+
+      <ContactBlock />
 
       <CtaBanner isAuthed={!!user} />
 
