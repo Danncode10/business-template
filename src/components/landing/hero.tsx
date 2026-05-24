@@ -18,8 +18,8 @@ interface HeroProps {
   isAuthed: boolean;
 }
 
-const HERO_HEADLINE = "The AI-native starter for shipping faster.";
-const HERO_TYPING_SPEED = 70; // ~3s total for 42-char headline
+const HERO_HEADLINE = "Help small businesses go digital.";
+const HERO_TYPING_SPEED = 60; // ~2.5s total for headline
 
 export function Hero({ isAuthed }: HeroProps) {
   const [typingDone, setTypingDone] = useState(false);
@@ -104,7 +104,7 @@ export function Hero({ isAuthed }: HeroProps) {
           <span className="flex items-center gap-1.5 rounded-full bg-primary/10 border border-primary/20 px-2 py-0.5 text-[10px] font-semibold text-primary uppercase tracking-[0.15em]">
             New
           </span>
-          <span>Multi-tenant RLS templates for client websites</span>
+          <span>Complete platform for client websites & marketing</span>
           <ArrowRight className="h-3 w-3 transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-1" />
         </motion.a>
 
@@ -134,9 +134,9 @@ export function Hero({ isAuthed }: HeroProps) {
           }}
           className="mt-8 max-w-xl text-[17px] text-muted-foreground leading-relaxed"
         >
-          A production-grade Next.js + Supabase template with multi-tenant
-          RLS, type-safe services, and an AI-driven workflow that turns
-          natural language into shipped features.
+          Build beautiful, multi-tenant client websites with Dann. One platform
+          for landing pages, lead capture, team collaboration, and analytics.
+          Launch faster, scale easier.
         </motion.p>
 
         {/* CTAs — visible but blurred during typing, pops in after */}
@@ -155,7 +155,7 @@ export function Hero({ isAuthed }: HeroProps) {
           className="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-7"
         >
           <MagneticCTA href={isAuthed ? "/dashboard" : "/login"}>
-            Get started free
+            Start your journey
           </MagneticCTA>
 
           <a
@@ -188,7 +188,7 @@ export function Hero({ isAuthed }: HeroProps) {
           className="mt-16 flex flex-col gap-5"
         >
           <p className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground/60">
-            Built for teams shipping production software
+            Trusted by small business owners and agencies
           </p>
           {/* Grid (not flex) for universal gap support across browsers */}
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-x-8 gap-y-4 max-w-2xl">

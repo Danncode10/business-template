@@ -42,11 +42,11 @@ export default async function Home() {
               Features
             </span>
             <h2 className="mt-6 text-4xl sm:text-5xl font-semibold text-foreground tracking-[-0.02em]">
-              <Typewriter text="Everything you need to launch" speed={40} />
+              <Typewriter text="Everything small businesses need" speed={40} />
             </h2>
 
             <p className="mt-5 text-[15px] text-muted-foreground max-w-xl mx-auto leading-relaxed">
-              One template. Every essential built in.
+              Websites, lead capture, team collaboration, and analytics. All in one platform.
             </p>
           </div>
 
