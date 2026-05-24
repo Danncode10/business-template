@@ -3,6 +3,25 @@ export const siteConfig = {
   githubUrl: process.env.NEXT_PUBLIC_GITHUB_URL || "https://github.com/Danncode10",
   description: "Help small businesses go digital. Build beautiful websites, capture leads, manage teams.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://danndigital.vercel.app",
+  // Social proof metrics (configurable per client)
+  socialProof: {
+    rating: "4.9",
+    ratingSource: "Google",
+    customers: "500+",
+    yearsInBusiness: "10",
+  },
+  // Contact info (configurable per client)
+  contact: {
+    email: "hello@danndigital.com",
+    phone: "+1 (555) 000-0000",
+    address: "123 Main Street, Suite 100, City, ST 00000",
+  },
+  // Social links
+  socials: {
+    twitter: "#",
+    instagram: "#",
+    linkedin: "#",
+  },
 } as const;
 
 /**

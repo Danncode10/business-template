@@ -7,6 +7,8 @@ import { HowItWorks } from "@/components/landing/how-it-works";
 import { Pricing } from "@/components/landing/pricing";
 import { CtaBanner } from "@/components/landing/cta-banner";
 import { Typewriter } from "@/components/landing/typewriter";
+import { SocialProofBar } from "@/components/landing/social-proof-bar";
+import { Testimonials } from "@/components/landing/testimonials";
 
 
 export default async function Home() {
@@ -18,6 +20,8 @@ export default async function Home() {
       <Navbar user={user} />
 
       <Hero isAuthed={!!user} />
+
+      <SocialProofBar />
 
       {/* =============================
           FEATURES SECTION (BENTO GRID)
@@ -51,6 +55,8 @@ export default async function Home() {
       </section>
 
       <HowItWorks />
+
+      <Testimonials />
 
       <Pricing isAuthed={!!user} />
 
