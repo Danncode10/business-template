@@ -64,3 +64,6 @@ mcp.json
 
 # Screenshot for Claude basis
 /ss/*
+
+# Supabase CLI generated files (machine-specific, ephemeral)
+supabase/.temp/
