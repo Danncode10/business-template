@@ -149,6 +149,33 @@
   - [x] Maintain: Dark-premium theme, glass navbar, magnetic CTAs (from [[landing-design-system]])
   - [ ] Test: Mobile responsive, Safari + Chrome, <10% CPU idle
 
+- [ ] **Testimonials / Reviews Section**
+  - [ ] 3–5 quote cards: star rating, quote text, customer name, optional avatar
+  - [ ] Sits below How It Works (before CTA banner)
+  - [ ] Starter content editable via `site_settings` or section JSON
+  - [ ] Optional: link to Google Reviews page
+
+- [ ] **Services / Pricing Overview** (landing page teaser, not full vertical)
+  - [ ] 3–6 service cards: name, short description, starting price or "Contact for pricing"
+  - [ ] Pulls from vertical-specific table (Phase 7) or hardcoded starter cards
+  - [ ] CTA per card: "Book now" / "Learn more" → contact form anchor
+
+- [ ] **Contact Block** (above footer)
+  - [ ] Address, phone, email, business hours (Mon–Sun)
+  - [ ] Google Maps embed (iframe via place ID stored in `site_settings`)
+  - [ ] Inline contact form: name, email, message → submits to `leads` table
+  - [ ] Responsive: map full-width on mobile, side-by-side on desktop
+
+- [ ] **Gallery / Photo Grid**
+  - [ ] 4–9 photos in uniform grid or masonry layout
+  - [ ] Images managed via dashboard Image Upload (Phase 2 editor)
+  - [ ] Lightbox on click (optional)
+
+- [ ] **Social Proof Bar**
+  - [ ] Horizontal strip between hero and features: e.g., "4.9 ★ on Google · 500+ customers · 10 years in business"
+  - [ ] Values configurable via `site_settings` (rating, customer count, years)
+  - [ ] Subtle separator, no heavy card — just trust signals
+
 - [x] **Dashboard Layout & Navigation** ✅ Foundation complete
   - [x] Single-component SPA (`dashboard-shell.tsx`) with `?tab=` URL param routing
   - [x] Fixed left sidebar (`bg-card border-r`)
@@ -197,6 +224,14 @@
   - [ ] Live preview: Side-by-side editor + preview
   - [ ] Test: Edit hero title → appears on live site
 
+- [ ] **Content Item CRUD** (add / edit / delete — reused by all Phase 7 verticals)
+  - [ ] Table view: list items (name, price, category, status) with edit + delete per row
+  - [ ] Add/edit via modal: name, description, price, image upload, category, display order
+  - [ ] Price field label adapts per vertical ("Price", "Starting from", "Rate", "Per night")
+  - [ ] Drag-to-reorder items within a section
+  - [ ] Soft delete only (sets `deleted_at`, never hard-deletes)
+  - [ ] This CRUD pattern is the base for Phase 7: menus, services, listings, courses
+
 - [ ] **Page Sections Display**
   - [ ] Create `<PageSection>` component (reusable for all section types)
   - [ ] Create hero, about, services, contact, testimonial components
@@ -210,12 +245,24 @@
   - [ ] Auto-optimize: Convert to WebP, responsive sizes
   - [ ] Display optimized images on frontend
 
+- [ ] **Site Settings (contact, hours, maps, branding)**
+  - [ ] Verify/create `site_settings` table: `org_id`, `key TEXT`, `value TEXT` (or structured columns)
+  - [ ] Structured fields: `business_name`, `tagline`, `logo_url`, `address`, `phone`, `email`, `hours` (JSON), `google_maps_url`, `social_links` (JSON), `primary_color`, `accent_color`
+  - [ ] Build `/dashboard/settings` UI:
+    - [ ] Business Info tab: name, tagline, logo upload
+    - [ ] Contact tab: address, phone, email, hours per weekday
+    - [ ] Integrations tab: Google Maps embed URL or place ID, social profile links
+    - [ ] Branding tab: primary color, accent color (Phase 5+ full theming)
+  - [ ] Fallback: `siteConfig` in `src/lib/config.ts` used as defaults until client configures
+  - [ ] Update `.env.example`: technical vars only (Supabase URL, app ID, site name) — no business content
+  - [ ] Run `npm run checkpoint` + `npm run update-types` after schema
+
 - [ ] **Form Submissions (Contact, Lead Capture)**
   - [ ] Verify `leads` table exists
-  - [ ] Create contact form component (reusable)
-  - [ ] Form submits → creates lead record in Supabase
+  - [ ] Create contact form component (reusable, used in Contact Block on landing page)
+  - [ ] Form submits → creates lead record in Supabase with `organization_id` + `app_id`
   - [ ] Leads appear in `/dashboard/leads` inbox
-  - [ ] Test: Submit contact form → appears in lead inbox
+  - [ ] Test: Submit contact form → appears in admin lead inbox
 
 **Acceptance Criteria:**
 - [x] Landing page hero rebranded ("Help small businesses go digital")
@@ -224,6 +271,11 @@
 - [x] CTA updated to "Ready to go digital?" / "Get started"
 - [ ] Footer updated with Dann Digital company info
 - [x] Landing page maintains dark-premium theme (OLED black, purple, glass nav)
+- [ ] Testimonials section live on landing page
+- [ ] Services / Pricing overview section live
+- [ ] Contact block: address, hours, Google Maps embed, inline form
+- [ ] Gallery / Photo grid section live
+- [ ] Social proof bar between hero and features
 - [x] Dashboard: fixed sidebar with nav (Overview, Pages, Leads, Team, Settings)
 - [x] Dashboard: collapsible sidebar (desktop) + mobile overlay
 - [x] Dashboard: user profile + popup menu at bottom
@@ -232,9 +284,11 @@
 - [x] Dashboard: all route stubs load without error
 - [ ] Dashboard: org switcher in top bar
 - [ ] Admin can edit hero, about, services pages
+- [ ] Admin can add / edit / delete content items with price and image
+- [ ] Dashboard settings: contact info, hours, Google Maps URL, social links
 - [ ] Changes appear live within 2-3 seconds
-- [ ] Team members can edit pages (if assigned role)
 - [ ] Contact forms submit → appear in lead inbox
+- [ ] `.env.example` updated with technical vars only (no business content)
 - [ ] All dashboard components styled consistently (dark theme, glass effects)
 - [ ] Mobile responsive: 375px → 2560px
 
@@ -418,6 +472,8 @@
 **Goal:** Pre-built modules for restaurant, service, real estate, education  
 **Est. time:** 3 weeks (staggered)  
 **Blockers:** Phase 2, 6 complete
+
+> Each vertical reuses the **Content Item CRUD** pattern built in Phase 2 (table + add/edit modal + image upload + drag-reorder). Only the table name, field labels, and section titles change per vertical.
 
 ### **Vertical 1: Restaurant**
 - [ ] **Schema**
