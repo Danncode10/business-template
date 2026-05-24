@@ -823,6 +823,7 @@ show_commands() {
             checkpoint|sync-types|explain-schema|migrate|seed) echo "3|🗄️  Supabase workflow" ;;
             new-feature|new-page|masterplan-task) echo "4|🧱 Scaffolding" ;;
             seo-check|seo-fix|marketing-check) echo "5|📈 SEO & marketing" ;;
+            sync-upstream|sync-to-upstream) echo "7|🔄 Upstream sync" ;;
             commit|cleanup|sync-commands|auto-docs|no-conflict|init-update|ruflo-upgrade) echo "6|🧹 Housekeeping" ;;
             *) echo "9|📦 Other" ;;
         esac
@@ -1489,7 +1490,9 @@ show_workflow() {
     echo -e "  ${CYAN}/ui${NC}            → Make code fully responsive (active rewrite)"
     echo -e "  ${CYAN}/review${NC}        → Pre-PR lint + typecheck + guardrails"
     echo -e "  ${CYAN}/commit${NC}        → Stage + draft conventional commit"
-    echo -e "  ${CYAN}/sync-commands${NC} → Validate command documentation\n"
+    echo -e "  ${CYAN}/sync-commands${NC}    → Validate command documentation"
+    echo -e "  ${CYAN}/sync-upstream${NC}    → Pull updates from DannFlow upstream"
+    echo -e "  ${CYAN}/sync-to-upstream${NC} → Contribute your improvements back to DannFlow\n"
 
     echo -e "📖 Full reference: ${BLUE}docs/dannflow_docs/claude-workflow.md${NC}"
     step_footer
