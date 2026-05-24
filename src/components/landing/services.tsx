@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Zap, Target, Sparkles } from 'lucide-react';
+import { Typewriter } from './typewriter';
 
 export function Services() {
   const services = [
@@ -60,7 +61,7 @@ export function Services() {
             Why Choose Us
           </span>
           <h2 className="mt-6 text-4xl sm:text-5xl font-semibold text-foreground tracking-[-0.02em]">
-            We Stand <span className="gradient-text-primary italic font-medium">Apart</span>
+            <Typewriter text="We Stand Apart" speed={40} />
           </h2>
           <p className="mt-5 text-[15px] text-muted-foreground max-w-xl mx-auto leading-relaxed">
             Discover what makes our business special and worth your time.

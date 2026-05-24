@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useState } from 'react';
+import { Typewriter } from './typewriter';
 
 export function Gallery() {
   const galleryItems = [
@@ -52,7 +53,7 @@ export function Gallery() {
             Gallery
           </span>
           <h2 className="mt-6 text-4xl sm:text-5xl font-semibold text-foreground tracking-[-0.02em]">
-            See Our <span className="gradient-text-primary italic font-medium">Best</span>
+            <Typewriter text="See Our Best" speed={40} />
           </h2>
           <p className="mt-5 text-[15px] text-muted-foreground max-w-xl mx-auto leading-relaxed">
             Beautiful moments and finished work that showcase our passion and quality.
