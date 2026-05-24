@@ -180,52 +180,42 @@ Supabase's Gmail SMTP integration allows you to send transactional emails (magic
 
 #### Setup Checklist
 
-1. **Enable 2-Step Verification on Google Account**
-   - [ ] Go to [myaccount.google.com/security](https://myaccount.google.com/security)
-   - [ ] Click "2-Step Verification" and complete setup
-   - [ ] Add recovery phone number and backup email
+1. **Enable 2-Step Verification on Google Account** ✅
+   - [x] Go to [myaccount.google.com/security](https://myaccount.google.com/security)
+   - [x] Click "2-Step Verification" and complete setup
+   - [x] Add recovery phone number and backup email
 
-2. **Create Gmail App Password**
-   - [ ] Go to [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
-   - [ ] Select "Mail" and "Windows Computer" (or your device)
-   - [ ] Click "Generate" and copy the 16-character password
-   - [ ] Save it securely (you'll use it in step 4)
+2. **Create Gmail App Password** ✅
+   - [x] Go to [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
+   - [x] Select "Mail" and "Windows Computer" (or your device)
+   - [x] Click "Generate" and copy the 16-character password
+   - [x] Save it securely (you'll use it in step 4)
 
-3. **Configure Supabase SMTP Settings**
-   - [ ] Open Supabase Dashboard → **Authentication** → **SMTP Settings**
-   - [ ] Fill in these fields:
+3. **Configure Supabase SMTP Settings** ✅
+   - [x] Open Supabase Dashboard → **Authentication** → **SMTP Settings**
+   - [x] Fill in these fields:
      - **Host:** `smtp.gmail.com`
      - **Port:** `465`
      - **Username:** your Gmail address (e.g., `yourname@gmail.com`)
      - **Password:** the 16-character app password from step 2
      - **Sender Email:** your Gmail address
-     - **Sender Name:** Your Site Name (e.g., "DannFlow")
-   - [ ] Click **Test Connection** → verify success message
-   - [ ] Click **Save**
+     - **Sender Name:** "Dann" (verified)
+   - [x] Click **Test Connection** → verify success message
+   - [x] Click **Save**
 
-4. **Enable Email Templates in Supabase**
-   - [ ] Go to **Authentication** → **Email Templates**
-   - [ ] Enable these templates by toggling ON:
-     - ✅ **Reset Password** (blue toggle = ON)
-     - ✅ **Confirm Sign Up** (if using email confirmation)
-   - [ ] Customize subject lines and content if desired
-   - [ ] Click **Save Changes**
+4. **Enable Email Templates in Supabase** ✅
+   - [x] Go to **Authentication** → **Email Templates**
+   - [x] Enable these templates by toggling ON:
+     - [x] **Reset Password** (blue toggle = ON)
+     - [x] **Confirm Sign Up** (if using email confirmation)
+   - [x] Customize subject lines and content if desired
+   - [x] Click **Save Changes**
 
-5. **Test Email Delivery**
-   - [ ] In your Next.js app, create a test route `/api/auth/test-email`
-   - [ ] Call Supabase's `resetPasswordForEmail()` with your test email:
-     ```typescript
-     import { supabase } from "@/utils/supabase/client";
-     
-     export async function testEmail(email: string) {
-       const { error } = await supabase.auth.resetPasswordForEmail(email);
-       if (error) console.error("Error:", error.message);
-       return !error;
-     }
-     ```
-   - [ ] Check your inbox for "Reset your password" email from your Site Name
-   - [ ] Verify sender shows your Gmail address
-   - [ ] Click reset link (should route to `/reset-password`)
+5. **Test Email Delivery** ✅
+   - [x] Verified: Signup creates account → email received
+   - [x] Verified: Login successful → access token issued
+   - [x] Verified: Sender name shows "Dann"
+   - [x] Verified: Email delivery working end-to-end
 
 #### Email Flows That Now Work
 
