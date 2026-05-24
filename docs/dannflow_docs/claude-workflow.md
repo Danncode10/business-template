@@ -97,6 +97,7 @@ Run `/ask-command <what you want>` if you don't remember which command to use.
 |---|---|
 | `/new-feature <name>` | Scaffolds service + types + App Router page + Shadcn form for a new feature. |
 | `/new-page <route>` | Scaffolds an App Router page (Server Component) with `loading.tsx` + `error.tsx`. |
+| `/masterplan-task <task>` | Execute a single task from `MASTERPLAN.md` with full context. Auto-generates `TEST.md` verification guide. Use during development sprints for systematic, hallucination-free feature scaffolding. |
 
 ### SEO & marketing
 | Command | What it does |

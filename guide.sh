@@ -819,10 +819,10 @@ show_commands() {
     get_category() {
         case "$1" in
             ask-command|init-claude|make-command) echo "1|🚀 Discovery & setup" ;;
-            checkpoint|sync-types|explain-schema|migrate|seed) echo "2|🗄️  Supabase workflow" ;;
-            new-feature|new-page) echo "3|🧱 Scaffolding" ;;
-            seo-check|seo-fix|marketing-check) echo "4|📈 SEO & marketing" ;;
-            security-audit|rls-check|rls|ui|review) echo "5|🛡️  Security & quality" ;;
+            security-audit|rls-check|rls|ui|review) echo "2|🛡️  Security & quality" ;;
+            checkpoint|sync-types|explain-schema|migrate|seed) echo "3|🗄️  Supabase workflow" ;;
+            new-feature|new-page|masterplan-task) echo "4|🧱 Scaffolding" ;;
+            seo-check|seo-fix|marketing-check) echo "5|📈 SEO & marketing" ;;
             commit|cleanup|sync-commands|auto-docs|no-conflict|init-update|ruflo-upgrade) echo "6|🧹 Housekeeping" ;;
             *) echo "9|📦 Other" ;;
         esac
