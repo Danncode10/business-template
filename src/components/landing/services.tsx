@@ -8,20 +8,20 @@ export function Services() {
     {
       id: 1,
       icon: Zap,
-      title: 'Performance',
-      description: 'Lightning-fast websites optimized for conversions and user experience.',
+      title: 'Quality First',
+      description: 'Premium ingredients, expert craftsmanship, and attention to detail in everything we do.',
     },
     {
       id: 2,
       icon: Target,
-      title: 'Strategy',
-      description: 'Data-driven approach to reach your audience and achieve measurable results.',
+      title: 'Fast & Reliable',
+      description: 'Quick service without compromising on quality. Always fresh, always on time.',
     },
     {
       id: 3,
       icon: Sparkles,
-      title: 'Design',
-      description: 'Beautiful, modern interfaces that reflect your brand and engage users.',
+      title: 'Customer Care',
+      description: 'Friendly staff, personalized service, and memorable experiences every visit.',
     },
   ];
 
@@ -57,13 +57,13 @@ export function Services() {
           className="text-center mb-16"
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.02] px-3 py-1 text-[10px] font-medium text-foreground/70 uppercase tracking-[0.2em]">
-            Services
+            Why Choose Us
           </span>
           <h2 className="mt-6 text-4xl sm:text-5xl font-semibold text-foreground tracking-[-0.02em]">
-            What We <span className="gradient-text-primary italic font-medium">Offer</span>
+            We Stand <span className="gradient-text-primary italic font-medium">Apart</span>
           </h2>
           <p className="mt-5 text-[15px] text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            Everything you need to build a successful online presence.
+            Discover what makes our business special and worth your time.
           </p>
         </motion.div>
 
