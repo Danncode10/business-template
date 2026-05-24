@@ -44,13 +44,27 @@ export function Hero({ isAuthed }: HeroProps) {
   };
 
   useEffect(() => {
+    // Start intro state
     document.body.classList.add("intro-active");
     blurHeader();
+
+    // Cleanup: always clear on unmount or component destroy
     return () => {
       document.body.classList.remove("intro-active");
       clearHeader();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Failsafe: if page reloads before typing completes, clear after 5s timeout
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (document.body.classList.contains("intro-active")) {
+        document.body.classList.remove("intro-active");
+        clearHeader();
+      }
+    }, 5000);
+
+    return () => clearTimeout(timeout);
   }, []);
 
   useEffect(() => {
@@ -87,7 +101,7 @@ export function Hero({ isAuthed }: HeroProps) {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Microcopy link — blurred while typing, clears after */}
         <motion.a
-          href="/#features"
+          href="/#services"
           initial={{ opacity: 0.35, filter: "blur(8px)" }}
           animate={
             typingDone

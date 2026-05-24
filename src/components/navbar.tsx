@@ -19,9 +19,9 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import type { User } from "@supabase/supabase-js";
 
 const navLinks = [
-  { label: "Features", href: "/#features" },
-  { label: "How it works", href: "/#how-it-works" },
-  { label: "Pricing", href: "/#pricing" },
+  { label: "Services", href: "/#services" },
+  { label: "Gallery", href: "/#gallery" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export function Navbar({ user }: { user: User | null }) {
