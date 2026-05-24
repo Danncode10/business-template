@@ -9,6 +9,7 @@ interface TypewriterProps {
   delay?: number; // ms before typing starts (after coming into view)
   className?: string;
   onComplete?: () => void;
+  skipAnimation?: boolean; // if true, show all text immediately (for anchor navigation)
   /** After typing completes, smoothly tint chars [start, end) to primary color */
   highlight?: {
     start: number;
@@ -37,6 +38,7 @@ export function Typewriter({
   className,
   onComplete,
   highlight,
+  skipAnimation,
 }: TypewriterProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
@@ -59,7 +61,7 @@ export function Typewriter({
     startedRef.current = true;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
+    if (reduce || skipAnimation) {
       setShown(text.length);
       if (!completedRef.current) {
         completedRef.current = true;
@@ -99,7 +101,7 @@ export function Typewriter({
       cancelAnimationFrame(raf);
       if (highlightTimerRef.current) clearTimeout(highlightTimerRef.current);
     };
-  }, [inView, text, speed, delay]); // intentionally NOT depending on onComplete / highlight
+  }, [inView, text, speed, delay, skipAnimation]); // intentionally NOT depending on onComplete / highlight
 
   const done = shown >= text.length;
 

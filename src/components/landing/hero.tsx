@@ -23,6 +23,7 @@ const HERO_TYPING_SPEED = 60; // ~2.5s total for headline
 
 export function Hero({ isAuthed }: HeroProps) {
   const [typingDone, setTypingDone] = useState(false);
+  const [skipIntro, setSkipIntro] = useState(false);
 
   // Blur the fixed navbar directly — CSS `body.intro-active header` can be
   // unreliable for fixed+z-indexed elements; inline styles guarantee it.
@@ -43,7 +44,23 @@ export function Hero({ isAuthed }: HeroProps) {
     el.style.pointerEvents = "";
   };
 
+  // Skip intro animation if user navigates directly to an anchor (e.g., #gallery)
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const hash = window.location.hash;
+    if (hash && hash !== "#home") {
+      setSkipIntro(true);
+      setTypingDone(true); // Skip typing animation
+      document.body.classList.remove("intro-active");
+      clearHeader();
+    }
+  }, []);
+
+  useEffect(() => {
+    // Only show intro if not skipped
+    if (skipIntro) return;
+
     // Start intro state
     document.body.classList.add("intro-active");
     blurHeader();
@@ -53,10 +70,12 @@ export function Hero({ isAuthed }: HeroProps) {
       document.body.classList.remove("intro-active");
       clearHeader();
     };
-  }, []);
+  }, [skipIntro]);
 
   // Failsafe: if page reloads before typing completes, clear after 5s timeout
   useEffect(() => {
+    if (skipIntro) return;
+
     const timeout = setTimeout(() => {
       if (document.body.classList.contains("intro-active")) {
         document.body.classList.remove("intro-active");
@@ -65,7 +84,7 @@ export function Hero({ isAuthed }: HeroProps) {
     }, 5000);
 
     return () => clearTimeout(timeout);
-  }, []);
+  }, [skipIntro]);
 
   useEffect(() => {
     if (typingDone) {
@@ -130,6 +149,7 @@ export function Hero({ isAuthed }: HeroProps) {
             delay={200}
             onComplete={() => setTypingDone(true)}
             highlight={{ start: 4, end: 21, delay: 350 }}
+            skipAnimation={skipIntro}
           />
         </h1>
 
