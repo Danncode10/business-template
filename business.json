@@ -1,0 +1,94 @@
+{
+  "_readme": "Fill this out when you clone the template. Run /business-init to sync values into the codebase.",
+
+  "business": {
+    "name": "Dann Digital",
+    "tagline": "Help small businesses go digital.",
+    "description": "Build beautiful websites, capture leads, manage teams. All in one platform.",
+    "industry": "Digital Services",
+    "vertical": "general",
+    "_vertical_options": ["general", "restaurant", "service", "retail", "real-estate", "education"]
+  },
+
+  "branding": {
+    "primaryColor": "#7C5CFF",
+    "accentColor": "#5B3FE0",
+    "logoUrl": null,
+    "_note": "Colors are CSS hex values. logoUrl = Cloudinary/Supabase storage URL once uploaded."
+  },
+
+  "contact": {
+    "email": "hello@danndigital.com",
+    "phone": "+1 (555) 000-0000",
+    "address": "123 Main Street, Suite 100, City, ST 00000",
+    "website": "https://danndigital.vercel.app",
+    "googleMapsUrl": null,
+    "_googleMapsUrl_note": "Paste the Google Maps embed URL for the Contact Block iframe."
+  },
+
+  "hours": {
+    "monday": "9:00 AM – 5:00 PM",
+    "tuesday": "9:00 AM – 5:00 PM",
+    "wednesday": "9:00 AM – 5:00 PM",
+    "thursday": "9:00 AM – 5:00 PM",
+    "friday": "9:00 AM – 5:00 PM",
+    "saturday": "Closed",
+    "sunday": "Closed"
+  },
+
+  "socials": {
+    "twitter": null,
+    "instagram": null,
+    "linkedin": null,
+    "facebook": null,
+    "youtube": null,
+    "_note": "Set to null to hide the icon in footer. Use full URLs."
+  },
+
+  "socialProof": {
+    "rating": "4.9",
+    "ratingSource": "Google",
+    "customers": "500+",
+    "yearsInBusiness": "10",
+    "_note": "Displayed in the Social Proof Bar between hero and features."
+  },
+
+  "seo": {
+    "keywords": ["small business website", "digital presence", "lead capture", "business platform"],
+    "ogImage": null,
+    "twitterHandle": null,
+    "_ogImage_note": "Full URL to a 1200x630 image for social sharing previews."
+  },
+
+  "deployment": {
+    "domain": null,
+    "vercelProject": null,
+    "appId": "business-template",
+    "_appId_note": "Must match NEXT_PUBLIC_APP_ID in .env.local — used for multi-project RLS isolation.",
+    "_domain_note": "e.g. 'danndigital.com' — used in sitemap.ts and canonical URLs."
+  },
+
+  "supabase": {
+    "organizationSlug": null,
+    "projectRef": null,
+    "_note": "Fill in after running: supabase projects list. Used by /checkpoint and /migrate."
+  },
+
+  "features": {
+    "blog": false,
+    "gallery": false,
+    "testimonials": true,
+    "pricing": true,
+    "contactForm": true,
+    "teamPage": false,
+    "analytics": false,
+    "_note": "Feature flags for Phase 7 verticals. Set true to scaffold the module."
+  },
+
+  "client": {
+    "name": null,
+    "email": null,
+    "github": null,
+    "_note": "If this repo is for a specific client, fill in their details. Used by /business-init to personalize the setup report."
+  }
+}

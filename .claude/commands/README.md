@@ -33,6 +33,7 @@ Drop `.md` files in this folder to add custom slash commands. Each file becomes 
 | `/ruflo-upgrade` | Re-applies Ruflo memory + parallel-agent patterns to the 5 core commands. Safe to re-run after `/init-update`. |
 | `/make-command` | Creates a new custom slash command from a plain-English description. Auto-updates documentation and proposes conflict-avoidance edits to existing commands or SKILLS.md. |
 | `/masterplan-task` | Execute a task from MASTERPLAN.md and auto-generate TEST.md verification guide. Use during development sprints for systematic, hallucination-free feature scaffolding. |
+| `/business-init [--sync] [--report-only]` | Reads `business.json` + README + CLAUDE.md + MASTERPLAN.md + config.ts, syncs business values into the codebase, and prints a full setup status report. Run this first after cloning the template or handing off to a client. |
 
 ## File format
 
