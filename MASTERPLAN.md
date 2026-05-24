@@ -104,12 +104,12 @@
   - [x] Document setup steps in TEST.md
   - [x] Sender name: "Dann"
 
-- [ ] **Magic Link Auth Flow**
-  - [ ] Create `/auth/request-magic-link` API route
-  - [ ] Create `/auth/verify-magic-link` callback
-  - [ ] Create invitation invite system (admin sends invite link)
-  - [ ] Test: User receives magic link → clicks → sets password → logged in
-  - [ ] Add "forgot password" flow (email link → reset password)
+- [x] **Magic Link Auth Flow** ✅ (2026-05-24)
+  - [x] Create `/auth/request-magic-link` API route
+  - [x] Create `/auth/verify-magic-link` callback
+  - [x] Create invitation invite system (admin sends invite link)
+  - [x] Test: User receives magic link → clicks → sets password → logged in
+  - [x] Add "forgot password" flow (email link → reset password)
 
 - [ ] **Session & Auth Middleware**
   - [ ] Verify Supabase SSR middleware works (refresh tokens)
