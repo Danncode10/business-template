@@ -17,10 +17,11 @@ export async function getAllProfiles() {
     .single();
 
   if (profile?.role !== 'admin') {
-    // Regular users might only see public info, but for this demo:
+    // Regular users can only see their own profile
     const { data: profiles } = await supabase
       .from('profiles')
-      .select('id, full_name, role');
+      .select('id, full_name, role')
+      .eq('id', user.id);
     return profiles || [];
   }
 
@@ -69,4 +70,3 @@ export async function updateProfile(updates: {
   if (error) throw error;
   return data;
 }
-

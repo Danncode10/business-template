@@ -55,7 +55,7 @@
   - [x] Created `organizations` table with `app_id TEXT NOT NULL DEFAULT 'business-template'`
   - [x] Create index: `idx_organizations_app_id` for query perf
   - [x] Migration applied to Supabase (Businesses project)
-  - [ ] Run `npm run checkpoint` after migration (do after first schema checkpoint)
+  - [x] Run `npm run checkpoint` after migration (do after first schema checkpoint)
 
 - [x] **Update RLS policies (two-layer isolation)** ✅
   - [x] Organizations table RLS policy: `app_id = current_setting('app.id', true)::text`
