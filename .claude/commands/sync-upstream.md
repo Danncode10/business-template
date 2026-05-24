@@ -174,3 +174,9 @@ For when the user explicitly wants to see upstream commits and pick one. **Expec
 
 - If `git status` shows a dirty working tree at start, refuse and tell the user to commit or stash first. Sync over uncommitted work is too easy to lose.
 - If `upstream` points anywhere other than the DannFlow repo, warn and ask the user to confirm before proceeding.
+
+---
+
+## See also
+
+- `/sync-to-upstream` — the **reverse** flow: contribute your local improvements back to the DannFlow upstream repo.
