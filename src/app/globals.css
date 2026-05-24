@@ -215,3 +215,36 @@ input[type="text"]::-webkit-input-decoration-container {
   position: absolute;
   right: -9999px;
 }
+
+/* Safari & WebKit font rendering fixes */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Force hardware acceleration for animations on WebKit */
+body {
+  -webkit-transform: translate3d(0, 0, 0);
+}
+
+/* SVG icon rendering consistency */
+svg {
+  -webkit-filter: blur(0);
+  filter: blur(0);
+}
+
+/* Image rendering optimization */
+img {
+  -webkit-font-smoothing: antialiased;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/* Ensure proper line heights on Safari */
+h2, h3, h4, h5, h6 {
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -webkit-text-stroke-color: transparent;
+  text-rendering: geometricPrecision;
+}

@@ -1,17 +1,17 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ImageIcon } from 'lucide-react';
+import Image from 'next/image';
 import { useState } from 'react';
 
 export function Gallery() {
   const galleryItems = [
-    { id: 1, cols: 'col-span-1 md:col-span-2 md:row-span-2', title: 'Brand Identity', category: 'Design' },
-    { id: 2, cols: 'col-span-1', title: 'Web Design', category: 'Development' },
-    { id: 3, cols: 'col-span-1', title: 'Mobile App', category: 'Product' },
-    { id: 4, cols: 'col-span-1 md:col-span-2', title: 'Marketing Campaign', category: 'Strategy' },
-    { id: 5, cols: 'col-span-1', title: 'E-Commerce', category: 'Development' },
-    { id: 6, cols: 'col-span-1', title: 'Social Media', category: 'Content' },
+    { id: 1, cols: 'col-span-1 md:col-span-2 md:row-span-2', title: 'Brand Identity', category: 'Design', image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80' },
+    { id: 2, cols: 'col-span-1', title: 'Web Design', category: 'Development', image: 'https://images.unsplash.com/photo-1460925895917-adf4e565db13?w=400&q=80' },
+    { id: 3, cols: 'col-span-1', title: 'Mobile App', category: 'Product', image: 'https://images.unsplash.com/photo-1512941691920-25bda36dc643?w=400&q=80' },
+    { id: 4, cols: 'col-span-1 md:col-span-2', title: 'Marketing Campaign', category: 'Strategy', image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&q=80' },
+    { id: 5, cols: 'col-span-1', title: 'E-Commerce', category: 'Development', image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&q=80' },
+    { id: 6, cols: 'col-span-1', title: 'Social Media', category: 'Content', image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&q=80' },
   ];
 
   const [hoveredId, setHoveredId] = useState<number | null>(null);
@@ -80,7 +80,7 @@ export function Gallery() {
                 <div className="relative w-full h-full overflow-hidden rounded-[calc(1.5rem-0.375rem)] bg-card">
                   {/* Mouse-follow glow */}
                   <div
-                    className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
                     style={{
                       background: 'radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(124, 92, 255, 0.15), transparent 80%)',
                     }}
@@ -93,43 +93,46 @@ export function Gallery() {
                     }}
                   />
 
-                  {/* Aspect ratio container */}
-                  <div className="relative w-full aspect-square md:aspect-auto md:h-80 bg-gradient-to-br from-white/[0.05] to-white/[0.02] flex items-center justify-center overflow-hidden">
-                    {/* Placeholder icon with animation */}
-                    <motion.div
-                      animate={{ scale: hoveredId === item.id ? 1.1 : 1 }}
-                      transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
-                    >
-                      <ImageIcon className="h-16 w-16 text-primary/40" strokeWidth={1.5} />
-                    </motion.div>
-
-                    {/* Hover overlay with info */}
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: hoveredId === item.id ? 1 : 0 }}
-                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                      className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent flex flex-col items-end justify-end p-6"
-                    >
-                      <motion.div
-                        initial={{ y: 12, opacity: 0 }}
-                        animate={{
-                          y: hoveredId === item.id ? 0 : 12,
-                          opacity: hoveredId === item.id ? 1 : 0,
-                        }}
-                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                      >
-                        <span className="inline-block text-xs font-medium text-primary uppercase tracking-[0.1em] mb-2">
-                          {item.category}
-                        </span>
-                        <h3 className="text-lg font-semibold text-foreground">
-                          {item.title}
-                        </h3>
-                      </motion.div>
-                    </motion.div>
+                  {/* Image Container */}
+                  <div className="relative w-full aspect-square md:aspect-auto md:h-80 overflow-hidden">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500 ease-[0.32,0.72,0,1]"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      priority={item.id === 1}
+                    />
+                    {/* Gradient overlay on image */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-40" />
                   </div>
 
+                  {/* Hover overlay with info */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: hoveredId === item.id ? 1 : 0 }}
+                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent flex flex-col items-end justify-end p-6 z-20"
+                  >
+                    <motion.div
+                      initial={{ y: 12, opacity: 0 }}
+                      animate={{
+                        y: hoveredId === item.id ? 0 : 12,
+                        opacity: hoveredId === item.id ? 1 : 0,
+                      }}
+                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      <span className="inline-block text-xs font-medium text-primary uppercase tracking-[0.1em] mb-2">
+                        {item.category}
+                      </span>
+                      <h3 className="text-lg font-semibold text-foreground">
+                        {item.title}
+                      </h3>
+                    </motion.div>
+                  </motion.div>
+
                   {/* Card info footer (always visible) */}
-                  <div className="px-6 py-4 border-t border-white/[0.04]">
+                  <div className="absolute bottom-0 left-0 right-0 px-6 py-4 border-t border-white/[0.04] bg-card/80 backdrop-blur-sm z-20">
                     <p className="text-sm text-muted-foreground">Project {item.id}</p>
                   </div>
                 </div>
