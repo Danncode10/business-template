@@ -1,36 +1,35 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { GitBranch, Sparkles, Rocket } from "lucide-react";
+import { Globe, Layout, Zap } from "lucide-react";
 import { Typewriter } from "./typewriter";
 
 const STEPS = [
   {
     step: "01",
-    icon: GitBranch,
-    title: "Clone & configure",
+    icon: Globe,
+    title: "Set up your business profile",
     description:
-      "Fork the repo, drop your Supabase credentials into .env.local, and you're live in under two minutes.",
-    snippet: "git clone dannflow && npm i",
-    // Paint-only radial gradient (no filter:blur cost during scroll)
+      "Create your account, add your business info, upload your logo, and set your branding colors. Takes 5 minutes.",
+    snippet: "Your business is now on Dann Digital",
     glow: "radial-gradient(ellipse at 70% 50%, rgba(124,92,255,0.25), transparent 60%)",
   },
   {
     step: "02",
-    icon: Sparkles,
-    title: "Describe your vision",
+    icon: Layout,
+    title: "Design your website",
     description:
-      "Use feature prompts in src/prompts/features/. Your AI reads schema, types, and services automatically.",
-    snippet: "/new-feature lead-capture",
+      "Use our drag-and-drop editor to build landing pages. Add hero sections, services, testimonials, contact forms — no coding needed.",
+    snippet: "Fully customizable, fully yours",
     glow: "radial-gradient(ellipse at 70% 50%, rgba(245,158,11,0.22), transparent 60%)",
   },
   {
     step: "03",
-    icon: Rocket,
-    title: "Ship & scale",
+    icon: Zap,
+    title: "Launch and grow",
     description:
-      "Deploy to Vercel with one click. Checkpoint system means you can always roll back safely.",
-    snippet: "vercel deploy --prod",
+      "Go live instantly. Start capturing leads, managing team members, and tracking analytics. Scale as your business grows.",
+    snippet: "Watch the leads roll in",
     glow: "radial-gradient(ellipse at 70% 50%, rgba(16,185,129,0.22), transparent 60%)",
   },
 ];
@@ -60,7 +59,7 @@ export function HowItWorks() {
             How it works
           </span>
           <h2 className="mt-6 text-4xl sm:text-5xl font-semibold text-foreground tracking-[-0.02em]">
-            <Typewriter text="Three steps to your next project" speed={40} />
+            <Typewriter text="Three steps to your digital presence" speed={40} />
           </h2>
         </motion.div>
 
