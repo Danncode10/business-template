@@ -10,7 +10,7 @@ import {
   Shield,
   Zap,
 } from "lucide-react";
-import { siteConfig } from "@/lib/config";
+import { businessConfig } from "@/lib/business-config";
 import { Typewriter } from "./typewriter";
 import { WaterParticles } from "./water-particles";
 
@@ -18,7 +18,7 @@ interface HeroProps {
   isAuthed: boolean;
 }
 
-const HERO_HEADLINE = "Help small businesses go digital.";
+const HERO_HEADLINE = businessConfig.tagline || "Help small businesses go digital.";
 const HERO_TYPING_SPEED = 60; // ~2.5s total for headline
 
 export function Hero({ isAuthed }: HeroProps) {
@@ -192,18 +192,20 @@ export function Hero({ isAuthed }: HeroProps) {
             Start your journey
           </MagneticCTA>
 
-          <a
-            href={siteConfig.githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group inline-flex items-center gap-2 text-[14px] font-medium text-foreground/90 hover:text-foreground transition-colors"
-          >
-            <GitHubIcon className="h-3.5 w-3.5" />
-            <span className="border-b border-white/[0.15] group-hover:border-white/[0.4] transition-colors pb-0.5">
-              View on GitHub
-            </span>
-            <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </a>
+          {businessConfig.githubUrl && (
+            <a
+              href={businessConfig.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 text-[14px] font-medium text-foreground/90 hover:text-foreground transition-colors"
+            >
+              <GitHubIcon className="h-3.5 w-3.5" />
+              <span className="border-b border-white/[0.15] group-hover:border-white/[0.4] transition-colors pb-0.5">
+                View on GitHub
+              </span>
+              <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
+          )}
         </motion.div>
 
         {/* Customer logo strip — blurred during typing, clears after */}
@@ -272,7 +274,7 @@ export function Hero({ isAuthed }: HeroProps) {
                 <div className="flex items-center gap-2 px-3 py-1 rounded-md bg-white/[0.03] border border-white/[0.04]">
                   <div className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                   <span className="text-[10px] font-mono text-muted-foreground">
-                    {siteConfig.name}.app/dashboard
+                    {businessConfig.name.toLowerCase().replace(/\s+/g, '')}.app/dashboard
                   </span>
                 </div>
                 <div className="w-12" />

@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { Phone, MapPin, Clock, Send } from 'lucide-react';
 import { useState } from 'react';
-import { siteConfig } from '@/lib/config';
+import { businessConfig } from '@/lib/business-config';
 
 export function ContactBlock() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,22 +30,22 @@ export function ContactBlock() {
       id: 1,
       icon: MapPin,
       label: 'Address',
-      value: '123 Business Street',
-      subValue: 'City, State 12345',
+      value: businessConfig.contact.address.split(',')[0],
+      subValue: businessConfig.contact.address.split(',').slice(1).join(',').trim(),
     },
     {
       id: 2,
       icon: Phone,
       label: 'Phone',
-      value: '(555) 123-4567',
+      value: businessConfig.contact.phone,
       subValue: 'Available Mon-Fri',
     },
     {
       id: 3,
       icon: Clock,
       label: 'Hours',
-      value: 'Mon - Fri: 9AM - 6PM',
-      subValue: 'Sat: 10AM - 4PM',
+      value: `${businessConfig.hours.monday.split('–')[0].trim()} - ${businessConfig.hours.friday.split('–')[1].trim()}`,
+      subValue: businessConfig.hours.saturday === 'Closed' ? 'Weekdays Only' : `Sat: ${businessConfig.hours.saturday}`,
     },
   ];
 
@@ -116,16 +116,22 @@ export function ContactBlock() {
             <motion.div variants={itemVariants} className="group">
               <div className="p-1.5 rounded-3xl border border-white/[0.06] bg-gradient-to-br from-white/[0.04] to-white/[0.02] transition-all duration-300 group-hover:border-white/[0.12] group-hover:from-white/[0.06] group-hover:to-white/[0.04]">
                 <div className="rounded-[calc(1.5rem-0.375rem)] h-64 bg-card relative overflow-hidden">
-                  <iframe
-                    src={siteConfig.contact.googleMapsEmbedUrl}
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen=""
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    className="rounded-[calc(1.5rem-0.375rem)]"
-                  />
+                  {businessConfig.contact.googleMapsUrl ? (
+                    <iframe
+                      src={businessConfig.contact.googleMapsUrl}
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      allowFullScreen=""
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      className="rounded-[calc(1.5rem-0.375rem)]"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center h-full bg-muted/50">
+                      <p className="text-muted-foreground text-sm">Add googleMapsUrl to business.json to show map</p>
+                    </div>
+                  )}
                   <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     style={{
                       background: 'radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(124, 92, 255, 0.1), transparent 80%)',

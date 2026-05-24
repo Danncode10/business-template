@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { siteConfig } from "@/lib/config";
+import { businessConfig } from "@/lib/business-config";
 import { Typewriter } from "./typewriter";
 
 interface CtaBannerProps {
@@ -44,7 +44,7 @@ export function CtaBanner({ isAuthed }: CtaBannerProps) {
             <Typewriter text="Ready to go digital?" speed={40} />
           </h2>
           <p className="mt-6 text-[15px] text-muted-foreground max-w-md mx-auto leading-relaxed">
-            Businesses are transforming with {siteConfig.name}. Build your online
+            Businesses are transforming with {businessConfig.name}. Build your online
             presence and start reaching more customers today.
           </p>
 

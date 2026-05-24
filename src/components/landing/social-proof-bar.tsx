@@ -2,11 +2,11 @@
 
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
-import { siteConfig } from "@/lib/config";
+import { businessConfig } from "@/lib/business-config";
 
 export function SocialProofBar() {
   const { rating, ratingSource, customers, yearsInBusiness } =
-    siteConfig.socialProof;
+    businessConfig.socialProof;
 
   const items = [
     {

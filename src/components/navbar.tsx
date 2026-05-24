@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { siteConfig } from "@/lib/config";
+import { businessConfig } from "@/lib/business-config";
 import { signOut } from "@/services/auth";
 import { useRouter } from "next/navigation";
 import { LogOut, LayoutDashboard, Settings, ChevronDown, ArrowUpRight } from "lucide-react";
@@ -72,10 +72,12 @@ export function Navbar({ user }: { user: User | null }) {
             className="group flex items-center gap-2 pl-3 pr-4 py-1.5 rounded-full hover:bg-white/[0.03] transition-colors"
           >
             <div className="relative flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-[#5B3FE0] shadow-[0_2px_8px_rgba(124,92,255,0.4),inset_0_1px_0_rgba(255,255,255,0.2)]">
-              <span className="text-[11px] font-black text-primary-foreground">D</span>
+              <span className="text-[11px] font-black text-primary-foreground">
+                {businessConfig.name?.[0]?.toUpperCase() || 'D'}
+              </span>
             </div>
             <span className="text-sm font-semibold tracking-tight text-foreground">
-              {siteConfig.name}
+              {businessConfig.name}
             </span>
           </Link>
 
@@ -97,8 +99,19 @@ export function Navbar({ user }: { user: User | null }) {
             ))}
           </nav>
 
-          {/* CTA */}
+          {/* CTA + Github Link */}
           <div className="hidden md:flex items-center gap-1 pl-1">
+            {businessConfig.githubUrl && (
+              <a
+                href={businessConfig.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-3 py-1.5 text-[13px] font-medium text-muted-foreground rounded-full hover:text-foreground hover:bg-white/[0.03] transition-all duration-300"
+                title="View on GitHub"
+              >
+                GitHub
+              </a>
+            )}
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger className="group flex items-center gap-2 rounded-full bg-white/[0.04] hover:bg-white/[0.08] active:scale-[0.97] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] pl-1 pr-3 py-1 border border-white/[0.06]">
