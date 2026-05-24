@@ -177,9 +177,9 @@ Magic link authentication allows users to log in via email without remembering a
    - [ ] Verify `x-app-id: business-template` is present
 
 7. **Test: `useAuthUser` hook in browser**
-   - [ ] Open browser DevTools → **Console**
-   - [ ] The dashboard should load your name and email in the sidebar
-   - [ ] No console errors about `undefined user` or type errors
+   - [x] Open browser DevTools → **Console**
+   - [x] The dashboard should load your name and email in the sidebar
+   - [x] No console errors about `undefined user` or type errors
 
 #### Common Issues
 
