@@ -12,9 +12,15 @@ export const siteConfig = {
   },
   // Contact info (configurable per client)
   contact: {
-    email: "hello@danndigital.com",
-    phone: "+1 (555) 000-0000",
-    address: "123 Main Street, Suite 100, City, ST 00000",
+    email: "hello@example.com",
+    phone: "(555) 123-4567",
+    address: "123 Business Street, City, State 12345",
+    // Google Maps embed URL — to customize:
+    // 1. Go to https://www.google.com/maps
+    // 2. Search for your business address
+    // 3. Click "Share" → "Embed a map"
+    // 4. Copy the src= URL value and paste here
+    googleMapsEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.1234567890!2d-74.0060!3d40.7128!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDQyJzQ2LjEiTiA3NMKwMDAnMjEuNiJX!5e0!3m2!1sen!2sus!4v1234567890",
   },
   // Social links
   socials: {

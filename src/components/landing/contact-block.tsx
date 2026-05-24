@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Phone, MapPin, Clock, Send } from 'lucide-react';
 import { useState } from 'react';
+import { siteConfig } from '@/lib/config';
 
 export function ContactBlock() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -111,15 +112,23 @@ export function ContactBlock() {
             viewport={{ once: true, margin: '-60px' }}
             className="space-y-6"
           >
-            {/* Map Placeholder */}
+            {/* Google Maps */}
             <motion.div variants={itemVariants} className="group">
               <div className="p-1.5 rounded-3xl border border-white/[0.06] bg-gradient-to-br from-white/[0.04] to-white/[0.02] transition-all duration-300 group-hover:border-white/[0.12] group-hover:from-white/[0.06] group-hover:to-white/[0.04]">
-                <div className="rounded-[calc(1.5rem-0.375rem)] h-64 bg-card flex items-center justify-center relative overflow-hidden">
-                  <div
-                    className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                <div className="rounded-[calc(1.5rem-0.375rem)] h-64 bg-card relative overflow-hidden">
+                  <iframe
+                    src={siteConfig.contact.googleMapsEmbedUrl}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="rounded-[calc(1.5rem-0.375rem)]"
+                  />
+                  <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     style={{
-                      background:
-                        'radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(124, 92, 255, 0.1), transparent 80%)',
+                      background: 'radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(124, 92, 255, 0.1), transparent 80%)',
                     }}
                     onMouseMove={(e) => {
                       const rect = e.currentTarget.getBoundingClientRect();
@@ -129,10 +138,6 @@ export function ContactBlock() {
                       e.currentTarget.style.setProperty('--mouse-y', `${y}%`);
                     }}
                   />
-                  <div className="text-center relative z-10">
-                    <MapPin className="h-12 w-12 text-primary/40 mx-auto mb-3" strokeWidth={1.5} />
-                    <p className="text-muted-foreground text-sm">Google Maps placeholder</p>
-                  </div>
                 </div>
               </div>
             </motion.div>
