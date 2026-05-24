@@ -1,4 +1,4 @@
-import { getUserProfile, getVibeCheckData } from "@/services/dashboard";
+import { getUserProfile } from "@/services/dashboard";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { FeaturesTabs } from "@/components/features-tabs";
@@ -7,15 +7,11 @@ import { HowItWorks } from "@/components/landing/how-it-works";
 import { Pricing } from "@/components/landing/pricing";
 import { CtaBanner } from "@/components/landing/cta-banner";
 import { Typewriter } from "@/components/landing/typewriter";
-import { creatorRepos } from "@/lib/config";
 
 
 export default async function Home() {
   const session = await getUserProfile();
   const user = session?.user || null;
-  const profile = session?.profile;
-  const profiles = await getVibeCheckData() || [];
-  const repos = creatorRepos;
 
   return (
     <>
@@ -24,7 +20,7 @@ export default async function Home() {
       <Hero isAuthed={!!user} />
 
       {/* =============================
-          FEATURES SECTION (BENTO + TABS)
+          FEATURES SECTION (BENTO GRID)
           ============================= */}
       <section id="features" className="relative bg-background isolate overflow-hidden">
         <div
@@ -42,19 +38,15 @@ export default async function Home() {
               Features
             </span>
             <h2 className="mt-6 text-4xl sm:text-5xl font-semibold text-foreground tracking-[-0.02em]">
-              <Typewriter text="Everything you need to launch" speed={40} />
+              <Typewriter text="Everything small businesses need" speed={40} />
             </h2>
 
             <p className="mt-5 text-[15px] text-muted-foreground max-w-xl mx-auto leading-relaxed">
-              One template. Every essential built in.
+              Websites, lead capture, team collaboration, and analytics. All in one platform.
             </p>
           </div>
 
-          <FeaturesTabs
-            profiles={profiles}
-            repos={repos}
-            currentRole={profile?.role}
-          />
+          <FeaturesTabs />
         </div>
       </section>
 

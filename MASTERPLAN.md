@@ -27,10 +27,10 @@
 
 - [ ] **Create npm Test Scripts**
   - [ ] `npm run test:auth` (Phase 1 tests)
-  - [ ] `npm run test:roles` (Phase 2 tests)
-  - [ ] `npm run test:domain` (Phase 3 tests)
-  - [ ] `npm run test:rls` (Phase 4 tests)
-  - [ ] `npm run test:dashboard` (Phase 5 tests)
+  - [ ] `npm run test:dashboard` (Phase 2 tests)
+  - [ ] `npm run test:roles` (Phase 3 tests)
+  - [ ] `npm run test:domain` (Phase 4 tests)
+  - [ ] `npm run test:rls` (Phase 5 tests)
   - [ ] `npm run test:blog` (Phase 6 tests)
   - [ ] `npm run test:multi-tenant` (full isolation test)
 
@@ -41,7 +41,7 @@
 
 **Notes:**
 - Phase 0 is *already complete* — the command/skill/TEST.md are built and in place
-- Start Phase 1 by running: `/masterplan-task "Phase 1: Core Auth & Tenant Setup - Gmail SMTP Setup"`
+- Start Phase 1 by running: `/masterplan-task "Phase 1: Core Auth & Tenant Setup - Magic Link Auth Flow"`
 
 ---
 
@@ -95,13 +95,14 @@
 **Est. time:** 1-2 weeks  
 **Blockers:** None
 
-- [x] **Gmail SMTP Setup** ✅
+- [x] **Gmail SMTP Setup** ✅ (2026-05-24)
   - [x] Enable 2-Step Verification on Google Account
   - [x] Create Gmail App Password
   - [x] Configure Supabase SMTP (Host, Port, Username, Password)
   - [x] Enable email templates in Supabase (Reset Password, Confirm Sign Up)
-  - [x] Test email delivery via Supabase
-  - [x] Document setup steps in TEST.md (see README.md line 374)
+  - [x] Test email delivery via Supabase (verified: signup → login → email)
+  - [x] Document setup steps in TEST.md
+  - [x] Sender name: "Dann"
 
 - [ ] **Magic Link Auth Flow**
   - [ ] Create `/auth/request-magic-link` API route
@@ -115,6 +116,7 @@
   - [ ] Test session persistence across pages
   - [ ] Add logout functionality
   - [ ] Test: Session expires → redirects to login
+  - [ ] Set `app.id` context for RLS enforcement
 
 - [ ] **Type Safety for Auth**
   - [ ] Extend `src/types/supabase.ts` with `auth_users` type
@@ -126,10 +128,173 @@
 - [ ] User can set password once, change anytime
 - [ ] Sessions persist correctly
 - [ ] Forgot password works end-to-end
+- [ ] RLS context set via middleware for org isolation
 
 ---
 
-## **PHASE 2: Team Roles & Permissions** (Access Control)
+## **PHASE 2: Landing Page & Admin Dashboard** (UI Foundation)
+
+**Goal:** Rebrand landing page to Dann Digital + build professional admin dashboard  
+**Est. time:** 1-2 weeks (remaining — foundation complete)  
+**Status:** In Progress — Foundation complete (2026-05-24)  
+**Blockers:** None (UI work is independent of auth phases)
+
+- [x] **Landing Page Customization (Dann Digital Brand)** ✅ Mostly complete
+  - [x] Update hero section: "Help Small Businesses Go Digital" headline
+  - [x] Replace DannFlow references with Dann Digital (hero, features, how-it-works, CTA)
+  - [x] Update features section: removed developer tabs (Supabase Live, GitHub MCP), added 6 business-focused feature cards
+  - [x] Update CTA banner: "Ready to go digital?" + "Get started"
+  - [x] Update How It Works: 3 business-focused steps (Set up profile, Design website, Launch and grow)
+  - [ ] Update footer: Company info for Dann Digital
+  - [x] Maintain: Dark-premium theme, glass navbar, magnetic CTAs (from [[landing-design-system]])
+  - [ ] Test: Mobile responsive, Safari + Chrome, <10% CPU idle
+
+- [ ] **Testimonials / Reviews Section**
+  - [ ] 3–5 quote cards: star rating, quote text, customer name, optional avatar
+  - [ ] Sits below How It Works (before CTA banner)
+  - [ ] Starter content editable via `site_settings` or section JSON
+  - [ ] Optional: link to Google Reviews page
+
+- [ ] **Services / Pricing Overview** (landing page teaser, not full vertical)
+  - [ ] 3–6 service cards: name, short description, starting price or "Contact for pricing"
+  - [ ] Pulls from vertical-specific table (Phase 7) or hardcoded starter cards
+  - [ ] CTA per card: "Book now" / "Learn more" → contact form anchor
+
+- [ ] **Contact Block** (above footer)
+  - [ ] Address, phone, email, business hours (Mon–Sun)
+  - [ ] Google Maps embed (iframe via place ID stored in `site_settings`)
+  - [ ] Inline contact form: name, email, message → submits to `leads` table
+  - [ ] Responsive: map full-width on mobile, side-by-side on desktop
+
+- [ ] **Gallery / Photo Grid**
+  - [ ] 4–9 photos in uniform grid or masonry layout
+  - [ ] Images managed via dashboard Image Upload (Phase 2 editor)
+  - [ ] Lightbox on click (optional)
+
+- [ ] **Social Proof Bar**
+  - [ ] Horizontal strip between hero and features: e.g., "4.9 ★ on Google · 500+ customers · 10 years in business"
+  - [ ] Values configurable via `site_settings` (rating, customer count, years)
+  - [ ] Subtle separator, no heavy card — just trust signals
+
+- [x] **Dashboard Layout & Navigation** ✅ Foundation complete
+  - [x] Single-component SPA (`dashboard-shell.tsx`) with `?tab=` URL param routing
+  - [x] Fixed left sidebar (`bg-card border-r`)
+  - [x] Collapsible sidebar on desktop (PanelLeftClose / PanelLeft)
+  - [x] Mobile: slide-in overlay with backdrop blur
+  - [x] Sidebar nav: Overview, Pages, Leads, Team
+  - [x] `MAIN` section label above nav items
+  - [x] Settings button at bottom of sidebar
+  - [x] User profile row at bottom: Avatar + name + email + popup menu
+  - [x] Popup menu: Back to Home + Sign Out
+  - [x] Top bar with active tab breadcrumb
+  - [ ] Top bar: org switcher
+  - [ ] Top bar: notifications
+  - [ ] RLS context: Set `app.id` and `organization_id` for dashboard queries (Phase 1 dependency)
+  - [ ] Test: Switching orgs → data updates correctly
+
+- [x] **Dashboard Components (Core)** ✅ Core done
+  - [x] `StatCard` component (icon top-right, label, value, note, accent color)
+  - [x] `ComingSoon` placeholder (dashed border, icon, title, description, phase badge)
+  - [x] `OverviewTab` with 4-column stat cards + Recent Activity + Quick Actions
+  - [ ] Data table component (sortable columns, filters)
+  - [ ] Form components (inputs, selects, file upload)
+  - [ ] Modal dialogs (create, edit, delete)
+  - [x] Dark theme: Match landing page tokens (OLED black, purple accents)
+  - [ ] Test: All components responsive (375px—2560px)
+
+- [x] **Dashboard Pages (Stubs)** ✅ All stubs in place
+  - [x] `/dashboard` → Overview (stat cards + quick actions)
+  - [x] `/dashboard/pages` → ComingSoon stub
+  - [x] `/dashboard/leads` → ComingSoon stub
+  - [x] `/dashboard/team` → ComingSoon stub
+  - [x] `/dashboard/settings` → ComingSoon stub
+  - [ ] `/dashboard/analytics` → placeholder (future)
+
+- [ ] **Pages & Sections Schema**
+  - [ ] Verify `pages` table: id, org_id, slug, title, created_at
+  - [ ] Verify `sections` table: id, page_id, org_id, type, title, description, cta_text, cta_url, image_url, order, created_at
+  - [ ] Add section types enum: hero, about, services, pricing, testimonials, blog, contact, faq
+  - [ ] Run checkpoint + update-types
+
+- [ ] **Admin Page Editor**
+  - [ ] Create `/dashboard/pages` listing all pages (hero, about, services, etc.)
+  - [ ] Create `/dashboard/pages/[slug]/edit` editor (drag-to-reorder sections)
+  - [ ] For each section: show form with fields (title, description, CTA, image)
+  - [ ] Save to Supabase on submit
+  - [ ] Live preview: Side-by-side editor + preview
+  - [ ] Test: Edit hero title → appears on live site
+
+- [ ] **Content Item CRUD** (add / edit / delete — reused by all Phase 7 verticals)
+  - [ ] Table view: list items (name, price, category, status) with edit + delete per row
+  - [ ] Add/edit via modal: name, description, price, image upload, category, display order
+  - [ ] Price field label adapts per vertical ("Price", "Starting from", "Rate", "Per night")
+  - [ ] Drag-to-reorder items within a section
+  - [ ] Soft delete only (sets `deleted_at`, never hard-deletes)
+  - [ ] This CRUD pattern is the base for Phase 7: menus, services, listings, courses
+
+- [ ] **Page Sections Display**
+  - [ ] Create `<PageSection>` component (reusable for all section types)
+  - [ ] Create hero, about, services, contact, testimonial components
+  - [ ] Homepage `/` displays sections from `pages.home`
+  - [ ] Test: Live edit hero → homepage updates
+
+- [ ] **Image Upload & Optimization**
+  - [ ] Integrate Cloudinary or Supabase storage
+  - [ ] Admin can upload image for each section
+  - [ ] Store URL in `sections.image_url`
+  - [ ] Auto-optimize: Convert to WebP, responsive sizes
+  - [ ] Display optimized images on frontend
+
+- [ ] **Site Settings (contact, hours, maps, branding)**
+  - [ ] Verify/create `site_settings` table: `org_id`, `key TEXT`, `value TEXT` (or structured columns)
+  - [ ] Structured fields: `business_name`, `tagline`, `logo_url`, `address`, `phone`, `email`, `hours` (JSON), `google_maps_url`, `social_links` (JSON), `primary_color`, `accent_color`
+  - [ ] Build `/dashboard/settings` UI:
+    - [ ] Business Info tab: name, tagline, logo upload
+    - [ ] Contact tab: address, phone, email, hours per weekday
+    - [ ] Integrations tab: Google Maps embed URL or place ID, social profile links
+    - [ ] Branding tab: primary color, accent color (Phase 5+ full theming)
+  - [ ] Fallback: `siteConfig` in `src/lib/config.ts` used as defaults until client configures
+  - [ ] Update `.env.example`: technical vars only (Supabase URL, app ID, site name) — no business content
+  - [ ] Run `npm run checkpoint` + `npm run update-types` after schema
+
+- [ ] **Form Submissions (Contact, Lead Capture)**
+  - [ ] Verify `leads` table exists
+  - [ ] Create contact form component (reusable, used in Contact Block on landing page)
+  - [ ] Form submits → creates lead record in Supabase with `organization_id` + `app_id`
+  - [ ] Leads appear in `/dashboard/leads` inbox
+  - [ ] Test: Submit contact form → appears in admin lead inbox
+
+**Acceptance Criteria:**
+- [x] Landing page hero rebranded ("Help small businesses go digital")
+- [x] Developer-focused content removed (Supabase Live, GitHub MCP)
+- [x] How It Works updated to 3 business-focused steps
+- [x] CTA updated to "Ready to go digital?" / "Get started"
+- [ ] Footer updated with Dann Digital company info
+- [x] Landing page maintains dark-premium theme (OLED black, purple, glass nav)
+- [ ] Testimonials section live on landing page
+- [ ] Services / Pricing overview section live
+- [ ] Contact block: address, hours, Google Maps embed, inline form
+- [ ] Gallery / Photo grid section live
+- [ ] Social proof bar between hero and features
+- [x] Dashboard: fixed sidebar with nav (Overview, Pages, Leads, Team, Settings)
+- [x] Dashboard: collapsible sidebar (desktop) + mobile overlay
+- [x] Dashboard: user profile + popup menu at bottom
+- [x] Dashboard: 4-column stat cards on Overview
+- [x] Dashboard: Quick Actions + Recent Activity panels
+- [x] Dashboard: all route stubs load without error
+- [ ] Dashboard: org switcher in top bar
+- [ ] Admin can edit hero, about, services pages
+- [ ] Admin can add / edit / delete content items with price and image
+- [ ] Dashboard settings: contact info, hours, Google Maps URL, social links
+- [ ] Changes appear live within 2-3 seconds
+- [ ] Contact forms submit → appear in lead inbox
+- [ ] `.env.example` updated with technical vars only (no business content)
+- [ ] All dashboard components styled consistently (dark theme, glass effects)
+- [ ] Mobile responsive: 375px → 2560px
+
+---
+
+## **PHASE 3: Team Roles & Permissions** (Access Control)
 
 **Goal:** Admin can invite/remove team members, assign roles  
 **Est. time:** 1 week  
@@ -153,7 +318,7 @@
   - [ ] Run `npm run update-types` to sync `src/types/supabase.ts`
 
 - [ ] **Team Admin UI**
-  - [ ] Create `/admin/team` page (list all team members)
+  - [ ] Build out `/dashboard/team` (replace ComingSoon stub)
   - [ ] Create "Invite team member" form (email input, sends magic link)
   - [ ] Create "Delete team member" button (with confirmation)
   - [ ] Display role badge (Admin / Employee)
@@ -178,7 +343,7 @@
 
 ---
 
-## **PHASE 3: Domain & Deployment** (Per-Client Setup)
+## **PHASE 4: Domain & Deployment** (Per-Client Setup)
 
 **Goal:** Automated client onboarding script  
 **Est. time:** 1 week  
@@ -222,11 +387,11 @@
 
 ---
 
-## **PHASE 4: Data Isolation & Security** (Multi-Tenant Hardening)
+## **PHASE 5: Data Isolation & Security** (Multi-Tenant Hardening)
 
 **Goal:** Bulletproof RLS policies + audit trail  
 **Est. time:** 1 week  
-**Blockers:** Phase 1, 2, 3 mostly complete
+**Blockers:** Phase 1, 3, 4 mostly complete
 
 - [ ] **RLS Policy Audit**
   - [ ] Verify all tables have org-based RLS policies
@@ -267,66 +432,20 @@
 
 ---
 
-## **PHASE 5: Admin Dashboard Pages** (CMS Foundation)
-
-**Goal:** Editable landing page sections  
-**Est. time:** 2 weeks  
-**Blockers:** Phase 1, 4 complete
-
-- [ ] **Pages & Sections Schema**
-  - [ ] Verify `pages` table: id, org_id, slug, title, created_at
-  - [ ] Verify `sections` table: id, page_id, org_id, type, title, description, cta_text, cta_url, image_url, order, created_at
-  - [ ] Add section types enum: hero, about, services, pricing, testimonials, blog, contact, faq
-  - [ ] Run checkpoint + update-types
-
-- [ ] **Admin Page Editor**
-  - [ ] Create `/admin/pages` listing all pages (hero, about, services, etc.)
-  - [ ] Create `/admin/pages/[slug]/edit` editor
-  - [ ] For each section: show form with fields (title, description, CTA, image)
-  - [ ] Save to Supabase on submit
-  - [ ] Test: Edit hero title → appears on live site
-
-- [ ] **Page Sections Display**
-  - [ ] Create `<PageSection>` component (reusable for all section types)
-  - [ ] Create hero, about, services, contact components
-  - [ ] Homepage `/` displays sections from `pages.home`
-  - [ ] Test: Live edit hero → homepage updates
-
-- [ ] **Image Upload**
-  - [ ] Integrate Cloudinary or R2 (or simple Supabase storage)
-  - [ ] Admin can upload image for each section
-  - [ ] Store URL in `sections.image_url`
-  - [ ] Display optimized images on frontend
-
-- [ ] **Form Submissions (Contact, Lead Capture)**
-  - [ ] Verify `leads` table exists
-  - [ ] Create contact form component (reusable)
-  - [ ] Form submits → creates lead record in Supabase
-  - [ ] Leads appear in `/admin/leads` inbox
-  - [ ] Test: Submit contact form → appears in admin inbox
-
-**Acceptance Criteria:**
-- [ ] Admin can edit hero, about, services pages
-- [ ] Changes appear live within 2-3 seconds
-- [ ] Team members (employee role) can edit pages (if assigned)
-- [ ] Contact forms submit → appear in lead inbox
-
----
-
 ## **PHASE 6: Blog System** (Content & SEO)
 
 **Goal:** Blog CMS with SEO controls  
 **Est. time:** 1.5 weeks  
-**Blockers:** Phase 5 complete
+**Blockers:** Phase 2 complete
 
 - [ ] **Blog Schema**
   - [ ] Verify `blog_posts` table: id, org_id, title, slug, content, excerpt, featured_image, author_id, published_at, seo_title, seo_description, seo_keywords
   - [ ] Create RLS: employees can edit only if assigned
 
 - [ ] **Blog Editor**
-  - [ ] Create `/admin/blog` listing all posts
-  - [ ] Create `/admin/blog/new` editor
-  - [ ] Create `/admin/blog/[slug]/edit` editor
+  - [ ] Create `/dashboard/blog` listing all posts (replace Analytics stub or add nav item)
+  - [ ] Create `/dashboard/blog/new` editor
+  - [ ] Create `/dashboard/blog/[slug]/edit` editor
   - [ ] Editor fields: title, slug, content (markdown or rich text), excerpt, image, publish date
   - [ ] SEO fields: meta title, meta description, keywords
 
@@ -352,7 +471,9 @@
 
 **Goal:** Pre-built modules for restaurant, service, real estate, education  
 **Est. time:** 3 weeks (staggered)  
-**Blockers:** Phase 5, 6 complete
+**Blockers:** Phase 2, 6 complete
+
+> Each vertical reuses the **Content Item CRUD** pattern built in Phase 2 (table + add/edit modal + image upload + drag-reorder). Only the table name, field labels, and section titles change per vertical.
 
 ### **Vertical 1: Restaurant**
 - [ ] **Schema**
@@ -361,8 +482,8 @@
   - [ ] Create `menu_items` table (category_id, name, description, price, image)
 
 - [ ] **Admin UI**
-  - [ ] `/admin/restaurant/menus` — list/create menus
-  - [ ] `/admin/restaurant/menus/[id]/edit` — edit menu items & categories
+  - [ ] `/dashboard/restaurant/menus` — list/create menus
+  - [ ] `/dashboard/restaurant/menus/[id]/edit` — edit menu items & categories
 
 - [ ] **Frontend Display**
   - [ ] `/menu` page shows all categories + items with prices
@@ -374,8 +495,8 @@
   - [ ] Create `testimonials` table (org_id, author, text, rating, image)
 
 - [ ] **Admin UI**
-  - [ ] `/admin/services` — list/create services
-  - [ ] `/admin/testimonials` — manage testimonials
+  - [ ] `/dashboard/services` — list/create services
+  - [ ] `/dashboard/testimonials` — manage testimonials
 
 - [ ] **Frontend Display**
   - [ ] Services section on homepage
@@ -386,7 +507,7 @@
   - [ ] Create `listings` table (org_id, title, price, bedrooms, bathrooms, address, description, images)
 
 - [ ] **Admin UI**
-  - [ ] `/admin/listings` — list/create/edit properties
+  - [ ] `/dashboard/listings` — list/create/edit properties
 
 - [ ] **Frontend Display**
   - [ ] `/listings` page with filters (price, beds, baths)
@@ -398,7 +519,7 @@
   - [ ] Create `lessons` table (course_id, title, content, order)
 
 - [ ] **Admin UI**
-  - [ ] `/admin/courses` — manage courses & lessons
+  - [ ] `/dashboard/courses` — manage courses & lessons
 
 - [ ] **Frontend Display**
   - [ ] `/courses` listing
@@ -522,4 +643,4 @@
 
 ---
 
-**Last Status:** Planning complete, ready for Phase 1 development.
+**Last Status:** Phase 0 + 0.5 complete. Phase 1 (SMTP done). Phase 2 (landing + dashboard foundation done). Next: Phase 1 Magic Link Auth Flow.
