@@ -51,11 +51,13 @@
 **Est. time:** 1-2 weeks  
 **Blockers:** None
 
-- [ ] **Gmail SMTP Setup**
-  - [ ] Configure Gmail/Resend for transactional emails
-  - [ ] Test email delivery (magic link, password reset)
-  - [ ] Add email templates (magic link, welcome, password reset)
-  - [ ] Store email config in `src/lib/config.ts`
+- [x] **Gmail SMTP Setup** ✅
+  - [x] Enable 2-Step Verification on Google Account
+  - [x] Create Gmail App Password
+  - [x] Configure Supabase SMTP (Host, Port, Username, Password)
+  - [x] Enable email templates in Supabase (Reset Password, Confirm Sign Up)
+  - [x] Test email delivery via Supabase
+  - [x] Document setup steps in TEST.md (see README.md line 374)
 
 - [ ] **Magic Link Auth Flow**
   - [ ] Create `/auth/request-magic-link` API route
