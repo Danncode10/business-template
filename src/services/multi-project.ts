@@ -18,19 +18,6 @@ const getAppId = (): string => {
 };
 
 /**
- * Build a query with app_id + organization_id filters (two-layer isolation)
- * Use this as the base for all data queries
- */
-export function withMultiProjectFilters<T>(
-  query: ReturnType<SupabaseClient['from']>['select'],
-  tenantId: string
-): ReturnType<SupabaseClient['from']>['select'] {
-  return query
-    .eq('app_id', getAppId())
-    .eq('organization_id', tenantId) as any;
-}
-
-/**
  * Create an organization
  */
 export async function createOrganization(
