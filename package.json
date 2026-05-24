@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "NO_COLOR=1 next dev",
+    "build": "NO_COLOR=1 next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "NO_COLOR=1 eslint",
     "update-types": "bash scripts/update-types.sh",
     "checkpoint": "bash scripts/checkpoint.sh",
     "test:auth": "echo '✅ Phase 1 auth tests — placeholder (add Jest/Vitest when Phase 1 starts)'",

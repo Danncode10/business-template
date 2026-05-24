@@ -1,8 +1,16 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+const APP_ID = process.env.NEXT_PUBLIC_APP_ID ?? 'business-template'
+
 export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request })
+  // Forward app-id to Server Components via request header
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('x-app-id', APP_ID)
+
+  let response = NextResponse.next({ request: { headers: requestHeaders } })
+  // Also expose on response so browser DevTools can see it
+  response.headers.set('x-app-id', APP_ID)
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -13,21 +21,20 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll()
         },
         setAll(cookiesToSet) {
+          // Refresh the request and response when cookies change (token refresh)
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-          supabaseResponse = NextResponse.next({ request })
+          response = NextResponse.next({ request: { headers: requestHeaders } })
+          response.headers.set('x-app-id', APP_ID)
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+            response.cookies.set(name, value, options)
           )
         },
       },
     }
   )
 
-  // Refresh session — MUST be before any getUser() calls
+  // getUser() refreshes the session — must be called before any logic
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Set app.id header for downstream RLS context enforcement
-  supabaseResponse.headers.set('x-app-id', process.env.NEXT_PUBLIC_APP_ID ?? 'business-template')
-
-  return { supabaseResponse, user }
+  return { response, user }
 }

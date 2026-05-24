@@ -135,9 +135,60 @@ Magic link authentication allows users to log in via email without remembering a
 - [x] Protected routes (`/dashboard`) redirect to `/login` if unauthenticated
 - [x] Auth routes (`/login`, `/signup`) redirect to `/dashboard` if already authenticated
 - [x] `x-app-id` header set on every response for RLS `app.id` context
-- [x] Logout already in `src/services/auth.ts` (`signOut()`)
+- [x] Logout in `src/services/auth.ts` (`signOut()`)
 - [x] `useAuthUser()` hook — typed `AuthUser` + `UserProfile` with auth state subscription
 - [x] TypeScript build succeeds with no errors
+
+#### Manual Verification Steps
+
+**Setup:** Run `npm run dev` first.
+
+1. **Test: Unauthenticated redirect → login**
+   - [ ] Open an incognito/private browser window
+   - [ ] Go to `http://localhost:3000/dashboard`
+   - [ ] You should be **redirected to `/login`** immediately (not see the dashboard)
+   - [ ] The URL in the address bar should show `/login?next=/dashboard`
+
+2. **Test: Login redirects to dashboard**
+   - [ ] On the `/login` page, sign in with your account
+   - [ ] After login, you should be **redirected to `/dashboard`** automatically
+   - [ ] You should NOT see the login page again if you go back to `/login`
+
+3. **Test: Authenticated redirect away from login**
+   - [ ] While logged in, manually navigate to `http://localhost:3000/login`
+   - [ ] You should be **immediately redirected to `/dashboard`** (no login form shown)
+   - [ ] Same for `http://localhost:3000/signup`
+
+4. **Test: Session persists across page refresh**
+   - [ ] While logged in on `/dashboard`, press **Cmd+R** (or F5) to hard refresh
+   - [ ] You should stay on `/dashboard` — NOT get redirected to login
+   - [ ] Your name and profile info should still show in the sidebar
+
+5. **Test: Logout works**
+   - [ ] While logged in, click your avatar in the sidebar bottom
+   - [ ] Click **Sign Out** in the popup menu
+   - [ ] You should be redirected to `/login` (or home)
+   - [ ] Try going to `http://localhost:3000/dashboard` — should redirect to `/login`
+
+6. **Test: `x-app-id` header is set**
+   - [ ] Open browser DevTools → **Network** tab
+   - [ ] Navigate to any page (e.g. `/dashboard`)
+   - [ ] Click the page request in the Network tab → **Response Headers**
+   - [ ] Verify `x-app-id: business-template` is present
+
+7. **Test: `useAuthUser` hook in browser**
+   - [ ] Open browser DevTools → **Console**
+   - [ ] The dashboard should load your name and email in the sidebar
+   - [ ] No console errors about `undefined user` or type errors
+
+#### Common Issues
+
+| Issue | Solution |
+|-------|----------|
+| Dashboard loads without redirect (no middleware) | Confirm `middleware.ts` is in the **project root** (same level as `package.json`) |
+| Redirect loop on `/login` | Clear browser cookies and try again |
+| `x-app-id` header missing | Check `NEXT_PUBLIC_APP_ID` is set in `.env.local` |
+| `useAuthUser` returns `loading: true` forever | Check Supabase client URL/key in `.env.local` |
 
 ---
 
