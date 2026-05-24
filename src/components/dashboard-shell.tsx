@@ -18,6 +18,7 @@ import {
 import { useRouter, useSearchParams } from "next/navigation"
 import { createClient } from "@/utils/supabase/client"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { siteConfig } from "@/lib/config"
 import type { User as SupabaseUser } from "@supabase/supabase-js"
 
 /* ─────────────────────────────────────────────────────────────── */
@@ -201,7 +202,7 @@ export function DashboardShell({ user, profile }: DashboardShellProps) {
               <span className="text-[11px] font-black text-white">D</span>
             </div>
             <span className={`text-sm font-bold tracking-tight text-foreground whitespace-nowrap ${collapsed ? "md:hidden" : ""}`}>
-              Dann Digital
+              {siteConfig.name}
             </span>
           </a>
           {/* Mobile close */}
