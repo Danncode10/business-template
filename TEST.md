@@ -137,11 +137,11 @@ Enables one Supabase instance to safely serve multiple of Dann's projects:
    - [x] Verify no TypeScript errors in `src/services/multi-project.ts`
    - [x] Build successful ✅ (fixed overly complex type signature)
 
-6. **Test Service Helpers (Manual)**
-   - [ ] Create a test page or API route
-   - [ ] Import `createOrganization` from `src/services/multi-project`
-   - [ ] Call: `await createOrganization('Test Org', 'test-org')`
-   - [ ] Verify it returns an org object with `app_id = 'business-template'`
+6. **Test Service Helpers (Manual) — Deferred to Phase 1**
+   - [ ] Service layer correctly structured and compiles
+   - [ ] RLS context (`app.id`) needs Phase 1 middleware to be set
+   - [ ] Full integration test will be in Phase 1 after auth middleware is implemented
+   - **Why:** Service functions require `app.id` context for RLS enforcement; this is set by middleware added in Phase 1 (Core Auth & Tenant Setup)
 
 #### Common Issues
 
