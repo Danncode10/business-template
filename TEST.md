@@ -201,9 +201,9 @@ Magic link authentication allows users to log in via email without remembering a
 
 ---
 
-## Phase 2: Landing Page & Admin Dashboard ✅
+## Phase 2: Landing Page & Admin Dashboard
 
-> **Status:** Foundation Complete  
+> **Status:** In Progress  
 > **Date:** 2026-05-24
 
 ### Landing Page (Dann Digital Brand) ✅
@@ -214,9 +214,15 @@ Magic link authentication allows users to log in via email without remembering a
 - [x] How It Works: 3 steps (Set up profile → Design website → Launch and grow)
 - [x] CTA Banner: "Ready to go digital?" + "Get started" button
 - [x] Dark-premium theme preserved (OLED black, purple primary, glass navbar, magnetic CTAs)
+- [x] Footer: Dann Digital company info (contact email, phone, address, social icons)
+- [x] Social Proof Bar: trust strip between hero and features (rating, customers, years)
+- [x] Testimonials: 5-card grid with star ratings, quotes, and author info
 
 **Pending:**
-- [ ] Footer: Dann Digital company info
+- [ ] Services / Pricing Overview section
+- [ ] Contact Block (address, hours, Google Maps, inline form)
+- [ ] Gallery / Photo Grid
+- [ ] Test: Mobile responsive, Safari + Chrome, <10% CPU idle
 
 ### Dashboard Layout ✅
 
@@ -231,6 +237,66 @@ Magic link authentication allows users to log in via email without remembering a
 
 **Pending:**
 - [ ] Top bar: org switcher + notifications
+
+### Social Proof Bar ✅
+
+**Status:** Complete (2026-05-24)  
+**File:** `src/components/landing/social-proof-bar.tsx`
+
+**Completed:**
+- [x] Horizontal trust strip between hero and features
+- [x] Displays: rating + source, customer count, years in business, 5-star row
+- [x] Values sourced from `siteConfig.socialProof` (configurable per client)
+- [x] Framer Motion fade-in on scroll
+
+#### Manual Verification Steps
+
+1. **Verify strip appears between hero and features**
+   - [ ] Open `http://localhost:3000`
+   - [ ] Scroll past the hero section
+   - [ ] You should see a thin horizontal bar with "4.9 ★ on Google · 500+ customers served · 10 yrs in business" and 5 gold stars
+
+### Testimonials Section ✅
+
+**Status:** Complete (2026-05-24)  
+**File:** `src/components/landing/testimonials.tsx`
+
+**Completed:**
+- [x] 5 testimonial cards in a responsive grid (1→2→3 cols)
+- [x] Each card: star rating, quote text, author initials avatar, name, role
+- [x] Color-accented gradient per card
+- [x] Section sits between How It Works and Pricing
+- [x] Framer Motion staggered reveal on scroll
+
+#### Manual Verification Steps
+
+1. **Verify testimonials section appears**
+   - [ ] Open `http://localhost:3000`
+   - [ ] Scroll to below "Three steps to your digital presence"
+   - [ ] You should see 5 quote cards with star ratings and author info
+   - [ ] Cards should stagger-animate in as you scroll
+
+### Footer (Dann Digital) ✅
+
+**Status:** Complete (2026-05-24)  
+**File:** `src/components/footer.tsx`
+
+**Completed:**
+- [x] Brand column: logo, description, email, phone, address
+- [x] Services column: Website Design, Lead Capture, Team Management, Analytics
+- [x] Company column: About, Blog, Contact, Pricing links
+- [x] Legal column: Privacy Policy, Terms, Cookie Policy
+- [x] Social icons: Twitter/X, Instagram, LinkedIn
+- [x] Copyright line with current year
+
+#### Manual Verification Steps
+
+1. **Verify footer content**
+   - [ ] Open `http://localhost:3000`
+   - [ ] Scroll to bottom
+   - [ ] You should see 4 columns: brand+contact info, Services, Company, Legal
+   - [ ] Social icons (X, Instagram, LinkedIn) should appear bottom-right
+   - [ ] Copyright shows current year and "Dann Digital"
 
 ---
 
