@@ -206,23 +206,26 @@ Magic link authentication allows users to log in via email without remembering a
 > **Status:** In Progress  
 > **Date:** 2026-05-24
 
-### Landing Page (Dann Digital Brand) ✅
+### Landing Page (Dann Digital Brand) — In Progress
 
 **Completed:**
-- [x] Hero: "Help small businesses go digital." + subtitle
-- [x] Features: 6 business-focused cards (removed dev tabs: Supabase Live, GitHub MCP)
-- [x] How It Works: 3 steps (Set up profile → Design website → Launch and grow)
+- [x] Hero: "Help small businesses go digital." + typewriter animation + water particles
+- [x] Anchor navigation: Skip intro animation when navigating to `/#gallery`, `/#services`, etc.
+- [x] Social Proof Bar: trust strip (4.9★ Google, 500+ customers, 10 yrs) between hero and services
+- [x] Services: 3 value props (Quality First, Fast & Reliable, Customer Care) with icons
+- [x] Gallery: 6 business-appropriate items with hover animations (Signature Dishes, Fresh Ingredients, etc.)
+- [x] Testimonials: 5-card grid with star ratings, quotes, author info
+- [x] Contact Block: Address/Phone/Hours info + embedded Google Maps + contact form
 - [x] CTA Banner: "Ready to go digital?" + "Get started" button
-- [x] Dark-premium theme preserved (OLED black, purple primary, glass navbar, magnetic CTAs)
 - [x] Footer: Dann Digital company info (contact email, phone, address, social icons)
-- [x] Social Proof Bar: trust strip between hero and features (rating, customers, years)
-- [x] Testimonials: 5-card grid with star ratings, quotes, and author info
+- [x] Dark-premium theme: OLED black, purple primary (#7C5CFF), glass navbar, magnetic CTAs
+- [x] Navbar: Updated links (Services, Gallery, Contact) + auth state (Sign in / Dashboard)
 
 **Pending:**
-- [ ] Services / Pricing Overview section
-- [ ] Contact Block (address, hours, Google Maps, inline form)
-- [ ] Gallery / Photo Grid
-- [ ] Test: Mobile responsive, Safari + Chrome, <10% CPU idle
+- [ ] Contact form backend integration (currently UI-only with 2s submit animation)
+- [ ] Blog system integration
+- [ ] Mobile testing: full responsive check on iOS/Android
+- [ ] Performance: measure CPU/memory on Safari, Chrome, Firefox at idle
 
 ### Dashboard Layout ✅
 
@@ -238,23 +241,52 @@ Magic link authentication allows users to log in via email without remembering a
 **Pending:**
 - [ ] Top bar: org switcher + notifications
 
+### Anchor Navigation (Skip Intro Animation) ✅
+
+**Status:** Complete (2026-05-24)  
+**Files:** `src/components/landing/hero.tsx`, `src/components/landing/typewriter.tsx`
+
+**Completed:**
+- [x] Detect URL hash on mount; if `#gallery`, `#services`, etc., skip typing animation
+- [x] Added `skipAnimation` prop to Typewriter component
+- [x] Added 5s failsafe timeout to clear intro-active state on page reload
+- [x] Typewriter shows text immediately without character-by-character animation when skipAnimation=true
+
+#### Manual Verification Steps
+
+1. **Test: Anchor navigation skips intro**
+   - [ ] Open `http://localhost:3000/#gallery` directly (not via link)
+   - [ ] You should land on the gallery section **without** the hero typing animation or blur
+   - [ ] The hero headline "Help small businesses go digital." should appear instantly
+   - [ ] Try `/#services`, `/#contact` — same behavior
+
+2. **Test: Home anchor shows intro**
+   - [ ] Open `http://localhost:3000/#home` or just `http://localhost:3000`
+   - [ ] You **should** see the typewriter animation typing out the headline
+   - [ ] The navbar should blur while typing completes
+
+3. **Test: Page reload at anchor preserves anchor position**
+   - [ ] Navigate to `http://localhost:3000/#gallery`
+   - [ ] Press Cmd+R (or F5) to reload
+   - [ ] You should stay on the gallery section (intro skipped, no blur)
+
 ### Social Proof Bar ✅
 
 **Status:** Complete (2026-05-24)  
 **File:** `src/components/landing/social-proof-bar.tsx`
 
 **Completed:**
-- [x] Horizontal trust strip between hero and features
+- [x] Horizontal trust strip between hero and services
 - [x] Displays: rating + source, customer count, years in business, 5-star row
 - [x] Values sourced from `siteConfig.socialProof` (configurable per client)
 - [x] Framer Motion fade-in on scroll
 
 #### Manual Verification Steps
 
-1. **Verify strip appears between hero and features**
-   - [ ] Open `http://localhost:3000`
-   - [ ] Scroll past the hero section
-   - [ ] You should see a thin horizontal bar with "4.9 ★ on Google · 500+ customers served · 10 yrs in business" and 5 gold stars
+1. **Verify strip appears between hero and services**
+   - [x] Open `http://localhost:3000`
+   - [x] Scroll past the hero section
+   - [x] You should see "4.9 ★ on Google · 500+ customers served · 10 yrs in business" + 5 gold stars
 
 ### Testimonials Section ✅
 
