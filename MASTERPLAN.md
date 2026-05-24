@@ -45,6 +45,44 @@
 
 ---
 
+## **PHASE 0.5: Multi-Project Supabase Setup** (Infrastructure)
+
+**Goal:** Namespace all tables with `app_id` so this Supabase can serve multiple of Dann's projects safely  
+**Est. time:** 2-4 hours  
+**Blockers:** None (do before any schema work)
+
+- [ ] **Add `app_id` to core tables**
+  - [ ] Add `app_id TEXT NOT NULL DEFAULT 'business-template'` to: `organizations`, `pages`, `sections`, `blog_posts`, `media`, `leads`, `site_settings`, `team_members`, `audit_log`
+  - [ ] Create index: `CREATE INDEX ON <table>(app_id)` for query perf
+  - [ ] Run `npm run checkpoint` after migration
+  - [ ] Run `npm run update-types`
+
+- [ ] **Update RLS policies (two-layer isolation)**
+  - [ ] Update all existing policies to also check `app_id = current_setting('app.id', true)`
+  - [ ] Test: project A cannot read project B's rows
+  - [ ] Run `/rls-check` to verify
+
+- [ ] **Set env var in `.env.local`**
+  - [ ] Add `NEXT_PUBLIC_APP_ID=business-template`
+  - [ ] Add `APP_ID=business-template` (server-side)
+
+- [ ] **Update service layer**
+  - [ ] All queries in `src/services/` add `.eq('app_id', process.env.NEXT_PUBLIC_APP_ID)`
+  - [ ] Lint: grep for `from('` calls missing `app_id` filter
+
+- [ ] **Document in MULTI_PROJECT.md**
+  - [ ] Schema setup steps
+  - [ ] How to add a new project to this Supabase
+  - [ ] Migration safety checklist
+
+**Acceptance Criteria:**
+- [ ] All tables have `app_id` column
+- [ ] RLS policies enforce both `app_id` and `organization_id`
+- [ ] `.env.local` has `NEXT_PUBLIC_APP_ID=business-template`
+- [ ] MULTI_PROJECT.md written
+
+---
+
 ## **PHASE 1: Core Auth & Tenant Setup** (Foundation)
 
 **Goal:** Magic link auth + tenant isolation + email infrastructure  

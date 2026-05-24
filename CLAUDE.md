@@ -144,6 +144,39 @@ When a client outgrows the shared tier and moves to their own Supabase:
 4. Update env vars (`NEXT_PUBLIC_SUPABASE_URL`, keys) to point to their Supabase
 5. No code changes needed — RLS policies automatically apply to their isolated DB
 
+### Multi-Project Supabase (Developer Namespace Pattern)
+This Supabase project is **shared across multiple of Dann's projects** (not just clients within this template). Each project is namespaced via `app_id`.
+
+**How it works:**
+- Every shared table has an `app_id TEXT NOT NULL DEFAULT 'business-template'` column
+- RLS policies enforce `app_id` in addition to `organization_id`
+- Each project's `.env.local` sets `NEXT_PUBLIC_APP_ID=<project-slug>`
+- Migrations applied here affect all projects sharing this Supabase — **always coordinate or use `app_id`-scoped migrations**
+
+**RLS pattern (two-layer isolation):**
+```sql
+-- Layer 1: project namespace
+-- Layer 2: client tenant
+CREATE POLICY "project + org isolation" ON pages
+  FOR ALL
+  USING (
+    app_id = current_setting('app.id', true)
+    AND organization_id = (auth.jwt() ->> 'organization_id')::uuid
+  );
+```
+
+**Service layer pattern:**
+```ts
+// Always filter both app_id and organization_id
+const { data } = await supabase
+  .from('pages')
+  .select('*')
+  .eq('app_id', process.env.NEXT_PUBLIC_APP_ID)
+  .eq('organization_id', tenantId)
+```
+
+See [MULTI_PROJECT.md](MULTI_PROJECT.md) for the full guide, migration steps, and env setup.
+
 ## Required MCP tools
 
 Before specialized work, verify these MCPs are connected:

@@ -249,16 +249,39 @@ CREATE POLICY "org isolation" ON pages
 
 ---
 
+## Multi-Project Supabase — LOCKED
+
+**Decision:** One Supabase project serves multiple of Dann's own projects (business-template + future projects). Tables are namespaced via `app_id`.
+
+**Two layers of isolation:**
+- **Layer 1 — `app_id`** (project namespace): isolates this template's tables from other projects Dann builds
+- **Layer 2 — `organization_id`** (tenant isolation): isolates clients from each other within this template
+
+**Env vars per project:**
+```
+NEXT_PUBLIC_APP_ID=business-template
+```
+
+**Why:**
+- Free Supabase tier is more than enough for multiple small projects at dev stage
+- Avoids paying for/managing multiple Supabase instances during growth phase
+- Simple to graduate: when a project scales, point its env vars to its own Supabase
+
+**Constraint:** Any migration to the shared Supabase must include `app_id` on new tables. Never run a migration that drops or modifies shared infrastructure without checking which projects are affected. See [MULTI_PROJECT.md](MULTI_PROJECT.md).
+
+---
+
 ## Anti-Decisions (What We're NOT Doing)
 
 1. **NOT a visual page builder with drag-drop.** Text + image CRUD only in MVP.
 2. **NOT using Stripe immediately.** Payments in Phase 2.
-3. **NOT supporting multiple Supabase projects in MVP.** One shared instance with RLS.
-4. **NOT building multi-tenant auth UI.** Clients provision their own Supabase + JWT.
-5. **NOT writing a CMS from scratch.** Simple JSONB columns for now.
-6. **NOT adding AI/chatbot early.** Phase 3 if demand emerges.
-7. **NOT making this restaurant-first.** Service business is first vertical; restaurants Phase 2.
-8. **NOT a white-label theme store.** We're a repeatable deployment platform per client.
+3. **NOT a separate Supabase per client in MVP.** One shared instance with RLS (`organization_id`). Clients can migrate later via env vars.
+4. **NOT a separate Supabase per project yet.** One shared Supabase + `app_id` namespace for all Dann's projects. Graduate when needed.
+5. **NOT building multi-tenant auth UI.** Clients provision their own Supabase + JWT.
+6. **NOT writing a CMS from scratch.** Simple JSONB columns for now.
+7. **NOT adding AI/chatbot early.** Phase 3 if demand emerges.
+8. **NOT making this restaurant-first.** Service business is first vertical; restaurants Phase 2.
+9. **NOT a white-label theme store.** We're a repeatable deployment platform per client.
 
 ---
 
