@@ -18,49 +18,49 @@ import type { Database as DatabaseType } from "@/types/supabase";
 
 const FEATURES = [
   {
-    icon: Database,
-    title: "Supabase integration",
+    icon: Layers,
+    title: "Beautiful Landing Pages",
     description:
-      "Auth, database, and real-time built in. Type-safe queries powered by auto-generated TypeScript definitions.",
+      "Drag-and-drop editor to create stunning websites. No coding required. Sections for hero, services, testimonials, pricing, and more.",
     span: "lg:col-span-2 lg:row-span-2",
     // Paint-only radial corner glow — no filter:blur cost on scroll
     glow: "radial-gradient(circle at 80% 20%, rgba(124,92,255,0.18), transparent 50%)",
   },
   {
-    icon: Zap,
-    title: "AI-native architecture",
+    icon: Database,
+    title: "Lead Capture & CRM",
     description:
-      "Built for Vibe Coding. Describe what you want — your AI builds it using your typed services.",
+      "Capture leads from contact forms. Inbox management, follow-up emails, and lead tracking built in.",
     span: "lg:col-span-2",
     glow: "radial-gradient(circle at 80% 20%, rgba(245,158,11,0.15), transparent 50%)",
   },
   {
     icon: Shield,
-    title: "Auth & RLS ready",
-    description: "Login, signup, and role-based access out of the box.",
+    title: "Team Collaboration",
+    description: "Invite team members, assign roles, and manage permissions. Full audit trail of changes.",
     span: "",
     glow: "radial-gradient(circle at 80% 20%, rgba(16,185,129,0.15), transparent 50%)",
   },
   {
-    icon: Terminal,
-    title: "Checkpoint system",
-    description: "One command to snapshot your database. Instant rollback.",
+    icon: Zap,
+    title: "SEO Optimized",
+    description: "Built-in meta tags, JSON-LD schema, sitemaps, and Google analytics integration.",
     span: "",
     glow: "radial-gradient(circle at 80% 20%, rgba(249,115,22,0.15), transparent 50%)",
   },
   {
-    icon: GitBranch,
-    title: "Git-first workflow",
+    icon: Code,
+    title: "Multi-Tenant Ready",
     description:
-      "Clean commits, branch strategies, and AI-assisted reviews via GitHub MCP.",
+      "One platform for multiple clients. Perfect for agencies. Complete data isolation and branding per client.",
     span: "lg:col-span-2",
     glow: "radial-gradient(circle at 80% 20%, rgba(139,92,246,0.15), transparent 50%)",
   },
   {
-    icon: Layers,
-    title: "Clean architecture",
+    icon: Lock,
+    title: "Enterprise Security",
     description:
-      "UI, services, types, prompts — each in its own lane.",
+      "Row-level security, encrypted passwords, SMTP email delivery, and role-based access control.",
     span: "lg:col-span-2",
     glow: "radial-gradient(circle at 80% 20%, rgba(236,72,153,0.15), transparent 50%)",
   },
