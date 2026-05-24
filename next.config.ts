@@ -3,6 +3,11 @@ import type { NextConfig } from "next";
 const APP_ID = process.env.NEXT_PUBLIC_APP_ID ?? 'business-template'
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      { hostname: 'images.unsplash.com' },
+    ],
+  },
   async headers() {
     return [
       {
