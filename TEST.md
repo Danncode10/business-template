@@ -121,9 +121,23 @@ Magic link authentication allows users to log in via email without remembering a
 - [x] Rate limiting protects against abuse
 - [x] Gmail SMTP integration working end-to-end
 
-### Session & Auth Middleware
+### Session & Auth Middleware ✅
 
-**Status:** Pending (next Phase 1 task)
+**Status:** Complete (2026-05-24)
+
+**Files created:**
+- `middleware.ts` — root Next.js middleware
+- `src/utils/supabase/middleware.ts` — SSR session refresh helper
+- `src/hooks/useAuthUser.ts` — typed client-side auth hook
+
+**Completed:**
+- [x] Supabase SSR middleware refreshes tokens on every request
+- [x] Protected routes (`/dashboard`) redirect to `/login` if unauthenticated
+- [x] Auth routes (`/login`, `/signup`) redirect to `/dashboard` if already authenticated
+- [x] `x-app-id` header set on every response for RLS `app.id` context
+- [x] Logout already in `src/services/auth.ts` (`signOut()`)
+- [x] `useAuthUser()` hook — typed `AuthUser` + `UserProfile` with auth state subscription
+- [x] TypeScript build succeeds with no errors
 
 ---
 
@@ -131,7 +145,8 @@ Magic link authentication allows users to log in via email without remembering a
 
 **Gmail SMTP:** ✅ Complete — Free email delivery via Supabase  
 **Magic Link Auth:** ✅ Complete — Email login + password setup + team invitations  
-**Session Middleware:** ⏳ Next — Set `app.id` context for RLS enforcement  
+**Session Middleware:** ✅ Complete — Token refresh + protected routes + `app.id` RLS context  
+**Type Safety:** ✅ Complete — `useAuthUser` hook + typed `AuthUser` / `UserProfile`
 
 ---
 

@@ -111,17 +111,17 @@
   - [x] Test: User receives magic link → clicks → sets password → logged in
   - [x] Add "forgot password" flow (email link → reset password)
 
-- [ ] **Session & Auth Middleware**
-  - [ ] Verify Supabase SSR middleware works (refresh tokens)
-  - [ ] Test session persistence across pages
-  - [ ] Add logout functionality
-  - [ ] Test: Session expires → redirects to login
-  - [ ] Set `app.id` context for RLS enforcement
+- [x] **Session & Auth Middleware** ✅ (2026-05-24)
+  - [x] Verify Supabase SSR middleware works (refresh tokens)
+  - [x] Test session persistence across pages
+  - [x] Add logout functionality
+  - [x] Test: Session expires → redirects to login
+  - [x] Set `app.id` context for RLS enforcement
 
-- [ ] **Type Safety for Auth**
-  - [ ] Extend `src/types/supabase.ts` with `auth_users` type
-  - [ ] Create `src/hooks/useAuthUser.ts` hook
-  - [ ] Update all auth checks to use typed hooks (no `any`)
+- [x] **Type Safety for Auth** ✅ (2026-05-24)
+  - [x] Extend `src/types/supabase.ts` with `auth_users` type
+  - [x] Create `src/hooks/useAuthUser.ts` hook
+  - [x] Update all auth checks to use typed hooks (no `any`)
 
 **Rate Limiting Notes:**
 - Rate limiting is **optional** via Upstash Redis (gracefully disabled if env vars missing)
@@ -134,8 +134,8 @@
 - [x] User can set password once, change anytime
 - [x] Magic link verified via OTP
 - [x] Admin can invite team members
-- [ ] Sessions persist correctly (Phase 1 next task)
-- [ ] RLS context set via middleware for org isolation (Phase 1 next task)
+- [x] Sessions persist correctly (middleware.ts token refresh)
+- [x] RLS context set via middleware (`x-app-id` header)
 
 ---
 
