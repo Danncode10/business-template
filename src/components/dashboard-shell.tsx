@@ -60,6 +60,8 @@ export function DashboardShell({ user, profile }: DashboardShellProps) {
   })();
 
   const [activeTab, setActiveTabLocal] = React.useState<DashboardTabId>(initialTab);
+  // Track which tabs have ever been visited — they stay mounted (just hidden) after first visit.
+  const [mountedTabs, setMountedTabs] = React.useState<Set<DashboardTabId>>(new Set([initialTab]));
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [collapsed, setCollapsed] = React.useState(false);
   const [userMenuOpen, setUserMenuOpen] = React.useState(false);
@@ -70,6 +72,8 @@ export function DashboardShell({ user, profile }: DashboardShellProps) {
   const setTab = React.useCallback((tab: DashboardTabId) => {
     if (!validIds.has(tab)) return;
     setActiveTabLocal(tab);
+    // Add to mounted set so the component is never unmounted after first visit
+    setMountedTabs(prev => prev.has(tab) ? prev : new Set([...prev, tab]));
     router.push(`/dashboard?tab=${tab}`, { scroll: false });
     setSidebarOpen(false);
   }, [router, validIds]);
@@ -229,13 +233,15 @@ export function DashboardShell({ user, profile }: DashboardShellProps) {
         </header>
 
         <main className="flex-1 overflow-y-auto p-6 md:p-8">
-          {activeTab === "overview"  && <OverviewTab displayName={displayName} setTab={setTab} />}
-          {activeTab === "services"  && <ServicesTab />}
-          {activeTab === "leads"     && <LeadsTab />}
-          {activeTab === "bookings"  && <BookingsTab />}
-          {activeTab === "gallery"   && <GalleryTab />}
-          {activeTab === "analytics" && <AnalyticsTab />}
-          {activeTab === "settings"  && <SettingsTab />}
+          {/* Lazy-mount: each tab mounts on first visit and stays mounted (hidden) after.
+              This keeps React Query observers alive so there's zero reload on tab switch. */}
+          {mountedTabs.has("overview")  && <div hidden={activeTab !== "overview"}>  <OverviewTab displayName={displayName} setTab={setTab} /></div>}
+          {mountedTabs.has("services")  && <div hidden={activeTab !== "services"}>  <ServicesTab /></div>}
+          {mountedTabs.has("leads")     && <div hidden={activeTab !== "leads"}>     <LeadsTab /></div>}
+          {mountedTabs.has("bookings")  && <div hidden={activeTab !== "bookings"}>  <BookingsTab /></div>}
+          {mountedTabs.has("gallery")   && <div hidden={activeTab !== "gallery"}>   <GalleryTab /></div>}
+          {mountedTabs.has("analytics") && <div hidden={activeTab !== "analytics"}> <AnalyticsTab /></div>}
+          {mountedTabs.has("settings")  && <div hidden={activeTab !== "settings"}>  <SettingsTab /></div>}
         </main>
       </div>
     </div>
