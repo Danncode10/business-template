@@ -8,6 +8,7 @@ import {
   Calendar,
   Image as ImageIcon,
   BarChart3,
+  ScrollText,
   Settings,
   LogOut,
   Home,
@@ -30,6 +31,7 @@ import { LeadsTab } from "@/components/dashboard/tabs/leads-tab";
 import { BookingsTab } from "@/components/dashboard/tabs/bookings-tab";
 import { GalleryTab } from "@/components/dashboard/tabs/gallery-tab";
 import { AnalyticsTab } from "@/components/dashboard/tabs/analytics-tab";
+import { LogsTab } from "@/components/dashboard/tabs/logs-tab";
 import { SettingsTab } from "@/components/dashboard/tabs/settings-tab";
 import { NotificationsBell } from "@/components/dashboard/notifications-bell";
 
@@ -40,6 +42,7 @@ const ICONS: Record<DashboardTabId, LucideIcon> = {
   bookings: Calendar,
   gallery: ImageIcon,
   analytics: BarChart3,
+  logs: ScrollText,
   settings: Settings,
 };
 
@@ -241,6 +244,7 @@ export function DashboardShell({ user, profile }: DashboardShellProps) {
           {mountedTabs.has("bookings")  && <div hidden={activeTab !== "bookings"}>  <BookingsTab /></div>}
           {mountedTabs.has("gallery")   && <div hidden={activeTab !== "gallery"}>   <GalleryTab /></div>}
           {mountedTabs.has("analytics") && <div hidden={activeTab !== "analytics"}> <AnalyticsTab /></div>}
+          {mountedTabs.has("logs")      && <div hidden={activeTab !== "logs"}>      <LogsTab /></div>}
           {mountedTabs.has("settings")  && <div hidden={activeTab !== "settings"}>  <SettingsTab /></div>}
         </main>
       </div>

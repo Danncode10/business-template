@@ -7,6 +7,7 @@ export type DashboardTabId =
   | "bookings"
   | "gallery"
   | "analytics"
+  | "logs"
   | "settings";
 
 export type FeatureFlag =
@@ -32,6 +33,7 @@ export const TAB_CONFIG: TabConfig[] = [
   { id: "bookings",   label: "Bookings",   feature: "contactForm" },
   { id: "gallery",    label: "Gallery",    feature: "gallery" },
   { id: "analytics",  label: "Analytics",  feature: "analytics" },
+  { id: "logs",       label: "Logs",       feature: "always" },
   { id: "settings",   label: "Settings",   feature: "always" },
 ];
 
