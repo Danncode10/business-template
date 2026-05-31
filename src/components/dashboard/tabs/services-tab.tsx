@@ -17,14 +17,14 @@ const asFeatures = (raw: unknown): string[] => (Array.isArray(raw) ? (raw as str
 const asTiers    = (raw: unknown): PriceTier[] => (Array.isArray(raw) ? (raw as PriceTier[]) : []);
 
 const MAIN_GROUPS = [
-  { key: "packages",  label: "Packages"  },
-  { key: "services",  label: "Services"  },
-  { key: "premium",   label: "Premium"   },
+  { key: "exterior",  label: "Exterior"  },
+  { key: "interior",  label: "Interior"  },
+  { key: "exclusive", label: "Exclusive" },
 ] as const;
 
 type MainGroup = (typeof MAIN_GROUPS)[number]["key"];
 
-// ─── Inline text editor ───────────────────────────────────────────────────────
+// ─── Inline text editor (used only in SimpleRow) ──────────────────────────────
 
 function InlineText({
   value, onSave, className, placeholder, multiline,
@@ -97,11 +97,14 @@ function EditPackageModal({ service, onSave, onClose }: {
   const [newPrice, setNewPrice]   = useState("");
 
   const handleSave = () => {
+    // Auto-commit any in-progress inputs so the user doesn't have to click ✓ first
+    const finalFeatures = newFeature.trim() ? [...features, newFeature.trim()] : features;
+    const finalTiers    = newPrice.trim()   ? [...tiers, { label: newLabel.trim(), price: newPrice.trim() }] : tiers;
     onSave({
       name: name.trim() || service.name,
       badge: badge.trim() || null,
-      features: features as unknown as Service["features"],
-      pricing_tiers: tiers as unknown as Service["pricing_tiers"],
+      features: finalFeatures as unknown as Service["features"],
+      pricing_tiers: finalTiers as unknown as Service["pricing_tiers"],
       is_published: isPublished,
       is_featured: isPopular,
     });
@@ -113,6 +116,7 @@ function EditPackageModal({ service, onSave, onClose }: {
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="bg-card border border-border rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
 
+        {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-border">
           <h3 className="text-base font-semibold text-foreground">Edit Package</h3>
           <button onClick={onClose} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
@@ -122,6 +126,7 @@ function EditPackageModal({ service, onSave, onClose }: {
 
         <div className="p-5 space-y-5">
 
+          {/* Name */}
           <div className="space-y-1.5">
             <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wide">Package Name</label>
             <input
@@ -132,6 +137,7 @@ function EditPackageModal({ service, onSave, onClose }: {
             />
           </div>
 
+          {/* Badge */}
           <div className="space-y-1.5">
             <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wide">Badge Text</label>
             <input
@@ -142,15 +148,19 @@ function EditPackageModal({ service, onSave, onClose }: {
             />
           </div>
 
+          {/* Toggles: Popular + Published */}
           <div className="space-y-3">
             <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wide">Settings</label>
 
+            {/* Popular */}
             <button
               type="button"
               onClick={() => setIsPopular(!isPopular)}
               className={cn(
                 "w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-colors",
-                isPopular ? "border-primary/40 bg-primary/10 text-foreground" : "border-border bg-background text-muted-foreground"
+                isPopular
+                  ? "border-primary/40 bg-primary/10 text-foreground"
+                  : "border-border bg-background text-muted-foreground"
               )}>
               <div className="flex items-center gap-2.5">
                 <Star className={cn("w-4 h-4", isPopular ? "text-primary fill-primary" : "text-muted-foreground")} />
@@ -159,17 +169,26 @@ function EditPackageModal({ service, onSave, onClose }: {
                   <p className="text-[11px] opacity-60">Highlights this card with a featured border</p>
                 </div>
               </div>
-              <div className={cn("w-10 h-5 rounded-full relative transition-colors shrink-0", isPopular ? "bg-primary" : "bg-muted")}>
-                <div className={cn("absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all", isPopular ? "left-5" : "left-0.5")} />
+              <div className={cn(
+                "w-10 h-5 rounded-full relative transition-colors shrink-0",
+                isPopular ? "bg-primary" : "bg-muted"
+              )}>
+                <div className={cn(
+                  "absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all",
+                  isPopular ? "left-5" : "left-0.5"
+                )} />
               </div>
             </button>
 
+            {/* Published */}
             <button
               type="button"
               onClick={() => setIsPublished(!isPublished)}
               className={cn(
                 "w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-colors",
-                isPublished ? "border-emerald-500/30 bg-emerald-500/10 text-foreground" : "border-border bg-background text-muted-foreground"
+                isPublished
+                  ? "border-emerald-500/30 bg-emerald-500/10 text-foreground"
+                  : "border-border bg-background text-muted-foreground"
               )}>
               <div className="flex items-center gap-2.5">
                 <div className={cn("w-2 h-2 rounded-full shrink-0", isPublished ? "bg-emerald-400" : "bg-muted-foreground/50")} />
@@ -178,12 +197,19 @@ function EditPackageModal({ service, onSave, onClose }: {
                   <p className="text-[11px] opacity-60">Visible on the public website</p>
                 </div>
               </div>
-              <div className={cn("w-10 h-5 rounded-full relative transition-colors shrink-0", isPublished ? "bg-emerald-500" : "bg-muted")}>
-                <div className={cn("absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all", isPublished ? "left-5" : "left-0.5")} />
+              <div className={cn(
+                "w-10 h-5 rounded-full relative transition-colors shrink-0",
+                isPublished ? "bg-emerald-500" : "bg-muted"
+              )}>
+                <div className={cn(
+                  "absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all",
+                  isPublished ? "left-5" : "left-0.5"
+                )} />
               </div>
             </button>
           </div>
 
+          {/* Features */}
           <div className="space-y-2">
             <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wide">Features</label>
             <div className="space-y-1.5">
@@ -220,6 +246,7 @@ function EditPackageModal({ service, onSave, onClose }: {
             </div>
           </div>
 
+          {/* Pricing Tiers */}
           <div className="space-y-2">
             <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wide">Pricing Tiers</label>
             <div className="space-y-1.5">
@@ -228,7 +255,7 @@ function EditPackageModal({ service, onSave, onClose }: {
                   <input
                     value={t.label}
                     onChange={(e) => setTiers(tiers.map((x, j) => j === i ? { ...x, label: e.target.value } : x))}
-                    placeholder="Label (e.g. Large)"
+                    placeholder="Label (e.g. SUV)"
                     className="flex-1 bg-background border border-border rounded-lg px-2.5 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary/50"
                   />
                   <input
@@ -247,7 +274,7 @@ function EditPackageModal({ service, onSave, onClose }: {
                 <input
                   value={newLabel}
                   onChange={(e) => setNewLabel(e.target.value)}
-                  placeholder="Label (e.g. Standard)"
+                  placeholder="Label (e.g. Sedan)"
                   className="flex-1 bg-background border border-dashed border-border rounded-lg px-2.5 py-1.5 text-sm text-muted-foreground focus:outline-none focus:border-primary/50 focus:text-foreground"
                 />
                 <input
@@ -268,8 +295,10 @@ function EditPackageModal({ service, onSave, onClose }: {
           </div>
         </div>
 
+        {/* Footer */}
         <div className="flex items-center justify-end gap-2 p-5 border-t border-border">
-          <button onClick={onClose} className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <button onClick={onClose}
+            className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
             Cancel
           </button>
           <button onClick={handleSave}
@@ -301,11 +330,15 @@ function PackageCard({ service, onUpdate, onDelete }: {
           ? "bg-gradient-to-br from-primary via-primary/40 to-primary/10"
           : "bg-gradient-to-br from-white/10 via-white/[0.04] to-transparent",
       )}>
+        {/* Card body */}
         <div className={cn(
           "rounded-3xl p-6 flex flex-col gap-5 h-full",
           service.is_featured ? "bg-card/95" : "bg-card",
         )}>
+
+          {/* Top bar: badge + controls */}
           <div className="flex items-center justify-between gap-2">
+            {/* Badge / Popular / Hidden */}
             <div className="flex items-center gap-2 min-w-0">
               {service.is_featured ? (
                 <span className="px-2.5 py-1 rounded-full bg-primary text-white text-[11px] font-semibold flex items-center gap-1 shrink-0">
@@ -324,22 +357,30 @@ function PackageCard({ service, onUpdate, onDelete }: {
                 </span>
               )}
             </div>
+
+            {/* Controls */}
             <div className="flex gap-1 shrink-0">
-              <button title="Edit package" onClick={() => setEditOpen(true)}
+              <button
+                title="Edit package"
+                onClick={() => setEditOpen(true)}
                 className="p-1.5 rounded-lg text-muted-foreground bg-muted hover:text-foreground hover:bg-muted/80 transition-colors">
                 <Pencil className="w-3.5 h-3.5" />
               </button>
-              <button title="Delete" onClick={() => confirm(`Delete "${service.name}"?`) && onDelete()}
+              <button
+                title="Delete"
+                onClick={() => confirm(`Delete "${service.name}"?`) && onDelete()}
                 className="p-1.5 rounded-lg text-muted-foreground bg-muted hover:text-destructive hover:bg-destructive/10 transition-colors">
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
 
+          {/* Name */}
           <p className={cn("font-bold text-xl leading-tight", service.is_featured ? "text-primary" : "text-white")}>
             {service.name}
           </p>
 
+          {/* Features list */}
           <ul className="space-y-2 flex-1">
             {features.map((f, i) => (
               <li key={i} className="flex items-start gap-2">
@@ -349,6 +390,7 @@ function PackageCard({ service, onUpdate, onDelete }: {
             ))}
           </ul>
 
+          {/* Pricing tiers */}
           {tiers.length > 0 && (
             <div className="pt-4 border-t border-border">
               <div className={cn(
@@ -370,13 +412,17 @@ function PackageCard({ service, onUpdate, onDelete }: {
       </div>
 
       {editOpen && (
-        <EditPackageModal service={service} onSave={(u) => onUpdate(u)} onClose={() => setEditOpen(false)} />
+        <EditPackageModal
+          service={service}
+          onSave={(u) => onUpdate(u)}
+          onClose={() => setEditOpen(false)}
+        />
       )}
     </>
   );
 }
 
-// ─── Simple row (Specialty + Add-ons sections) ────────────────────────────────
+// ─── Simple row (Paint Correction & Add-ons) ──────────────────────────────────
 
 function SimpleRow({ service, onUpdate, onDelete }: {
   service: Service;
@@ -394,7 +440,8 @@ function SimpleRow({ service, onUpdate, onDelete }: {
         className="text-sm text-white flex-1 mr-4" placeholder="Item name" />
       <div className="flex items-center gap-3 shrink-0">
         <InlineText value={price} onSave={setPrice}
-          className="text-sm font-bold text-primary min-w-[60px] text-right justify-end" placeholder="$0" />
+          className="text-sm font-bold text-primary min-w-[60px] text-right justify-end"
+          placeholder="$0" />
         <button onClick={() => confirm(`Delete "${service.name}"?`) && onDelete()}
           className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all">
           <Trash2 className="w-3.5 h-3.5" />
@@ -404,7 +451,7 @@ function SimpleRow({ service, onUpdate, onDelete }: {
   );
 }
 
-// ─── Add forms ────────────────────────────────────────────────────────────────
+// ─── Add package / Add row forms ──────────────────────────────────────────────
 
 function AddPackageCard({ onAdd }: { onAdd: (name: string) => void }) {
   const [name, setName] = useState("");
@@ -421,12 +468,14 @@ function AddPackageCard({ onAdd }: { onAdd: (name: string) => void }) {
   return (
     <div className="rounded-3xl border-2 border-dashed border-primary/30 p-6 flex flex-col gap-3 min-h-[200px]">
       <p className="text-[13px] font-semibold text-foreground">New package</p>
-      <input autoFocus value={name} onChange={(e) => setName(e.target.value)} placeholder="Package name"
+      <input autoFocus value={name} onChange={(e) => setName(e.target.value)}
+        placeholder="Package name"
         onKeyDown={(e) => { if (e.key === "Enter" && name.trim()) { onAdd(name.trim()); setName(""); setOpen(false); } if (e.key === "Escape") setOpen(false); }}
         className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary/50" />
       <div className="flex gap-2 mt-auto">
         <button onClick={() => setOpen(false)} className="px-3 py-1.5 text-[13px] text-muted-foreground">Cancel</button>
-        <button disabled={!name.trim()} onClick={() => { onAdd(name.trim()); setName(""); setOpen(false); }}
+        <button disabled={!name.trim()}
+          onClick={() => { onAdd(name.trim()); setName(""); setOpen(false); }}
           className="px-3 py-1.5 bg-primary text-primary-foreground rounded-lg text-[13px] font-medium disabled:opacity-50">
           Add
         </button>
@@ -467,7 +516,7 @@ function AddRowButton({ onAdd, placeholder }: { onAdd: (name: string, price: str
 // ─── Main Tab ─────────────────────────────────────────────────────────────────
 
 export function ServicesTab() {
-  const [activeGroup, setActiveGroup] = useState<MainGroup>("packages");
+  const [activeGroup, setActiveGroup] = useState<MainGroup>("exterior");
   const qc = useQueryClient();
 
   const { data: allServices, isLoading } = useQuery({
@@ -480,23 +529,22 @@ export function ServicesTab() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["services"] });
       qc.invalidateQueries({ queryKey: ["recent-activity"] });
+      toast.success("Saved");
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Save failed"),
   });
 
   const createMut = useMutation({
     mutationFn: async (input: { name: string; category: string; features?: string[]; pricing_tiers?: PriceTier[]; display_order?: number }) => {
-      const client = (await import("@/utils/supabase/client")).createClient();
-      const { data: org } = await client.from("organizations").select("id")
-        .eq("app_id", process.env.NEXT_PUBLIC_APP_ID ?? "business-template").single();
-      if (!org) throw new Error("Org not found");
+      const orgId = ((allServices ?? []) as Service[])[0]?.organization_id;
+      if (!orgId) throw new Error("No existing services to derive organization — add at least one service first.");
       return createService({
         name: input.name,
         slug: `${input.category}-${input.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${Date.now()}`,
         category: input.category,
         features: (input.features ?? []) as unknown as never,
         pricing_tiers: (input.pricing_tiers ?? []) as unknown as never,
-        organization_id: org.id,
+        organization_id: orgId,
         is_published: true,
         is_featured: false,
         display_order: input.display_order ?? 99,
@@ -521,7 +569,6 @@ export function ServicesTab() {
 
   const save = (id: string, updates: Record<string, unknown>) => {
     updateMut.mutate({ id, updates });
-    toast.success("Saved");
   };
 
   const byGroup = (cat: string) =>
@@ -529,22 +576,24 @@ export function ServicesTab() {
       .filter(s => s.category === cat)
       .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
 
-  const mainServices      = byGroup(activeGroup);
-  const specialtyServices = byGroup("specialty");
-  const addonServices     = byGroup("addons");
+  const mainServices   = byGroup(activeGroup);
+  const paintServices  = byGroup("paint-correction");
+  const addonServices  = byGroup("addons");
 
   return (
     <div className="space-y-8">
 
+      {/* Header */}
       <div>
-        <h2 className="text-2xl font-semibold text-foreground tracking-tight">Services &amp; Packages</h2>
+        <h2 className="text-2xl font-semibold text-foreground tracking-tight">Services & Packages</h2>
         <p className="mt-1 text-[14px] text-muted-foreground">
           Click the <Pencil className="inline w-3 h-3 mb-0.5" /> icon on any card to edit it.
         </p>
       </div>
 
-      {/* ── Main packages ── */}
+      {/* ── Main packages (Exterior / Interior / Exclusive) ── */}
       <div className="space-y-5">
+        {/* Tabs — scrollable on small screens */}
         <div className="flex overflow-x-auto pb-1 -mb-1">
           <div className="flex gap-1 bg-muted/60 rounded-2xl p-1 border border-border shrink-0">
             {MAIN_GROUPS.map(({ key, label }) => {
@@ -553,24 +602,30 @@ export function ServicesTab() {
                 <button key={key} onClick={() => setActiveGroup(key)}
                   className={cn(
                     "px-5 py-2 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap",
-                    activeGroup === key ? "bg-primary text-white shadow-sm" : "text-muted-foreground hover:text-white"
+                    activeGroup === key
+                      ? "bg-primary text-white shadow-sm"
+                      : "text-muted-foreground hover:text-white"
                   )}>
                   {label}
-                  <span className={cn("ml-1.5 text-[10px] font-bold", activeGroup === key ? "opacity-80" : "opacity-50")}>
-                    ({count})
-                  </span>
+                  <span className={cn(
+                    "ml-1.5 text-[10px] font-bold",
+                    activeGroup === key ? "opacity-80" : "opacity-50"
+                  )}>({count})</span>
                 </button>
               );
             })}
           </div>
         </div>
 
+        {/* Cards grid */}
         {isLoading ? (
           <div className="p-12 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
         ) : (
           <div className={cn(
             "grid gap-5",
-            mainServices.length <= 2 ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+            mainServices.length <= 2
+              ? "grid-cols-1 sm:grid-cols-2"
+              : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
           )}>
             {mainServices.map(s => (
               <PackageCard key={s.id} service={s}
@@ -582,11 +637,12 @@ export function ServicesTab() {
         )}
       </div>
 
-      {/* ── Specialty Services + Add-ons ── */}
+      {/* ── Paint Correction + Add-ons side by side ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4 border-t border-border">
 
+        {/* Paint Correction */}
         <div className="space-y-3">
-          <h3 className="text-white font-bold text-xl">Specialty Services</h3>
+          <h3 className="text-white font-bold text-xl">Paint Correction</h3>
           <div className="rounded-3xl p-px bg-gradient-to-br from-white/10 via-white/[0.04] to-transparent">
             <div className="bg-card rounded-3xl px-6 py-4">
               <div className="text-[10px] text-muted-foreground mb-3 flex justify-between pr-8">
@@ -594,25 +650,26 @@ export function ServicesTab() {
               </div>
               {isLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
-              ) : specialtyServices.length === 0 ? (
+              ) : paintServices.length === 0 ? (
                 <p className="text-[13px] text-muted-foreground text-center py-4">No items yet.</p>
               ) : (
-                specialtyServices.map(s => (
+                paintServices.map(s => (
                   <SimpleRow key={s.id} service={s}
                     onUpdate={(u) => save(s.id, u as Record<string, unknown>)}
                     onDelete={() => deleteMut.mutate(s.id)} />
                 ))
               )}
-              <AddRowButton placeholder="e.g. Specialty service"
+              <AddRowButton placeholder="e.g. Single Stage Polish"
                 onAdd={(name, price) => createMut.mutate({
-                  name, category: "specialty",
+                  name, category: "paint-correction",
                   pricing_tiers: price ? [{ label: "", price }] : [],
-                  display_order: (specialtyServices.at(-1)?.display_order ?? 0) + 10,
+                  display_order: (paintServices.at(-1)?.display_order ?? 0) + 10,
                 })} />
             </div>
           </div>
         </div>
 
+        {/* Add-ons */}
         <div className="space-y-3">
           <h3 className="text-white font-bold text-xl">Add-ons</h3>
           <div className="rounded-3xl p-px bg-gradient-to-br from-white/10 via-white/[0.04] to-transparent">
@@ -631,7 +688,7 @@ export function ServicesTab() {
                     onDelete={() => deleteMut.mutate(s.id)} />
                 ))
               )}
-              <AddRowButton placeholder="e.g. Add-on name"
+              <AddRowButton placeholder="e.g. Ceramic Coating"
                 onAdd={(name, price) => createMut.mutate({
                   name, category: "addons",
                   pricing_tiers: price ? [{ label: "", price }] : [],
@@ -642,6 +699,7 @@ export function ServicesTab() {
         </div>
       </div>
 
+      {/* Saving indicator */}
       {(updateMut.isPending || createMut.isPending || deleteMut.isPending) && (
         <div className="fixed bottom-6 right-6 flex items-center gap-2 bg-card border border-border rounded-lg px-4 py-2 shadow-lg text-[13px] text-muted-foreground z-50">
           <Loader2 className="w-3.5 h-3.5 animate-spin" /> Saving…
