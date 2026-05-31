@@ -399,11 +399,13 @@ export type Database = {
       services: {
         Row: {
           app_id: string
+          badge: string | null
           category: string | null
           created_at: string
           description: string | null
           display_order: number | null
           duration_minutes: number | null
+          features: Json
           icon: string | null
           id: string
           image_url: string | null
@@ -414,17 +416,20 @@ export type Database = {
           price_from: number | null
           price_label: string | null
           price_to: number | null
+          pricing_tiers: Json
           short_desc: string | null
           slug: string
           updated_at: string
         }
         Insert: {
           app_id?: string
+          badge?: string | null
           category?: string | null
           created_at?: string
           description?: string | null
           display_order?: number | null
           duration_minutes?: number | null
+          features?: Json
           icon?: string | null
           id?: string
           image_url?: string | null
@@ -435,17 +440,20 @@ export type Database = {
           price_from?: number | null
           price_label?: string | null
           price_to?: number | null
+          pricing_tiers?: Json
           short_desc?: string | null
           slug: string
           updated_at?: string
         }
         Update: {
           app_id?: string
+          badge?: string | null
           category?: string | null
           created_at?: string
           description?: string | null
           display_order?: number | null
           duration_minutes?: number | null
+          features?: Json
           icon?: string | null
           id?: string
           image_url?: string | null
@@ -456,6 +464,7 @@ export type Database = {
           price_from?: number | null
           price_label?: string | null
           price_to?: number | null
+          pricing_tiers?: Json
           short_desc?: string | null
           slug?: string
           updated_at?: string
