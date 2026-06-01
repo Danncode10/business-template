@@ -30,7 +30,16 @@ export async function signInWithEmail(email: string, password: string) {
   return { success: true, requiresMFA: false };
 }
 
+// Public sign-up is OFF by default: this is a multi-tenant admin app, accounts
+// are provisioned by invite. Set NEXT_PUBLIC_ALLOW_PUBLIC_SIGNUP=true only on a
+// deployment that genuinely wants open registration.
+const PUBLIC_SIGNUP_ENABLED =
+  process.env.NEXT_PUBLIC_ALLOW_PUBLIC_SIGNUP === 'true';
+
 export async function signUpWithEmail(email: string, password: string) {
+  if (!PUBLIC_SIGNUP_ENABLED) {
+    throw new Error('Public sign-up is disabled. Ask your administrator for an invite.');
+  }
   const client = createClient();
   const { error } = await client.auth.signUp({
     email,
