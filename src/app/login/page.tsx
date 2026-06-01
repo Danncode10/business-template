@@ -8,6 +8,10 @@ import { toast } from 'sonner';
 import Link from 'next/link';
 import { Mail, Lock, User, Eye, EyeOff, ArrowRight, Loader2, Check } from 'lucide-react';
 
+// Invite-only by default — only show the "Create Account" tab where public
+// sign-up is explicitly enabled for this deployment.
+const SIGNUP_ENABLED = process.env.NEXT_PUBLIC_ALLOW_PUBLIC_SIGNUP === 'true';
+
 export default function AuthPage() {
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [formKey, setFormKey] = useState(0);
@@ -26,7 +30,7 @@ export default function AuthPage() {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     const saved = localStorage.getItem('df_auth_mode');
-    if (saved) setMode(saved as 'login' | 'signup');
+    if (saved && (saved === 'login' || SIGNUP_ENABLED)) setMode(saved as 'login' | 'signup');
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -291,7 +295,8 @@ export default function AuthPage() {
           zIndex: 10,
         }}>
           <div style={{ width: '100%', maxWidth: 400, animation: 'fadeUp 0.45s ease both' }}>
-            {/* Tabs */}
+            {/* Tabs — only shown when public sign-up is enabled */}
+            {SIGNUP_ENABLED && (
             <div style={{
               display: 'flex',
               background: '#13131F',
@@ -323,6 +328,7 @@ export default function AuthPage() {
                 </button>
               ))}
             </div>
+            )}
 
             {/* Heading */}
             <div style={{ marginBottom: 24 }}>
