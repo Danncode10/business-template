@@ -1,8 +1,10 @@
 -- ============================================================================
 -- 20260601_003_tenant_rls_hardening.sql
 --
--- ⚠️  DRAFT — NOT YET APPLIED.  Review + `npm run checkpoint` BEFORE running.
---     This rewrites RLS on the LIVE shared project ("Businesses").
+-- ✅ APPLIED 2026-06-01 to project "Businesses" (okctavmxprxjtvnwvvas).
+--    Rollback snapshot: supabase/backups/rls-policies-pre-003-2026-06-01.sql
+--    Follow-up: 20260601_004_security_definer_grants.sql (function grants).
+--    NOTE: helper functions below were finalized as SECURITY INVOKER (see 004).
 --
 -- WHY (audit findings, Issue #5):
 --   The existing policies do NOT implement the two-layer (app_id + org_id)
@@ -40,20 +42,22 @@ begin;
 
 -- ----------------------------------------------------------------------------
 -- Helpers: derive the caller's tenant from their profile row.
--- SECURITY DEFINER so they bypass RLS on profiles (avoids recursion / lockout).
+-- SECURITY INVOKER — they read only the caller's own profile row, which the
+-- profiles RLS policy (id = auth.uid()) already permits. Used only in policies
+-- on OTHER tables, so no recursion. Grants are locked down in migration 004.
 -- ----------------------------------------------------------------------------
 create or replace function public.current_app_id()
-  returns text language sql stable security definer set search_path = public as $$
+  returns text language sql stable security invoker set search_path = public as $$
   select app_id from public.profiles where id = auth.uid()
 $$;
 
 create or replace function public.current_org_id()
-  returns uuid language sql stable security definer set search_path = public as $$
+  returns uuid language sql stable security invoker set search_path = public as $$
   select organization_id from public.profiles where id = auth.uid()
 $$;
 
 create or replace function public.is_org_admin()
-  returns boolean language sql stable security definer set search_path = public as $$
+  returns boolean language sql stable security invoker set search_path = public as $$
   select exists (
     select 1 from public.profiles
     where id = auth.uid() and role = 'admin'
