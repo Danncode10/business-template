@@ -26,12 +26,15 @@ This is an **active rewrite**, not a check. Read the target, then edit it direct
    - Error states use `text-destructive` for messages and `border-destructive` for the input
    - Required fields marked with a visible indicator
 
-4. **Semantic tokens ONLY**
+4. **Semantic tokens ONLY (and Safari-safe)**
    - REPLACE any hex (`#ffffff`, `#000`), `rgb()`, `rgba()`, or hardcoded color words (`white`, `black`, `gray-500`, `slate-900`) with semantic tokens:
      - Backgrounds → `bg-background`, `bg-card`, `bg-muted`
      - Text → `text-foreground`, `text-muted-foreground`, `text-primary`
      - Borders → `border`, `border-border`, `border-input`
      - Brand → `bg-primary`, `text-primary-foreground`
+   - **Cross-browser rule (Safari + Chrome):** Also replace Tailwind **alpha modifiers on structural surfaces/borders/dividers** — `bg-white/5`, `border-white/[0.07]`, `divide-white/10`, `text-white/40` — with solid tokens. Tailwind v4 compiles these to `color-mix(in oklab, …, transparent)`, which **Safari renders inconsistently** (borders blow out to near-full white, producing a harsh outlined box that looks fine in Chrome). Solid tokens render identically across browsers.
+     - `border-white/[0.07]` → `border-border` · `bg-white/5` → `bg-muted` · `text-white/40` → `text-muted-foreground` · `divide-white/10` → `divide-border`
+   - A single brand-button hover tint (`hover:bg-primary/90`) is acceptable; the rule targets borders, dividers, panels, and base text where the blow-out is visible.
 
 5. **Shadcn primitives**
    - Replace raw `<button>` with `<Button variant="...">`
