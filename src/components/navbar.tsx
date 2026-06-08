@@ -21,6 +21,8 @@ import type { User } from "@supabase/supabase-js";
 const navLinks = [
   { label: "Services", href: "/#services" },
   { label: "Gallery", href: "/#gallery" },
+  // Blog link only shown when the blog feature is enabled in business.json
+  ...(businessConfig.features.blog ? [{ label: "Blog", href: "/blog" }] : []),
   { label: "Contact", href: "/#contact" },
 ];
 

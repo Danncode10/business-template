@@ -8,6 +8,7 @@ import { Testimonials } from "@/components/landing/testimonials";
 import { Services } from "@/components/landing/services";
 import { Gallery } from "@/components/landing/gallery";
 import { ContactBlock } from "@/components/landing/contact-block";
+import { BlogPreview } from "@/components/landing/blog-preview";
 
 
 export default async function Home() {
@@ -27,6 +28,8 @@ export default async function Home() {
       <Gallery />
 
       <Testimonials />
+
+      <BlogPreview />
 
       <ContactBlock />
 
