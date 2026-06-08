@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -10,13 +11,38 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import {
   listBlogPosts, publishBlogPost, unpublishBlogPost, deleteBlogPost,
+  cleanupOrphanedBlogImages,
 } from "@/services/blog";
 import type { BlogPost } from "@/services/blog";
+
+// Run the orphaned-image sweep at most once an hour — opening the Blog tab
+// is a frequent, low-stakes moment to self-heal storage without nagging the
+// user or hammering the bucket's `list` endpoint on every render.
+const GC_THROTTLE_KEY = "blog-image-gc-last-run";
+const GC_THROTTLE_MS = 60 * 60 * 1000;
+
+function maybeRunImageCleanup() {
+  try {
+    const last = Number(sessionStorage.getItem(GC_THROTTLE_KEY) ?? 0);
+    if (Date.now() - last < GC_THROTTLE_MS) return;
+    sessionStorage.setItem(GC_THROTTLE_KEY, String(Date.now()));
+  } catch {
+    // sessionStorage unavailable (e.g. private mode) — just run once per page life
+  }
+
+  cleanupOrphanedBlogImages()
+    .then(({ deleted }) => {
+      if (deleted > 0) {
+        toast.success(`Cleaned up ${deleted} unused image${deleted === 1 ? "" : "s"} from storage`);
+      }
+    })
+    .catch(() => {});
+}
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-US", {
+  return new Date(iso).toLocaleDateString("en-AU", {
     day: "2-digit", month: "short", year: "numeric",
   });
 }
@@ -140,6 +166,8 @@ export function BlogTab() {
     queryKey: ["blog-posts"],
     queryFn: () => listBlogPosts({ pageSize: 50 }),
   });
+
+  useEffect(() => { maybeRunImageCleanup(); }, []);
 
   const posts = postsQuery.data?.data ?? [];
   const published = posts.filter(p => p.is_published).length;
