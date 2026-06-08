@@ -6,7 +6,7 @@ import {
   Tag,
   Inbox,
   Calendar,
-  Image as ImageIcon,
+  BookOpen,
   BarChart3,
   ScrollText,
   Settings,
@@ -29,7 +29,7 @@ import { OverviewTab } from "@/components/dashboard/tabs/overview-tab";
 import { ServicesTab } from "@/components/dashboard/tabs/services-tab";
 import { LeadsTab } from "@/components/dashboard/tabs/leads-tab";
 import { BookingsTab } from "@/components/dashboard/tabs/bookings-tab";
-import { GalleryTab } from "@/components/dashboard/tabs/gallery-tab";
+import { BlogTab } from "@/components/dashboard/tabs/blog-tab";
 import { AnalyticsTab } from "@/components/dashboard/tabs/analytics-tab";
 import { LogsTab } from "@/components/dashboard/tabs/logs-tab";
 import { SettingsTab } from "@/components/dashboard/tabs/settings-tab";
@@ -40,7 +40,7 @@ const ICONS: Record<DashboardTabId, LucideIcon> = {
   services: Tag,
   leads: Inbox,
   bookings: Calendar,
-  gallery: ImageIcon,
+  blog: BookOpen,
   analytics: BarChart3,
   logs: ScrollText,
   settings: Settings,
@@ -242,7 +242,7 @@ export function DashboardShell({ user, profile }: DashboardShellProps) {
           {mountedTabs.has("services")  && <div hidden={activeTab !== "services"}>  <ServicesTab /></div>}
           {mountedTabs.has("leads")     && <div hidden={activeTab !== "leads"}>     <LeadsTab /></div>}
           {mountedTabs.has("bookings")  && <div hidden={activeTab !== "bookings"}>  <BookingsTab /></div>}
-          {mountedTabs.has("gallery")   && <div hidden={activeTab !== "gallery"}>   <GalleryTab /></div>}
+          {mountedTabs.has("blog")      && <div hidden={activeTab !== "blog"}>      <BlogTab /></div>}
           {mountedTabs.has("analytics") && <div hidden={activeTab !== "analytics"}> <AnalyticsTab /></div>}
           {mountedTabs.has("logs")      && <div hidden={activeTab !== "logs"}>      <LogsTab /></div>}
           {mountedTabs.has("settings")  && <div hidden={activeTab !== "settings"}>  <SettingsTab /></div>}
