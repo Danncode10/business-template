@@ -49,7 +49,7 @@ show_main() {
         "Step 4: Connect AI Agents (MCPs/Cursor/Antigravity)"
         "Step 5: Setup Gmail security notifications"
         "Step 6: Customize your brand theme & colors"
-        "Step 7: Final checklist & rebrand (resets Git history)"
+        "Step 7: Final checklist & rebrand (keeps upstream Git history)"
         "Step 8: Deploy to Vercel (Production)"
     )
     local count=${#labels[@]}
@@ -637,7 +637,7 @@ show_ready() {
     echo -e " [ ] ${CYAN}Snapshot${NC}: Ran 'npm run checkpoint' to save DB state\n"
     
     echo -e "Ready to start coding? Disconnect from the template and start your own legacy:\n"
-    echo -e "👉 Run ${YELLOW}./guide.sh init${NC} (This will reset your Git history!)\n"
+    echo -e "👉 Run ${YELLOW}./guide.sh init${NC} (rebrands the project; upstream Git history is kept)\n"
     
     echo -e "📖 Deployment and Next Steps: ${BLUE}docs/dannflow_docs/backups-and-sync.md${NC}"
     echo -e "Happy shipping! 🚢"
@@ -1592,8 +1592,9 @@ show_init() {
     
     show_header
     echo -e "${RED}${BOLD}⚠️  CRITICAL: RUN ONLY ONCE${NC}"
-    echo -e "${RED}This command will rebrand your project and PERMANENTLY REMOVE${NC}"
-    echo -e "${RED}all existing Git history to start your own fresh repository.${NC}\n"
+    echo -e "${RED}This command will rebrand your project and commit the changes${NC}"
+    echo -e "${RED}on top of the existing Git history (DannFlow/business-template${NC}"
+    echo -e "${RED}history is intentionally kept so /sync-upstream keeps working).${NC}\n"
     
     echo -e "${BOLD}🚀 Project Rebranding & Initialization${NC}"
     
