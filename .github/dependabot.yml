@@ -1,0 +1,27 @@
+# Dependabot keeps dependencies current and patches security vulnerabilities.
+# It opens PRs automatically — CI (ci.yml) then validates each one.
+# Docs: https://docs.github.com/code-security/dependabot
+version: 2
+updates:
+  # npm dependencies
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    # Group minor + patch bumps into one PR to cut noise; majors stay separate.
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+
+  # GitHub Actions versions (e.g. actions/checkout, actions/setup-node)
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "chore(ci)"
