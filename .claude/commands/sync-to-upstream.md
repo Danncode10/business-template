@@ -26,21 +26,32 @@ Because your project has **rewritten git history** (via `guide.sh init`), you ca
 
 ## Step 1 — Preflight checks
 
-1. Verify working tree is clean:
+1. **Read `dannflow.json`** to get the base commit:
+   ```bash
+   cat dannflow.json
+   ```
+   - If the file is missing, warn:
+     ```
+     ⚠️ No dannflow.json found. Cannot determine what changed since your last sync.
+     Run /update-dannflow to create a version anchor first.
+     ```
+     and stop.
+   - Show: `Base DannFlow commit: <dannflow_commit> (synced <synced_at>)`
+
+2. Verify working tree is clean:
    ```bash
    git status --porcelain
    ```
    If dirty, stop: tell the user to commit or stash first. Do not proceed over uncommitted work.
 
-2. Verify `upstream` remote exists and points to the right place:
+3. Verify `upstream` remote exists and matches `dannflow.json`'s `repo` field:
    ```bash
    git remote get-url upstream
    ```
-   Expected: `https://github.com/Danncode10/DannFlow.git` (or SSH equivalent).
    - If missing: tell the user to add it and stop.
    - If pointing elsewhere: warn loudly and ask for confirmation before continuing.
 
-3. Fetch latest upstream:
+4. Fetch latest upstream:
    ```bash
    git fetch upstream --quiet
    ```
@@ -53,6 +64,7 @@ Scan these paths for files that differ between your `HEAD` and `upstream/main`:
 
 ```
 .claude/commands/        (top-level .md files only — exclude Ruflo subdirectories)
+.claude/agents/
 .claude/skills/
 CLAUDE.md
 SKILLS.md
@@ -62,6 +74,8 @@ docs/dannflow_docs/
 scripts/
 src/prompts/features/
 ```
+
+> Keep this list in sync with `/sync-upstream`'s default scan paths — the two commands should cover the same file set in both directions. **Exception:** `.github/workflows/ci.yml` is intentionally excluded here. Your project's `ci.yml` is tuned to *your* package manager and scripts; pushing it up would pollute the generic template. Contribute CI *improvements* by hand, not the tuned file.
 
 **Exclude from scanning (always business-specific — never upstream candidates):**
 
@@ -83,10 +97,11 @@ next.config.ts
 tsconfig.json
 ```
 
-Build the candidate list:
+Build the candidate list using the `dannflow_commit` SHA from `dannflow.json` as the base — this is more precise than `upstream/main` because it reflects exactly what you last synced from, not the current tip:
 ```bash
-git diff --name-status upstream/main HEAD -- <each-scanned-path>
+git diff --name-status <dannflow_commit> HEAD -- <each-scanned-path>
 ```
+If a file changed both in upstream (since `dannflow_commit`) and locally, flag it as 🟡 REVIEW NEEDED — it may conflict.
 
 ---
 
@@ -232,10 +247,19 @@ C) Skip for now — patches are saved to /tmp/dannflow-upstream-patch/ for later
 
 3. Run `git diff` in the clean clone to confirm only the right changes are staged.
 
-4. Create a commit:
+4. Create a commit with provenance trailers (see the canonical spec in `/adopt-dannflow`). Record where the contribution came FROM — the origin repo and commit — so DannFlow history shows which project each improvement originated in:
+   ```
+   feat: <contribution description>
+
+   DannFlow-Action: contribute
+   DannFlow-Origin: <origin repo slug>@<your HEAD short sha>
+
+   Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>
+   ```
+   Get the origin slug + sha from the *project* repo before cloning: `git remote get-url origin` and `git rev-parse --short HEAD`.
    ```bash
    git add <specific files only>
-   git commit -m "feat: <contribution description>"
+   git commit -F <message-file>
    ```
 
 5. Ask before pushing:
@@ -246,7 +270,7 @@ C) Skip for now — patches are saved to /tmp/dannflow-upstream-patch/ for later
 
 6. If confirmed: `git push origin <branch-name>`
 
-7. Print the PR URL:
+7. Open the PR directly via the GitHub MCP (`create_pull_request`) or `gh pr create --repo Danncode10/DannFlow --base main --head <branch-name>` — DannFlow has no `dev` branch, so contributions PR straight into `main`, where its CI gate keeps the template clean. If neither is available, print the compare URL as a fallback:
    ```
    https://github.com/Danncode10/DannFlow/compare/<branch-name>
    ```

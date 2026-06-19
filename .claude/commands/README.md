@@ -2,7 +2,7 @@
 
 Drop `.md` files in this folder to add custom slash commands. Each file becomes `/filename`.
 
-## Planned commands
+## Available commands
 
 | Command | Purpose |
 |---|---|
@@ -23,17 +23,19 @@ Drop `.md` files in this folder to add custom slash commands. Each file becomes 
 | `/sync-commands` | Audits `.claude/commands/` and validates against `claude-workflow.md` and `./guide.sh`. Reports orphaned commands, optionally auto-patches docs. |
 | `/auto-docs` | Broader superset of `/sync-commands`. Audits commands, skills, npm scripts, env vars, tech stack, and folder structure for documentation drift. `--fix` auto-patches the safe categories. |
 | `/init-update` | Update your DannFlow project to the latest version — pull new commands, scripts, guide, skills, and more while preserving your code. Interactive menu or `--all` for one-command full update. |
-| `/sync-upstream [path|--commits [N]]` | Pull selective file or commit updates from DannFlow upstream. File-level diff is the default — safe for forked-and-rewritten repos with no common git ancestry. Opt-in commit-level cherry-pick with `--commits`. |
+| `/adopt-dannflow [--no-protect\|--force]` | Bootstrap a non-DannFlow repo into a first-class DannFlow project: detect shape, install + prove CI, write `dannflow.json`, create the `dev` branch, then run the first sync. Run once per repo. |
+| `/sync-upstream [path|--commits [N]]` | Pull selective file or commit updates from DannFlow upstream. Lands changes on a `feat/sync-*` branch → PR into `dev`. File-level diff is the default — safe for forked-and-rewritten repos with no common git ancestry. Opt-in commit-level cherry-pick with `--commits`. |
+| `/sync-to-upstream [path\|--dry-run]` | Contribute local improvements back UP to DannFlow. Classifies changes as generic vs. business-specific, then opens a clean PR into DannFlow `main`. |
+| `/update-dannflow [--init]` | Smart entry point — auto-detects your `dannflow.json` version anchor and pulls the latest upstream updates. Creates the anchor if missing. |
 | `/no-conflict` | Audits repo for conflicts between documentation (README, CLAUDE.md) and actual code — technology versions, features, commands, RLS enforcement, semantic tokens, folder structure. Reports only. |
 | `/seed <table\|all>` | Generates realistic, type-safe seed data from `src/types/supabase.ts`. Respects FK order and RLS ownership. Writes to `supabase/seeds/`. |
 | `/migrate <description>` | Wraps the full migration flow — checkpoint → apply_migration → sync-types — into one step. Plain-English description in, type-safe code out. |
 | `/seo-check [route]` | Per-route SEO audit: metadata, OG, canonical, sitemap.ts, robots.ts, JSON-LD, alt text, heading hierarchy. Reports only. |
 | `/seo-fix <route\|all>` | Active rewrite — adds missing SEO essentials. Scaffolds `sitemap.ts`, `robots.ts`, metadata blocks, JSON-LD. Plan-then-confirm. |
 | `/marketing-check [route]` | Conversion-fundamentals audit for landing/marketing pages — headline, CTA, social proof, friction, pricing legibility. Opinionated, judgement-heavy. Reports only. |
-| `/ruflo-upgrade` | Re-applies Ruflo memory + parallel-agent patterns to the 5 core commands. Safe to re-run after `/init-update`. |
+| `/ruflo-upgrade` | Re-applies Ruflo memory + parallel-agent patterns to the 8 core commands. Safe to re-run after `/init-update`. |
 | `/make-command` | Creates a new custom slash command from a plain-English description. Auto-updates documentation and proposes conflict-avoidance edits to existing commands or SKILLS.md. |
 | `/masterplan-task` | Execute a task from MASTERPLAN.md and auto-generate TEST.md verification guide. Use during development sprints for systematic, hallucination-free feature scaffolding. |
-| `/business-init [--sync] [--report-only]` | Reads `business.json` + README + CLAUDE.md + MASTERPLAN.md + config.ts, syncs business values into the codebase, and prints a full setup status report. Run this first after cloning the template or handing off to a client. |
 
 ## File format
 
@@ -49,6 +51,10 @@ The prompt that Claude executes when you run /commandname.
 Use $ARGUMENTS to reference args the user typed after the command.
 ```
 
-## Status
+## Keeping this index current
 
-Empty for now. Commands will be added one at a time after planning is locked in.
+This table covers the core DannFlow commands. The folder also contains Ruflo/claude-flow
+command packs (`claude-flow-*`, plus the `agents/`, `swarm/`, `sparc/`, etc. subfolders) that
+aren't listed individually here. To reconcile this index with what's actually on disk, run
+`/auto-docs` (broad drift check) or `/sync-commands` (command-specific) — they detect orphaned
+or undocumented commands and can auto-patch.
