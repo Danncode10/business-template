@@ -65,7 +65,11 @@ export function SettingsTab() {
 }
 
 function OrganizationPanel() {
-  const sb = businessConfig.supabase as { organizationSlug?: string; projectRef?: string; projectName?: string };
+  const sb = businessConfig.supabase as {
+    organizationSlug?: string | null;
+    projectRef?: string | null;
+    projectName?: string | null;
+  };
   return (
     <div className="space-y-5 max-w-2xl mx-auto">
       <div>

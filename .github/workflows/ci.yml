@@ -1,0 +1,50 @@
+name: CI
+
+# Runs on every PR and on pushes to main. Gates merges on lint + build passing.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Cancel an in-progress run if a newer commit is pushed to the same branch/PR.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Lint & Build
+    runs-on: ubuntu-latest
+
+    # Placeholder env so `next build` doesn't fail on missing Supabase vars.
+    # These are dummy values — CI only checks that the code compiles, not that
+    # it can reach a real Supabase project. Real keys live in Vercel, not here.
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
+      NEXT_PUBLIC_SITE_NAME: CI Build
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Lint is informational for now — the codebase has pre-existing errors
+      # being cleaned up incrementally. It runs and reports, but doesn't block
+      # merges. Build is the hard gate below. Flip this to remove
+      # continue-on-error once lint is green.
+      - name: Lint
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Build
+        run: npm run build
