@@ -1,13 +1,28 @@
-# The "Time Machine" Workflow
+# The "Time Machine" Workflow — Database Backups & Type Sync
 
-When you are "Vibe Coding," you will change your database frequently. Follow this loop:
+When you are "Vibe Coding," you will change your database frequently. This loop keeps your AI's view of the schema honest and gives you a restore point if something breaks.
 
-1. **Change**: Tell the AI to modify the DB (via Supabase MCP).
-2. **Sync**: Run `npm run update-types` to update the AI's "Eyes."
-3. **Checkpoint**: Every time you finish a feature, run `npm run checkpoint`. 
-   - The script will generate a specific prompt for your AI Agent.
-   - **Copy and paste** that message to the AI (Antigravity).
-   - The AI will then read your live Supabase schema (via MCP) and populate a new file under `supabase/backups/`.
-   - Example: `supabase/backups/schema-04-02-2026-21-00.sql`.
+> **Two kinds of "sync" in DannFlow.** This doc covers **database** sync — keeping `src/types/supabase.ts` and your backups aligned with the live schema. For **template** sync — pulling command/doc updates from DannFlow upstream — see [branching-and-sync.md](branching-and-sync.md).
 
-If you ever break your DB, you can "Restore" by copying the SQL from your last Checkpoint file into the Supabase SQL Editor.
+## The loop
+
+1. **Change**: Tell Claude Code to modify the DB (via the Supabase MCP, or `/migrate <description>`).
+2. **Sync types**: Run `npm run update-types` (or `/sync-types`) to refresh `src/types/supabase.ts` — the AI's "Eyes." Never let it guess the schema.
+3. **Checkpoint**: Every time you finish a feature, run `npm run checkpoint` (or `/checkpoint`).
+   - The script verifies your Supabase MCP connection and generates a prompt.
+   - Claude Code reads your live Supabase schema (tables, enums, RLS policies, triggers, functions) via MCP.
+   - It writes a new timestamped DDL snapshot under `supabase/backups/`.
+   - Example: `supabase/backups/schema-2026-06-18-21-00.sql`.
+
+## Restoring
+
+If you ever break your DB, "restore" by copying the SQL from your most recent checkpoint file in `supabase/backups/` into the Supabase SQL Editor and running it.
+
+## The golden rule
+
+**Change → Sync types → Checkpoint.** Do the type-sync *immediately* after any schema change so the AI never works against a stale `src/types/supabase.ts`. Checkpoint before anything destructive so you always have a way back.
+
+## See also
+
+- [branching-and-sync.md](branching-and-sync.md) — pulling template updates from DannFlow upstream (a different kind of sync).
+- [the-holy-trinity.md](the-holy-trinity.md) — why Types + Schema + Services must stay aligned.

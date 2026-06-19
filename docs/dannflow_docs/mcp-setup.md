@@ -12,7 +12,7 @@ To make "DannFlow" work, the AI needs three sets of tools:
 
 ### 3. Terminal MCP (The Hands)
 - **Purpose**: Allows the AI to run commands like `npm install` or `npm run update-types` for you.
-- **Setup**: Enable "Terminal" or "Shell" access in Antigravity settings.
+- **Setup**: Enable "Terminal" or "Shell" access in your agent settings (Claude Code, Cursor, or Antigravity).
 
 ### 4. Ruflo MCP (Memory + Orchestration) — Beta
 
