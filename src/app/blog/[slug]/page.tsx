@@ -12,8 +12,15 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  const slugs = await getAllPublishedSlugs();
-  return slugs.map(slug => ({ slug }));
+  // Best-effort — when the DB is unreachable at build time (e.g. CI with
+  // placeholder Supabase env) we pre-render no slugs. dynamicParams (default)
+  // lets pages render on-demand and ISR (revalidate above) caches them.
+  try {
+    const slugs = await getAllPublishedSlugs();
+    return slugs.map(slug => ({ slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

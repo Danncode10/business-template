@@ -28,7 +28,15 @@ function readingTime(content: string) {
 }
 
 export default async function BlogPage() {
-  const { data: posts } = await listBlogPosts({ publishedOnly: true, pageSize: 50 });
+  // Best-effort fetch — page still builds (empty state) when the DB is
+  // unreachable, e.g. CI builds with placeholder Supabase env. ISR
+  // (revalidate above) repopulates it at runtime.
+  let posts: Awaited<ReturnType<typeof listBlogPosts>>["data"] = [];
+  try {
+    ({ data: posts } = await listBlogPosts({ publishedOnly: true, pageSize: 50 }));
+  } catch {
+    // ignore — blog table may be unreachable at build time
+  }
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
