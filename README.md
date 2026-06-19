@@ -111,7 +111,7 @@ Every client is just a fork of this template. Spinning up the next business is t
 
 ```bash
 # 1. Fork/clone business-template into a new client repo, then inside it:
-./guide.sh init        # rebrand + reset git history — RUN ONCE, ever
+./guide.sh init        # rebrand + commit on top of upstream history — RUN ONCE, ever
 ```
 ```
 2. /sync-upstream      # pull the latest improvements you've upstreamed from past clients
