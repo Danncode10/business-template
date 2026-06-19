@@ -74,6 +74,90 @@ Choose what to lock down first:
 
 ---
 
+## 🔄 Built on DannFlow — The Upstream Loop
+
+**This repo is not a dead-end copy.** It sits in the middle of a three-tier chain, and each tier pulls improvements from the one above and pushes generic fixes back up. That's how the template gets better every time you build a client site.
+
+```
+DannFlow              ← github.com/Danncode10/DannFlow (methodology + SaaS starter)
+   └─ business-template  ← THIS repo (multi-tenant client platform)
+        └─ client site      ← a fork you deploy per business
+```
+
+Your link to upstream lives in **`dannflow.json`** — it records the exact DannFlow commit this repo is synced to:
+
+```json
+{ "dannflow_commit": "<sha>", "repo": "https://github.com/Danncode10/DannFlow", "base_branch": "main", "dev_branch": "dev" }
+```
+
+### How improvements flow
+
+| Direction | When | Command |
+|---|---|---|
+| ⬇️ **Pull down** | Bring the latest DannFlow improvements into this repo (or into a client fork) | `/sync-upstream` (file-level diff) or `/update-dannflow` (smart auto-detect) |
+| ⬆️ **Push up** | You fixed a bug or wrote something generic that every project should get | `/sync-to-upstream` — classifies your changes as **generic** (PRs to upstream) vs **business-specific** (stays local) |
+| 🆕 **Adopt** | Turn an existing repo into a DannFlow-tracked project (creates `dannflow.json`) | `/adopt-dannflow` |
+
+**The rule of thumb for where a fix belongs:**
+- Generic Claude command / skill / methodology fix → flows up to **DannFlow**
+- Multi-tenant / RLS / client-platform feature → stays in **business-template**
+- One-client customization → stays in that **client fork**, never pushed up
+
+### Do it again — the new-client runbook (run in this exact order)
+
+Every client is just a fork of this template. Spinning up the next business is the same ordered sequence each time. **Don't reorder these — each step reads the output of the one before it.**
+
+**Phase 1 — Get the code & pull the latest template**
+
+```bash
+# 1. Fork/clone business-template into a new client repo, then inside it:
+./guide.sh init        # rebrand + reset git history — RUN ONCE, ever
+```
+```
+2. /sync-upstream      # pull the latest improvements you've upstreamed from past clients
+                       #   → so this fork starts ahead, not from a stale base
+```
+
+**Phase 2 — Describe the client (edit files BEFORE running commands)**
+
+> The next commands *read* these files. If you run them first, they sync placeholder data.
+
+```
+3. Edit business.json  → name, contact, hours, branding, socials, and the `features`
+                         object (which features → which tables /create-organization builds)
+4. Edit README.md      → describe THIS client's project (Claude reads it in step 5 & 6)
+5. Fill PROJECT_CONTEXT.md → audience, design rules, tone, anti-decisions
+```
+
+**Phase 3 — Wire Claude + the codebase to this client**
+
+```
+6. /business-init      → syncs business.json into config.ts/env + prints a status report
+                         (its own docs say: "run this first whenever you clone the template")
+7. /init-claude        → rewrites CLAUDE.md + SKILLS.md + commands to match this project
+8. /ruflo-upgrade      → re-adds memory + parallel-agent patterns init-claude may have reset
+```
+
+**Phase 4 — Stand up the tenant & verify**
+
+```
+9.  /create-organization → creates the Supabase tenant: organization_id + app_id namespace
+                           + the tables your business.json `features` switched on
+10. Add to .env.local    → NEXT_PUBLIC_SUPABASE_URL + ANON_KEY + SERVICE_ROLE_KEY
+                           + NEXT_PUBLIC_APP_ID (the appId from business.json)
+11. /no-conflict         → confirm docs and code agree (RLS, tokens, structure)
+```
+
+**Phase 5 — Ship & feed improvements back up**
+
+```
+12. Deploy to Vercel     → separate app, same shared Supabase (see "Deploy to Vercel" below)
+13. /sync-to-upstream    → if you built anything generic, push it up so the NEXT client
+                           starts with it. Build for one → upstream the generic → repeat.
+```
+
+---
+
 ## Quick Start 
 
 Boot up your project and set your App Name with a single command:
