@@ -74,6 +74,56 @@ Choose what to lock down first:
 
 ---
 
+## 🔄 Built on DannFlow — The Upstream Loop
+
+**This repo is not a dead-end copy.** It sits in the middle of a three-tier chain, and each tier pulls improvements from the one above and pushes generic fixes back up. That's how the template gets better every time you build a client site.
+
+```
+DannFlow              ← github.com/Danncode10/DannFlow (methodology + SaaS starter)
+   └─ business-template  ← THIS repo (multi-tenant client platform)
+        └─ client site      ← a fork you deploy per business
+```
+
+Your link to upstream lives in **`dannflow.json`** — it records the exact DannFlow commit this repo is synced to:
+
+```json
+{ "dannflow_commit": "<sha>", "repo": "https://github.com/Danncode10/DannFlow", "base_branch": "main", "dev_branch": "dev" }
+```
+
+### How improvements flow
+
+| Direction | When | Command |
+|---|---|---|
+| ⬇️ **Pull down** | Bring the latest DannFlow improvements into this repo (or into a client fork) | `/sync-upstream` (file-level diff) or `/update-dannflow` (smart auto-detect) |
+| ⬆️ **Push up** | You fixed a bug or wrote something generic that every project should get | `/sync-to-upstream` — classifies your changes as **generic** (PRs to upstream) vs **business-specific** (stays local) |
+| 🆕 **Adopt** | Turn an existing repo into a DannFlow-tracked project (creates `dannflow.json`) | `/adopt-dannflow` |
+
+**The rule of thumb for where a fix belongs:**
+- Generic Claude command / skill / methodology fix → flows up to **DannFlow**
+- Multi-tenant / RLS / client-platform feature → stays in **business-template**
+- One-client customization → stays in that **client fork**, never pushed up
+
+### Spin up a new client — two commands
+
+Clone the template, then run two slash commands. Claude does the rest — interviews you, writes the config, makes the repo, and designs the whole site.
+
+```bash
+git clone <business-template>  my-client  &&  cd my-client
+
+/new-project "Bismi Cafe & Resto"   # Phase 1 — scaffold & wire
+/design-project                     # Phase 2 — Claude designs the site   ⭐ use Opus
+```
+
+**`/new-project`** — the setup. Interviews you for the business facts, writes `business.json` / `README` / `PROJECT_CONTEXT`, rebrands the code, **creates your GitHub repo and repoints `origin`** (keeping DannFlow as `upstream`), wires the Claude env, and stands up the Supabase tenant. Pauses once for your Supabase keys.
+
+**`/design-project`** — the build. Reads your brief, runs a quick design-taste interview, then **designs and builds the actual site** — real copy, a fitting theme, every section — replacing all template placeholders. It's pure design judgement, so **run it on Opus.**
+
+Then `npm run dev` to preview, and deploy to Vercel (separate app, same shared Supabase). Built something generic worth reusing? `/sync-to-upstream` pushes it up so the next client starts with it.
+
+> **Why the repo step matters:** a fresh clone's `origin` still points at `business-template`. `/new-project` fixes it (`git remote set-url origin <your repo>`) so your pushes don't land on the template. Doing it by hand? Don't skip that.
+
+---
+
 ## Quick Start 
 
 Boot up your project and set your App Name with a single command:

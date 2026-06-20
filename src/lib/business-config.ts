@@ -4,7 +4,7 @@
  * Clients edit business.json, run /business-init, and the landing page updates automatically.
  */
 
-import businessData from '../../business.json' assert { type: 'json' };
+import businessData from '../../business.json' with { type: 'json' };
 
 export const businessConfig = {
   // Core business info
