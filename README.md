@@ -103,66 +103,24 @@ Your link to upstream lives in **`dannflow.json`** — it records the exact Dann
 - Multi-tenant / RLS / client-platform feature → stays in **business-template**
 - One-client customization → stays in that **client fork**, never pushed up
 
-### Do it again — the new-client runbook
+### Spin up a new client — two commands
 
-Every client is just a fork of this template. **The fast path is one command:**
+Clone the template, then run two slash commands. Claude does the rest — interviews you, writes the config, makes the repo, and designs the whole site.
 
 ```bash
-# 1. Clone business-template, then inside the clone:
-/new-client "Bismi Cafe & Resto"
+git clone <business-template>  my-client  &&  cd my-client
+
+/new-project "Bismi Cafe & Resto"   # Phase 1 — scaffold & wire
+/design-project                     # Phase 2 — Claude designs the site   ⭐ use Opus
 ```
 
-`/new-client` runs the entire sequence below as one guided conversation: it interviews you about the business, writes `business.json` / `README.md` / `PROJECT_CONTEXT.md`, rebrands the code, **creates a fresh GitHub repo and repoints `origin`** (the step that's easy to forget — a clone's `origin` otherwise still points at business-template), keeps DannFlow as `upstream`, then chains `/business-init` → `/init-claude` → `/ruflo-upgrade` → `/create-organization` → `/no-conflict`. It pauses once for you to paste Supabase keys, and ends by printing your new repo link. Then just **deploy to Vercel** and start building.
+**`/new-project`** — the setup. Interviews you for the business facts, writes `business.json` / `README` / `PROJECT_CONTEXT`, rebrands the code, **creates your GitHub repo and repoints `origin`** (keeping DannFlow as `upstream`), wires the Claude env, and stands up the Supabase tenant. Pauses once for your Supabase keys.
 
-> **Why a clone's git remote matters:** cloning gives you a working copy whose `origin` still points at `Danncode10/business-template`. `/new-client` fixes this by creating your client repo and running `git remote set-url origin <your repo>`. If you ever set this up by hand, don't forget that step — otherwise pushes land on (or fail against) the template repo.
+**`/design-project`** — the build. Reads your brief, runs a quick design-taste interview, then **designs and builds the actual site** — real copy, a fitting theme, every section — replacing all template placeholders. It's pure design judgement, so **run it on Opus.**
 
-<details>
-<summary><strong>What <code>/new-client</code> does under the hood (the manual runbook, if you ever need it)</strong></summary>
+Then `npm run dev` to preview, and deploy to Vercel (separate app, same shared Supabase). Built something generic worth reusing? `/sync-to-upstream` pushes it up so the next client starts with it.
 
-Run in this exact order — each step reads the output of the one before it.
-
-**Phase 1 — Get the code & a client repo**
-```
-1. Clone business-template into a new folder
-2. Create an empty GitHub repo for the client, then:
-     git remote set-url origin <your-new-repo-url>   # origin → client repo
-     git remote -v                                    # upstream must stay → DannFlow
-3. (optional) /sync-upstream  → pull the latest template improvements first
-```
-
-**Phase 2 — Describe the client (edit files BEFORE running commands)**
-> The next commands *read* these files. If you run them first, they sync placeholder data.
-```
-4. Edit business.json  → name, contact, hours, branding, socials, and the `features`
-                         object (which features → which tables /create-organization builds)
-5. Edit README.md      → describe THIS client's project (Claude reads it in steps 6 & 7)
-6. Fill PROJECT_CONTEXT.md → audience, design rules, tone, anti-decisions
-```
-
-**Phase 3 — Wire Claude + the codebase to this client**
-```
-7. /business-init      → syncs business.json into config.ts/env + prints a status report
-8. /init-claude        → rewrites CLAUDE.md + SKILLS.md + commands to match this project
-9. /ruflo-upgrade      → re-adds memory + parallel-agent patterns init-claude may have reset
-```
-
-**Phase 4 — Stand up the tenant & verify**
-```
-10. Add to .env.local   → NEXT_PUBLIC_SUPABASE_URL + ANON_KEY + SERVICE_ROLE_KEY
-                          + NEXT_PUBLIC_APP_ID (the appId from business.json)
-11. /create-organization → creates the Supabase tenant: organization_id + app_id namespace
-                           + the tables your business.json `features` switched on
-12. /no-conflict         → confirm docs and code agree (RLS, tokens, structure)
-```
-
-**Phase 5 — Ship & feed improvements back up**
-```
-13. Deploy to Vercel     → separate app, same shared Supabase (see "Deploy to Vercel" below)
-14. /sync-to-upstream    → if you built anything generic, push it up so the NEXT client
-                           starts with it. Build for one → upstream the generic → repeat.
-```
-
-</details>
+> **Why the repo step matters:** a fresh clone's `origin` still points at `business-template`. `/new-project` fixes it (`git remote set-url origin <your repo>`) so your pushes don't land on the template. Doing it by hand? Don't skip that.
 
 ---
 

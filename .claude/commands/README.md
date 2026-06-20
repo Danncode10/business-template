@@ -6,7 +6,8 @@ Drop `.md` files in this folder to add custom slash commands. Each file becomes 
 
 | Command | Purpose |
 |---|---|
-| `/new-client ["name"]` | **Start here for a new client.** One-shot onboarding: interviews you about the business, writes `business.json` + `README` + `PROJECT_CONTEXT`, rebrands the code, creates a fresh GitHub repo and repoints `origin` (keeps DannFlow as `upstream`), then chains `/business-init` → `/init-claude` → `/ruflo-upgrade` → `/create-organization` → `/no-conflict`. Ends with a repo link. |
+| `/new-project ["name"]` | **Start here (Phase 1).** Scaffolds a new client: interviews you for the business facts, writes `business.json` + `README` + `PROJECT_CONTEXT`, rebrands the code, creates a GitHub repo and repoints `origin` (keeps DannFlow as `upstream`), wires the Claude env (`/business-init` → `/init-claude` → `/ruflo-upgrade`), and stands up the Supabase tenant. |
+| `/design-project ["section"]` | **Then this (Phase 2). ⭐ Use Opus.** Claude designs and builds the actual site — reads README + `business.json` + `PROJECT_CONTEXT`, runs a design-taste interview, then strictly replaces the template's placeholder copy, theme, and sections with a bespoke design for this business. |
 | `/init-claude` | Reads `README.md` + scans `src/` + `package.json`, then auto-rewrites `CLAUDE.md`, `SKILLS.md`, and refreshes this README to match the actual project state. |
 | `/ask-command` | Meta-router. Describe what you want in plain English; it searches all commands here and returns the best one + a ready-to-paste prompt. |
 | `/security-audit` | Full security scan: secrets in client bundles, service-role key leaks, `dangerouslySetInnerHTML`, missing `'use server'`, XSS vectors. |
