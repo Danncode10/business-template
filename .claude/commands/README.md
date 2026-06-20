@@ -6,6 +6,7 @@ Drop `.md` files in this folder to add custom slash commands. Each file becomes 
 
 | Command | Purpose |
 |---|---|
+| `/new-client ["name"]` | **Start here for a new client.** One-shot onboarding: interviews you about the business, writes `business.json` + `README` + `PROJECT_CONTEXT`, rebrands the code, creates a fresh GitHub repo and repoints `origin` (keeps DannFlow as `upstream`), then chains `/business-init` → `/init-claude` → `/ruflo-upgrade` → `/create-organization` → `/no-conflict`. Ends with a repo link. |
 | `/init-claude` | Reads `README.md` + scans `src/` + `package.json`, then auto-rewrites `CLAUDE.md`, `SKILLS.md`, and refreshes this README to match the actual project state. |
 | `/ask-command` | Meta-router. Describe what you want in plain English; it searches all commands here and returns the best one + a ready-to-paste prompt. |
 | `/security-audit` | Full security scan: secrets in client bundles, service-role key leaks, `dangerouslySetInnerHTML`, missing `'use server'`, XSS vectors. |

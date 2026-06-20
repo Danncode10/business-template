@@ -103,58 +103,66 @@ Your link to upstream lives in **`dannflow.json`** — it records the exact Dann
 - Multi-tenant / RLS / client-platform feature → stays in **business-template**
 - One-client customization → stays in that **client fork**, never pushed up
 
-### Do it again — the new-client runbook (run in this exact order)
+### Do it again — the new-client runbook
 
-Every client is just a fork of this template. Spinning up the next business is the same ordered sequence each time. **Don't reorder these — each step reads the output of the one before it.**
-
-**Phase 1 — Get the code & pull the latest template**
+Every client is just a fork of this template. **The fast path is one command:**
 
 ```bash
-# 1. Fork/clone business-template into a new client repo, then inside it:
-./guide.sh init        # rebrand + commit on top of upstream history — RUN ONCE, ever
+# 1. Clone business-template, then inside the clone:
+/new-client "Bismi Cafe & Resto"
 ```
+
+`/new-client` runs the entire sequence below as one guided conversation: it interviews you about the business, writes `business.json` / `README.md` / `PROJECT_CONTEXT.md`, rebrands the code, **creates a fresh GitHub repo and repoints `origin`** (the step that's easy to forget — a clone's `origin` otherwise still points at business-template), keeps DannFlow as `upstream`, then chains `/business-init` → `/init-claude` → `/ruflo-upgrade` → `/create-organization` → `/no-conflict`. It pauses once for you to paste Supabase keys, and ends by printing your new repo link. Then just **deploy to Vercel** and start building.
+
+> **Why a clone's git remote matters:** cloning gives you a working copy whose `origin` still points at `Danncode10/business-template`. `/new-client` fixes this by creating your client repo and running `git remote set-url origin <your repo>`. If you ever set this up by hand, don't forget that step — otherwise pushes land on (or fail against) the template repo.
+
+<details>
+<summary><strong>What <code>/new-client</code> does under the hood (the manual runbook, if you ever need it)</strong></summary>
+
+Run in this exact order — each step reads the output of the one before it.
+
+**Phase 1 — Get the code & a client repo**
 ```
-2. /sync-upstream      # pull the latest improvements you've upstreamed from past clients
-                       #   → so this fork starts ahead, not from a stale base
+1. Clone business-template into a new folder
+2. Create an empty GitHub repo for the client, then:
+     git remote set-url origin <your-new-repo-url>   # origin → client repo
+     git remote -v                                    # upstream must stay → DannFlow
+3. (optional) /sync-upstream  → pull the latest template improvements first
 ```
 
 **Phase 2 — Describe the client (edit files BEFORE running commands)**
-
 > The next commands *read* these files. If you run them first, they sync placeholder data.
-
 ```
-3. Edit business.json  → name, contact, hours, branding, socials, and the `features`
+4. Edit business.json  → name, contact, hours, branding, socials, and the `features`
                          object (which features → which tables /create-organization builds)
-4. Edit README.md      → describe THIS client's project (Claude reads it in step 5 & 6)
-5. Fill PROJECT_CONTEXT.md → audience, design rules, tone, anti-decisions
+5. Edit README.md      → describe THIS client's project (Claude reads it in steps 6 & 7)
+6. Fill PROJECT_CONTEXT.md → audience, design rules, tone, anti-decisions
 ```
 
 **Phase 3 — Wire Claude + the codebase to this client**
-
 ```
-6. /business-init      → syncs business.json into config.ts/env + prints a status report
-                         (its own docs say: "run this first whenever you clone the template")
-7. /init-claude        → rewrites CLAUDE.md + SKILLS.md + commands to match this project
-8. /ruflo-upgrade      → re-adds memory + parallel-agent patterns init-claude may have reset
+7. /business-init      → syncs business.json into config.ts/env + prints a status report
+8. /init-claude        → rewrites CLAUDE.md + SKILLS.md + commands to match this project
+9. /ruflo-upgrade      → re-adds memory + parallel-agent patterns init-claude may have reset
 ```
 
 **Phase 4 — Stand up the tenant & verify**
-
 ```
-9.  /create-organization → creates the Supabase tenant: organization_id + app_id namespace
+10. Add to .env.local   → NEXT_PUBLIC_SUPABASE_URL + ANON_KEY + SERVICE_ROLE_KEY
+                          + NEXT_PUBLIC_APP_ID (the appId from business.json)
+11. /create-organization → creates the Supabase tenant: organization_id + app_id namespace
                            + the tables your business.json `features` switched on
-10. Add to .env.local    → NEXT_PUBLIC_SUPABASE_URL + ANON_KEY + SERVICE_ROLE_KEY
-                           + NEXT_PUBLIC_APP_ID (the appId from business.json)
-11. /no-conflict         → confirm docs and code agree (RLS, tokens, structure)
+12. /no-conflict         → confirm docs and code agree (RLS, tokens, structure)
 ```
 
 **Phase 5 — Ship & feed improvements back up**
-
 ```
-12. Deploy to Vercel     → separate app, same shared Supabase (see "Deploy to Vercel" below)
-13. /sync-to-upstream    → if you built anything generic, push it up so the NEXT client
+13. Deploy to Vercel     → separate app, same shared Supabase (see "Deploy to Vercel" below)
+14. /sync-to-upstream    → if you built anything generic, push it up so the NEXT client
                            starts with it. Build for one → upstream the generic → repeat.
 ```
+
+</details>
 
 ---
 
