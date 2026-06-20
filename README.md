@@ -103,58 +103,24 @@ Your link to upstream lives in **`dannflow.json`** — it records the exact Dann
 - Multi-tenant / RLS / client-platform feature → stays in **business-template**
 - One-client customization → stays in that **client fork**, never pushed up
 
-### Do it again — the new-client runbook (run in this exact order)
+### Spin up a new client — two commands
 
-Every client is just a fork of this template. Spinning up the next business is the same ordered sequence each time. **Don't reorder these — each step reads the output of the one before it.**
-
-**Phase 1 — Get the code & pull the latest template**
+Clone the template, then run two slash commands. Claude does the rest — interviews you, writes the config, makes the repo, and designs the whole site.
 
 ```bash
-# 1. Fork/clone business-template into a new client repo, then inside it:
-./guide.sh init        # rebrand + commit on top of upstream history — RUN ONCE, ever
-```
-```
-2. /sync-upstream      # pull the latest improvements you've upstreamed from past clients
-                       #   → so this fork starts ahead, not from a stale base
+git clone <business-template>  my-client  &&  cd my-client
+
+/new-project "Bismi Cafe & Resto"   # Phase 1 — scaffold & wire
+/design-project                     # Phase 2 — Claude designs the site   ⭐ use Opus
 ```
 
-**Phase 2 — Describe the client (edit files BEFORE running commands)**
+**`/new-project`** — the setup. Interviews you for the business facts, writes `business.json` / `README` / `PROJECT_CONTEXT`, rebrands the code, **creates your GitHub repo and repoints `origin`** (keeping DannFlow as `upstream`), wires the Claude env, and stands up the Supabase tenant. Pauses once for your Supabase keys.
 
-> The next commands *read* these files. If you run them first, they sync placeholder data.
+**`/design-project`** — the build. Reads your brief, runs a quick design-taste interview, then **designs and builds the actual site** — real copy, a fitting theme, every section — replacing all template placeholders. It's pure design judgement, so **run it on Opus.**
 
-```
-3. Edit business.json  → name, contact, hours, branding, socials, and the `features`
-                         object (which features → which tables /create-organization builds)
-4. Edit README.md      → describe THIS client's project (Claude reads it in step 5 & 6)
-5. Fill PROJECT_CONTEXT.md → audience, design rules, tone, anti-decisions
-```
+Then `npm run dev` to preview, and deploy to Vercel (separate app, same shared Supabase). Built something generic worth reusing? `/sync-to-upstream` pushes it up so the next client starts with it.
 
-**Phase 3 — Wire Claude + the codebase to this client**
-
-```
-6. /business-init      → syncs business.json into config.ts/env + prints a status report
-                         (its own docs say: "run this first whenever you clone the template")
-7. /init-claude        → rewrites CLAUDE.md + SKILLS.md + commands to match this project
-8. /ruflo-upgrade      → re-adds memory + parallel-agent patterns init-claude may have reset
-```
-
-**Phase 4 — Stand up the tenant & verify**
-
-```
-9.  /create-organization → creates the Supabase tenant: organization_id + app_id namespace
-                           + the tables your business.json `features` switched on
-10. Add to .env.local    → NEXT_PUBLIC_SUPABASE_URL + ANON_KEY + SERVICE_ROLE_KEY
-                           + NEXT_PUBLIC_APP_ID (the appId from business.json)
-11. /no-conflict         → confirm docs and code agree (RLS, tokens, structure)
-```
-
-**Phase 5 — Ship & feed improvements back up**
-
-```
-12. Deploy to Vercel     → separate app, same shared Supabase (see "Deploy to Vercel" below)
-13. /sync-to-upstream    → if you built anything generic, push it up so the NEXT client
-                           starts with it. Build for one → upstream the generic → repeat.
-```
+> **Why the repo step matters:** a fresh clone's `origin` still points at `business-template`. `/new-project` fixes it (`git remote set-url origin <your repo>`) so your pushes don't land on the template. Doing it by hand? Don't skip that.
 
 ---
 
