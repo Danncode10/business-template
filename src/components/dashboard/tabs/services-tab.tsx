@@ -17,12 +17,17 @@ const asFeatures = (raw: unknown): string[] => (Array.isArray(raw) ? (raw as str
 const asTiers    = (raw: unknown): PriceTier[] => (Array.isArray(raw) ? (raw as PriceTier[]) : []);
 
 const MAIN_GROUPS = [
-  { key: "exterior",  label: "Exterior"  },
-  { key: "interior",  label: "Interior"  },
-  { key: "exclusive", label: "Exclusive" },
+  { key: "core", label: "Core" },
+  { key: "premium", label: "Premium" },
+  { key: "custom", label: "Custom" },
 ] as const;
 
 type MainGroup = (typeof MAIN_GROUPS)[number]["key"];
+const SERVICE_CATEGORIES = [
+  ...MAIN_GROUPS,
+  { key: "addons", label: "Add-ons" },
+  { key: "one-time", label: "One-time" },
+] as const;
 
 // ─── Inline text editor (used only in SimpleRow) ──────────────────────────────
 
@@ -73,7 +78,7 @@ function InlineText({
           className={sharedClass}
         />
       )}
-      <button onClick={commit} className="p-0.5 text-emerald-400 hover:text-emerald-300"><Check className="w-3 h-3" /></button>
+      <button onClick={commit} className="p-0.5 text-primary hover:text-primary"><Check className="w-3 h-3" /></button>
       <button onClick={() => setEditing(false)} className="p-0.5 text-muted-foreground"><X className="w-3 h-3" /></button>
     </span>
   );
@@ -87,6 +92,7 @@ function EditPackageModal({ service, onSave, onClose }: {
   onClose: () => void;
 }) {
   const [name, setName]           = useState(service.name);
+  const [category, setCategory]   = useState(service.category ?? "core");
   const [badge, setBadge]         = useState(service.badge ?? "");
   const [features, setFeatures]   = useState(asFeatures(service.features));
   const [tiers, setTiers]         = useState(asTiers(service.pricing_tiers));
@@ -102,6 +108,7 @@ function EditPackageModal({ service, onSave, onClose }: {
     const finalTiers    = newPrice.trim()   ? [...tiers, { label: newLabel.trim(), price: newPrice.trim() }] : tiers;
     onSave({
       name: name.trim() || service.name,
+      category,
       badge: badge.trim() || null,
       features: finalFeatures as unknown as Service["features"],
       pricing_tiers: finalTiers as unknown as Service["pricing_tiers"],
@@ -112,13 +119,13 @@ function EditPackageModal({ service, onSave, onClose }: {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="bg-card border border-border rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
 
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-border">
-          <h3 className="text-base font-semibold text-foreground">Edit Package</h3>
+          <h3 className="text-base font-semibold text-foreground">Edit Service</h3>
           <button onClick={onClose} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
             <X className="w-4 h-4" />
           </button>
@@ -128,13 +135,26 @@ function EditPackageModal({ service, onSave, onClose }: {
 
           {/* Name */}
           <div className="space-y-1.5">
-            <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wide">Package Name</label>
+            <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wide">Service Name</label>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50"
-              placeholder="Package name"
+              placeholder="Service name"
             />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-[12px] font-medium text-muted-foreground uppercase tracking-wide">Category</label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            >
+              {SERVICE_CATEGORIES.map((item) => (
+                <option key={item.key} value={item.key}>{item.label}</option>
+              ))}
+            </select>
           </div>
 
           {/* Badge */}
@@ -174,7 +194,7 @@ function EditPackageModal({ service, onSave, onClose }: {
                 isPopular ? "bg-primary" : "bg-muted"
               )}>
                 <div className={cn(
-                  "absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all",
+                  "absolute top-0.5 w-4 h-4 rounded-full bg-background shadow transition-all",
                   isPopular ? "left-5" : "left-0.5"
                 )} />
               </div>
@@ -187,11 +207,11 @@ function EditPackageModal({ service, onSave, onClose }: {
               className={cn(
                 "w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-colors",
                 isPublished
-                  ? "border-emerald-500/30 bg-emerald-500/10 text-foreground"
+                  ? "border-primary/40 bg-primary/10 text-foreground"
                   : "border-border bg-background text-muted-foreground"
               )}>
               <div className="flex items-center gap-2.5">
-                <div className={cn("w-2 h-2 rounded-full shrink-0", isPublished ? "bg-emerald-400" : "bg-muted-foreground/50")} />
+                <div className={cn("w-2 h-2 rounded-full shrink-0", isPublished ? "bg-primary" : "bg-muted-foreground/50")} />
                 <div className="text-left">
                   <p className="text-sm font-medium">Published</p>
                   <p className="text-[11px] opacity-60">Visible on the public website</p>
@@ -199,10 +219,10 @@ function EditPackageModal({ service, onSave, onClose }: {
               </div>
               <div className={cn(
                 "w-10 h-5 rounded-full relative transition-colors shrink-0",
-                isPublished ? "bg-emerald-500" : "bg-muted"
+                isPublished ? "bg-primary" : "bg-muted"
               )}>
                 <div className={cn(
-                  "absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all",
+                  "absolute top-0.5 w-4 h-4 rounded-full bg-background shadow transition-all",
                   isPublished ? "left-5" : "left-0.5"
                 )} />
               </div>
@@ -240,7 +260,7 @@ function EditPackageModal({ service, onSave, onClose }: {
                 />
                 {newFeature.trim() && (
                   <button onClick={() => { setFeatures([...features, newFeature.trim()]); setNewFeature(""); }}
-                    className="p-1 text-emerald-400 shrink-0"><Check className="w-3.5 h-3.5" /></button>
+                    className="p-1 text-primary shrink-0"><Check className="w-3.5 h-3.5" /></button>
                 )}
               </div>
             </div>
@@ -288,7 +308,7 @@ function EditPackageModal({ service, onSave, onClose }: {
                 />
                 {newPrice.trim() && (
                   <button onClick={() => { setTiers([...tiers, { label: newLabel, price: newPrice }]); setNewLabel(""); setNewPrice(""); }}
-                    className="p-1 text-emerald-400 shrink-0"><Check className="w-3.5 h-3.5" /></button>
+                    className="p-1 text-primary shrink-0"><Check className="w-3.5 h-3.5" /></button>
                 )}
               </div>
             </div>
@@ -325,15 +345,12 @@ function PackageCard({ service, onUpdate, onDelete }: {
   return (
     <>
       <div className={cn(
-        "rounded-3xl p-px flex flex-col",
-        service.is_featured
-          ? "bg-gradient-to-br from-primary via-primary/40 to-primary/10"
-          : "bg-gradient-to-br from-white/10 via-white/[0.04] to-transparent",
+        "rounded-lg border border-border bg-card flex flex-col",
+        service.is_featured && "border-primary"
       )}>
         {/* Card body */}
         <div className={cn(
-          "rounded-3xl p-6 flex flex-col gap-5 h-full",
-          service.is_featured ? "bg-card/95" : "bg-card",
+          "rounded-lg p-6 flex flex-col gap-5 h-full bg-card",
         )}>
 
           {/* Top bar: badge + controls */}
@@ -341,8 +358,8 @@ function PackageCard({ service, onUpdate, onDelete }: {
             {/* Badge / Popular / Hidden */}
             <div className="flex items-center gap-2 min-w-0">
               {service.is_featured ? (
-                <span className="px-2.5 py-1 rounded-full bg-primary text-white text-[11px] font-semibold flex items-center gap-1 shrink-0">
-                  <Star className="w-3 h-3 fill-white" />
+                <span className="px-2.5 py-1 rounded-full bg-primary text-primary-foreground text-[11px] font-semibold flex items-center gap-1 shrink-0">
+                  <Star className="w-3 h-3 fill-primary-foreground" />
                   Popular
                 </span>
               ) : service.badge ? (
@@ -361,7 +378,7 @@ function PackageCard({ service, onUpdate, onDelete }: {
             {/* Controls */}
             <div className="flex gap-1 shrink-0">
               <button
-                title="Edit package"
+                title="Edit service"
                 onClick={() => setEditOpen(true)}
                 className="p-1.5 rounded-lg text-muted-foreground bg-muted hover:text-foreground hover:bg-muted/80 transition-colors">
                 <Pencil className="w-3.5 h-3.5" />
@@ -376,7 +393,7 @@ function PackageCard({ service, onUpdate, onDelete }: {
           </div>
 
           {/* Name */}
-          <p className={cn("font-bold text-xl leading-tight", service.is_featured ? "text-primary" : "text-white")}>
+          <p className={cn("font-bold text-xl leading-tight", service.is_featured ? "text-primary" : "text-foreground")}>
             {service.name}
           </p>
 
@@ -400,7 +417,7 @@ function PackageCard({ service, onUpdate, onDelete }: {
                 {tiers.map((t, i) => (
                   <div key={i} className="text-center">
                     <p className="text-[10px] text-muted-foreground mb-1">{t.label}</p>
-                    <p className={cn("font-bold", service.is_featured ? "text-primary text-lg" : "text-white text-base")}>
+                    <p className={cn("font-bold", service.is_featured ? "text-primary text-lg" : "text-foreground text-base")}>
                       {t.price}
                     </p>
                   </div>
@@ -437,7 +454,7 @@ function SimpleRow({ service, onUpdate, onDelete }: {
   return (
     <div className="flex items-center justify-between py-2.5 border-b border-border last:border-0 group">
       <InlineText value={service.name} onSave={(v) => onUpdate({ name: v })}
-        className="text-sm text-white flex-1 mr-4" placeholder="Item name" />
+        className="text-sm text-foreground flex-1 mr-4" placeholder="Item name" />
       <div className="flex items-center gap-3 shrink-0">
         <InlineText value={price} onSave={setPrice}
           className="text-sm font-bold text-primary min-w-[60px] text-right justify-end"
@@ -467,9 +484,9 @@ function AddPackageCard({ onAdd }: { onAdd: (name: string) => void }) {
   }
   return (
     <div className="rounded-3xl border-2 border-dashed border-primary/30 p-6 flex flex-col gap-3 min-h-[200px]">
-      <p className="text-[13px] font-semibold text-foreground">New package</p>
+      <p className="text-[13px] font-semibold text-foreground">New service</p>
       <input autoFocus value={name} onChange={(e) => setName(e.target.value)}
-        placeholder="Package name"
+        placeholder="Service name"
         onKeyDown={(e) => { if (e.key === "Enter" && name.trim()) { onAdd(name.trim()); setName(""); setOpen(false); } if (e.key === "Escape") setOpen(false); }}
         className="w-full bg-background border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary/50" />
       <div className="flex gap-2 mt-auto">
@@ -507,7 +524,7 @@ function AddRowButton({ onAdd, placeholder }: { onAdd: (name: string, price: str
         }}
         className="w-20 bg-background border border-border rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-primary/50 shrink-0" />
       <button onClick={() => { if (name.trim()) { onAdd(name.trim(), price.trim()); setName(""); setPrice(""); } setOpen(false); }}
-        className="text-emerald-400 shrink-0"><Check className="w-4 h-4" /></button>
+        className="text-primary shrink-0"><Check className="w-4 h-4" /></button>
       <button onClick={() => setOpen(false)} className="text-muted-foreground shrink-0"><X className="w-4 h-4" /></button>
     </div>
   );
@@ -516,7 +533,7 @@ function AddRowButton({ onAdd, placeholder }: { onAdd: (name: string, price: str
 // ─── Main Tab ─────────────────────────────────────────────────────────────────
 
 export function ServicesTab() {
-  const [activeGroup, setActiveGroup] = useState<MainGroup>("exterior");
+  const [activeGroup, setActiveGroup] = useState<MainGroup>("core");
   const qc = useQueryClient();
 
   const { data: allServices, isLoading } = useQuery({
@@ -536,15 +553,12 @@ export function ServicesTab() {
 
   const createMut = useMutation({
     mutationFn: async (input: { name: string; category: string; features?: string[]; pricing_tiers?: PriceTier[]; display_order?: number }) => {
-      const orgId = ((allServices ?? []) as Service[])[0]?.organization_id;
-      if (!orgId) throw new Error("No existing services to derive organization — add at least one service first.");
       return createService({
         name: input.name,
         slug: `${input.category}-${input.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${Date.now()}`,
         category: input.category,
         features: (input.features ?? []) as unknown as never,
         pricing_tiers: (input.pricing_tiers ?? []) as unknown as never,
-        organization_id: orgId,
         is_published: true,
         is_featured: false,
         display_order: input.display_order ?? 99,
@@ -577,7 +591,7 @@ export function ServicesTab() {
       .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
 
   const mainServices   = byGroup(activeGroup);
-  const paintServices  = byGroup("paint-correction");
+  const oneTimeServices = byGroup("one-time");
   const addonServices  = byGroup("addons");
 
   return (
@@ -587,11 +601,11 @@ export function ServicesTab() {
       <div>
         <h2 className="text-2xl font-semibold text-foreground tracking-tight">Services & Packages</h2>
         <p className="mt-1 text-[14px] text-muted-foreground">
-          Click the <Pencil className="inline w-3 h-3 mb-0.5" /> icon on any card to edit it.
+          Edit service prices, categories, badges, and feature lists for this business.
         </p>
       </div>
 
-      {/* ── Main packages (Exterior / Interior / Exclusive) ── */}
+      {/* ── Main service groups ── */}
       <div className="space-y-5">
         {/* Tabs — scrollable on small screens */}
         <div className="flex overflow-x-auto pb-1 -mb-1">
@@ -603,8 +617,8 @@ export function ServicesTab() {
                   className={cn(
                     "px-5 py-2 rounded-xl text-sm font-medium transition-all duration-200 whitespace-nowrap",
                     activeGroup === key
-                      ? "bg-primary text-white shadow-sm"
-                      : "text-muted-foreground hover:text-white"
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
                   )}>
                   {label}
                   <span className={cn(
@@ -637,43 +651,40 @@ export function ServicesTab() {
         )}
       </div>
 
-      {/* ── Paint Correction + Add-ons side by side ── */}
+      {/* ── One-time services + Add-ons side by side ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-4 border-t border-border">
 
-        {/* Paint Correction */}
+        {/* One-time services */}
         <div className="space-y-3">
-          <h3 className="text-white font-bold text-xl">Paint Correction</h3>
-          <div className="rounded-3xl p-px bg-gradient-to-br from-white/10 via-white/[0.04] to-transparent">
-            <div className="bg-card rounded-3xl px-6 py-4">
+          <h3 className="text-foreground font-bold text-xl">One-time Services</h3>
+          <div className="rounded-lg border border-border bg-card px-6 py-4">
               <div className="text-[10px] text-muted-foreground mb-3 flex justify-between pr-8">
                 <span>Service</span><span>Price</span>
               </div>
               {isLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
-              ) : paintServices.length === 0 ? (
+              ) : oneTimeServices.length === 0 ? (
                 <p className="text-[13px] text-muted-foreground text-center py-4">No items yet.</p>
               ) : (
-                paintServices.map(s => (
+                oneTimeServices.map(s => (
                   <SimpleRow key={s.id} service={s}
                     onUpdate={(u) => save(s.id, u as Record<string, unknown>)}
                     onDelete={() => deleteMut.mutate(s.id)} />
                 ))
               )}
-              <AddRowButton placeholder="e.g. Single Stage Polish"
+              <AddRowButton placeholder="e.g. Strategy Session"
                 onAdd={(name, price) => createMut.mutate({
-                  name, category: "paint-correction",
+                  name, category: "one-time",
                   pricing_tiers: price ? [{ label: "", price }] : [],
-                  display_order: (paintServices.at(-1)?.display_order ?? 0) + 10,
+                  display_order: (oneTimeServices.at(-1)?.display_order ?? 0) + 10,
                 })} />
-            </div>
           </div>
         </div>
 
         {/* Add-ons */}
         <div className="space-y-3">
-          <h3 className="text-white font-bold text-xl">Add-ons</h3>
-          <div className="rounded-3xl p-px bg-gradient-to-br from-white/10 via-white/[0.04] to-transparent">
-            <div className="bg-card rounded-3xl px-6 py-4">
+          <h3 className="text-foreground font-bold text-xl">Add-ons</h3>
+          <div className="rounded-lg border border-border bg-card px-6 py-4">
               <div className="text-[10px] text-muted-foreground mb-3 flex justify-between pr-8">
                 <span>Service</span><span>Price</span>
               </div>
@@ -688,13 +699,12 @@ export function ServicesTab() {
                     onDelete={() => deleteMut.mutate(s.id)} />
                 ))
               )}
-              <AddRowButton placeholder="e.g. Ceramic Coating"
+              <AddRowButton placeholder="e.g. Priority Support"
                 onAdd={(name, price) => createMut.mutate({
                   name, category: "addons",
                   pricing_tiers: price ? [{ label: "", price }] : [],
                   display_order: (addonServices.at(-1)?.display_order ?? 0) + 10,
                 })} />
-            </div>
           </div>
         </div>
       </div>

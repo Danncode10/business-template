@@ -2,6 +2,7 @@ import businessConfig from "../../business.json";
 
 export type DashboardTabId =
   | "overview"
+  | "sales"
   | "services"
   | "leads"
   | "bookings"
@@ -28,6 +29,7 @@ interface TabConfig {
 
 export const TAB_CONFIG: TabConfig[] = [
   { id: "overview",   label: "Overview",   feature: "always" },
+  { id: "sales",      label: "Sales",      feature: "always" },
   { id: "services",   label: "Services",   feature: "pricing" },
   { id: "leads",      label: "Leads",      feature: "contactForm" },
   { id: "bookings",   label: "Bookings",   feature: "contactForm" },

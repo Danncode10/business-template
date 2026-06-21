@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import {
   LayoutDashboard,
   Tag,
@@ -9,6 +10,7 @@ import {
   BookOpen,
   BarChart3,
   ScrollText,
+  ShoppingBag,
   Settings,
   LogOut,
   Home,
@@ -26,6 +28,7 @@ import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 import { getEnabledTabs, isFeatureEnabled, type DashboardTabId } from "@/lib/dashboard-features";
 import { OverviewTab } from "@/components/dashboard/tabs/overview-tab";
+import { SalesTab } from "@/components/dashboard/tabs/sales-tab";
 import { ServicesTab } from "@/components/dashboard/tabs/services-tab";
 import { LeadsTab } from "@/components/dashboard/tabs/leads-tab";
 import { BookingsTab } from "@/components/dashboard/tabs/bookings-tab";
@@ -37,6 +40,7 @@ import { NotificationsBell } from "@/components/dashboard/notifications-bell";
 
 const ICONS: Record<DashboardTabId, LucideIcon> = {
   overview: LayoutDashboard,
+  sales: ShoppingBag,
   services: Tag,
   leads: Inbox,
   bookings: Calendar,
@@ -110,14 +114,14 @@ export function DashboardShell({ user, profile }: DashboardShellProps) {
       `}>
 
         <div className="h-14 flex items-center justify-between px-3 border-b border-border shrink-0">
-          <a href="/" className={`flex items-center gap-2.5 overflow-hidden ${collapsed ? "md:justify-center md:w-full" : ""}`}>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/70 shadow-[0_2px_8px_rgba(220,38,38,0.4)] shrink-0">
-              <span className="text-[11px] font-black text-white">{siteConfig.name.charAt(0)}</span>
+          <Link href="/" className={`flex items-center gap-2.5 overflow-hidden ${collapsed ? "md:justify-center md:w-full" : ""}`}>
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary shadow-sm shrink-0">
+              <span className="text-[11px] font-black text-primary-foreground">{siteConfig.name.charAt(0)}</span>
             </div>
             <span className={`text-sm font-bold tracking-tight text-foreground whitespace-nowrap ${collapsed ? "md:hidden" : ""}`}>
               {siteConfig.name}
             </span>
-          </a>
+          </Link>
           <button onClick={() => setSidebarOpen(false)} className="md:hidden p-1 text-muted-foreground hover:text-foreground rounded-md">
             <X className="w-4 h-4" />
           </button>
@@ -211,7 +215,7 @@ export function DashboardShell({ user, profile }: DashboardShellProps) {
                 ${collapsed ? "md:justify-center px-0 py-2" : "px-3 py-2"}`}
             >
               <Avatar className="h-7 w-7 border border-border shrink-0">
-                <AvatarFallback className="bg-gradient-to-br from-primary to-primary/70 text-white font-black text-[10px]">
+                <AvatarFallback className="bg-primary text-primary-foreground font-black text-[10px]">
                   {initials}
                 </AvatarFallback>
               </Avatar>
@@ -239,6 +243,7 @@ export function DashboardShell({ user, profile }: DashboardShellProps) {
           {/* Lazy-mount: each tab mounts on first visit and stays mounted (hidden) after.
               This keeps React Query observers alive so there's zero reload on tab switch. */}
           {mountedTabs.has("overview")  && <div hidden={activeTab !== "overview"}>  <OverviewTab displayName={displayName} setTab={setTab} /></div>}
+          {mountedTabs.has("sales")     && <div hidden={activeTab !== "sales"}>     <SalesTab /></div>}
           {mountedTabs.has("services")  && <div hidden={activeTab !== "services"}>  <ServicesTab /></div>}
           {mountedTabs.has("leads")     && <div hidden={activeTab !== "leads"}>     <LeadsTab /></div>}
           {mountedTabs.has("bookings")  && <div hidden={activeTab !== "bookings"}>  <BookingsTab /></div>}
