@@ -173,6 +173,29 @@ npm run checkpoint      # Snapshot your live DB schema to supabase/backups/
 npm run update-types    # Regenerate src/types/supabase.ts after schema changes
 ```
 
+### Codex Command Bridge
+
+This template can reuse the existing Claude command library from Codex through
+the `.codex/` compatibility layer:
+
+```text
+/claude-command <claude-command> [arguments]
+```
+
+Examples:
+
+```text
+/claude-command ui src/components/BillingForm.tsx
+/claude-command new-feature client-portal
+/claude-command sync-upstream --commits 3
+```
+
+If you do not know which command fits, use:
+
+```text
+/ask-claude-command make the homepage responsive and review it
+```
+
 ### The Initial Commit
 
 The `./guide.sh init` command automatically handles rebranding and resets your Git history so you can start fresh. **Run it only once.**
@@ -507,6 +530,11 @@ supabase/
 ├── agents/, hooks/, security/, workflows/   # curated state (committed)
 └── data/, logs/, sessions/, metrics/, learning/   # runtime state (gitignored)
 
+.codex/
+├── commands/               # Codex commands that load .claude command prompts
+├── context/                # DannFlow + Claude compatibility notes for Codex
+└── adapters/               # Command-loading contract
+
 docs/
 └── dannflow_docs/          # 📚 DannFlow documentation (separate from your /docs/)
 ```
@@ -530,6 +558,18 @@ DannFlow ships with **16 built-in slash commands** that accelerate Vibe Coding. 
 | `/commit` | Stages changes + drafts conventional commit message |
 
 Run `./guide.sh commands` to see all 16 commands grouped by category (Discovery, Security, Supabase, Scaffolding, Housekeeping).
+
+### Running Claude commands from Codex
+
+Use the Codex bridge instead of duplicating command files:
+
+```text
+/claude-command <command> [arguments]
+```
+
+For example, `/claude-command sync-upstream` loads
+`.claude/commands/sync-upstream.md` and runs it under Codex with DannFlow's
+agent guardrails.
 
 ---
 

@@ -37,6 +37,8 @@ To fix:
 -   If you encounter a bug, fix it in the **Service** layer first.
 -   If you need a new data structure, define or request generation of its types in `src/types/` first.
 -   **GitHub MCP Mastery**: Use the GitHub MCP whenever the user reports a regression or a merge conflict. Compare current files with historical commits before asking for manual diffs.
+-   **Codex Compatibility**: If the user invokes `/claude-command <command> [args]`, read `.codex/commands/claude-command.md`, resolve the matching `.claude/commands/*.md` file, replace `$ARGUMENTS` with the provided args, and execute the loaded prompt under these AGENTS.md rules.
+-   **Command Source of Truth**: Keep `.claude/commands/` as the canonical command library. Do not duplicate every Claude command into `.codex/`; `.codex/` is the adapter/context layer for Codex.
 -   **Backup & Snapshot**: If the user runs `npm run checkpoint` and provides the generated prompt, you must:
     1. Verify Supabase MCP connection.
     2. Read the live schema (Tables, Enums, RLS, Triggers) for the specified project ID.
@@ -92,4 +94,18 @@ Always check `src/types/supabase.ts` and **assume RLS is active on every table**
 
 ## Project Overview
 A high-performance Next.js starter optimized for AI-native development (Vibe Coding), featuring automated type-safety and live database orchestration.
+
+## Codex Command Bridge
+DannFlow supports Codex through the `.codex/` folder:
+
+- `.codex/commands/claude-command.md` defines `/claude-command <claude-command> [arguments]`.
+- `.codex/commands/ask-claude-command.md` routes a plain-English task to the best existing Claude command.
+- `.codex/context/claude-compatibility.md` translates Claude-only concepts such as Ruflo memory, Claude hooks, Claude Flow, swarms, and model names into Codex behavior.
+
+When running a Claude command from Codex:
+1. Read `AGENTS.md` first, then `CLAUDE.md`.
+2. Resolve the command from `.claude/commands/`.
+3. Replace `$ARGUMENTS` with the user-provided argument string.
+4. Follow the loaded command unless it conflicts with AGENTS.md, active user instructions, or Codex environment safety rules.
+5. If the command requires unavailable MCP tooling, use the Missing Tool Alert Protocol unless the user explicitly says to proceed without discussing MCPs.
 <!-- END:nextjs-agent-rules -->

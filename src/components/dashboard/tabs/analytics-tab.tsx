@@ -1,10 +1,24 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Loader2, TrendingUp } from "lucide-react";
+import { BarChart2, DollarSign, Loader2, ShoppingBag, TrendingUp } from "lucide-react";
 import { getEventCountsByDay, getTopPages, getEventTypeBreakdown } from "@/services/analytics";
+import { getSalesStats } from "@/services/sales";
+import { RevenueTrendChart } from "@/components/dashboard/revenue-trend-chart";
 
 export function AnalyticsTab() {
+  const { data: salesMonth } = useQuery({
+    queryKey: ["sales-stats", "month"],
+    queryFn: () => getSalesStats("month"),
+    staleTime: 60_000,
+  });
+
+  const { data: salesWeek } = useQuery({
+    queryKey: ["sales-stats", "week"],
+    queryFn: () => getSalesStats("week"),
+    staleTime: 60_000,
+  });
+
   const { data: byDay, isLoading: loadingDay } = useQuery({
     queryKey: ["analytics-by-day"],
     queryFn: () => getEventCountsByDay(14),
@@ -31,10 +45,55 @@ export function AnalyticsTab() {
       <div>
         <h2 className="text-2xl font-semibold text-foreground tracking-tight">Analytics</h2>
         <p className="mt-1 text-[14px] text-muted-foreground">
-          Last 14 days · First-party tracking, no Google Analytics required.
+          Business performance and first-party site analytics in one place.
         </p>
       </div>
 
+      <div>
+        <h3 className="mb-3 text-[13px] font-semibold uppercase tracking-wide text-muted-foreground">Business Performance</h3>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="rounded-lg border border-border bg-card p-5">
+            <DollarSign className="h-5 w-5 text-primary" strokeWidth={1.5} />
+            <p className="mt-3 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Revenue · 30 Days</p>
+            <p className="mt-2 text-2xl font-bold text-foreground tabular-nums">${(salesMonth?.revenue ?? 0).toLocaleString()}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{salesMonth?.count ?? 0} direct sales</p>
+          </div>
+          <div className="rounded-lg border border-border bg-card p-5">
+            <ShoppingBag className="h-5 w-5 text-primary" strokeWidth={1.5} />
+            <p className="mt-3 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Revenue · 7 Days</p>
+            <p className="mt-2 text-2xl font-bold text-foreground tabular-nums">${(salesWeek?.revenue ?? 0).toLocaleString()}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{salesWeek?.count ?? 0} direct sales</p>
+          </div>
+          <div className="rounded-lg border border-border bg-card p-5">
+            <TrendingUp className="h-5 w-5 text-primary" strokeWidth={1.5} />
+            <p className="mt-3 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Average Sale</p>
+            <p className="mt-2 text-2xl font-bold text-foreground tabular-nums">${(salesMonth?.avgSale ?? 0).toLocaleString()}</p>
+            <p className="mt-1 text-xs text-muted-foreground">30 day direct-sale average</p>
+          </div>
+          <div className="rounded-lg border border-border bg-card p-5">
+            <BarChart2 className="h-5 w-5 text-primary" strokeWidth={1.5} />
+            <p className="mt-3 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Top Service</p>
+            <p className="mt-2 truncate text-2xl font-bold text-foreground">{salesMonth?.topService ?? "None yet"}</p>
+            <p className="mt-1 text-xs text-muted-foreground">by direct-sale count</p>
+          </div>
+        </div>
+      </div>
+
+      {salesMonth && (
+        <div className="rounded-lg border border-border bg-card p-5">
+          <h3 className="mb-4 text-[13px] font-semibold text-foreground">Revenue Trend · 30 Days</h3>
+          {salesMonth.dailyRevenue.some((point) => point.revenue > 0) ? (
+            <RevenueTrendChart points={salesMonth.dailyRevenue} period="month" />
+          ) : (
+            <div className="flex h-48 items-center justify-center text-[13px] text-muted-foreground">
+              No revenue data for this period.
+            </div>
+          )}
+        </div>
+      )}
+
+      <div>
+        <h3 className="mb-3 text-[13px] font-semibold uppercase tracking-wide text-muted-foreground">Web Analytics · Last 14 Days</h3>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-card border border-border rounded-2xl px-5 py-5">
           <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-[0.15em]">Total Events</p>
@@ -55,6 +114,7 @@ export function AnalyticsTab() {
           </p>
           <p className="mt-1 text-[11px] text-muted-foreground">14 day total</p>
         </div>
+      </div>
       </div>
 
       <div className="bg-card border border-border rounded-2xl overflow-hidden">
