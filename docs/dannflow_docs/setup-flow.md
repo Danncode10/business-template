@@ -115,6 +115,41 @@ Step 5 — Run /no-conflict
 
 ---
 
+## Shared Supabase auth setup
+
+When one Supabase project serves many client deployments, configure both the
+deployment env and Supabase Auth redirect allow-list.
+
+Each client deployment needs:
+
+```env
+NEXT_PUBLIC_APP_ID=<client-slug>
+NEXT_PUBLIC_ORG_ID=<client organization uuid>
+NEXT_PUBLIC_SITE_URL=https://<client-domain>
+NEXT_PUBLIC_SITE_NAME="<Client Name>"
+```
+
+In Supabase Auth URL Configuration:
+
+- **Site URL** is only the fallback/default redirect URL.
+- **Redirect URLs** must include every client domain that can receive password
+  reset, magic link, email confirmation, or OAuth redirects.
+
+Example Redirect URLs:
+
+```text
+http://localhost:3000/**
+https://client-a.com/**
+https://www.client-a.com/**
+https://client-b.vercel.app/**
+https://client-b.com/**
+```
+
+For the full checklist, see
+[`auth-redirects-and-tenant-env.md`](./auth-redirects-and-tenant-env.md).
+
+---
+
 ## Why PROJECT_CONTEXT.md exists
 
 DannFlow ships with 8 skill packs from GitHub. Skills are updated by `./guide.sh skills-update`. If you edited a skill file directly, the update would overwrite your edits.
