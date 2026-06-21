@@ -196,6 +196,7 @@ export type Database = {
           notes: string | null
           organization_id: string
           package: string | null
+          payment_method: string | null
           payment_status: string
           preferred_date: string | null
           preferred_time: string | null
@@ -224,6 +225,7 @@ export type Database = {
           notes?: string | null
           organization_id: string
           package?: string | null
+          payment_method?: string | null
           payment_status?: string
           preferred_date?: string | null
           preferred_time?: string | null
@@ -252,6 +254,7 @@ export type Database = {
           notes?: string | null
           organization_id?: string
           package?: string | null
+          payment_method?: string | null
           payment_status?: string
           preferred_date?: string | null
           preferred_time?: string | null

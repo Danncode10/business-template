@@ -9,6 +9,7 @@ import {
   BookOpen,
   BarChart3,
   ScrollText,
+  ShoppingBag,
   Settings,
   LogOut,
   Home,
@@ -26,6 +27,7 @@ import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 import { getEnabledTabs, isFeatureEnabled, type DashboardTabId } from "@/lib/dashboard-features";
 import { OverviewTab } from "@/components/dashboard/tabs/overview-tab";
+import { SalesTab } from "@/components/dashboard/tabs/sales-tab";
 import { ServicesTab } from "@/components/dashboard/tabs/services-tab";
 import { LeadsTab } from "@/components/dashboard/tabs/leads-tab";
 import { BookingsTab } from "@/components/dashboard/tabs/bookings-tab";
@@ -37,6 +39,7 @@ import { NotificationsBell } from "@/components/dashboard/notifications-bell";
 
 const ICONS: Record<DashboardTabId, LucideIcon> = {
   overview: LayoutDashboard,
+  sales: ShoppingBag,
   services: Tag,
   leads: Inbox,
   bookings: Calendar,
@@ -239,6 +242,7 @@ export function DashboardShell({ user, profile }: DashboardShellProps) {
           {/* Lazy-mount: each tab mounts on first visit and stays mounted (hidden) after.
               This keeps React Query observers alive so there's zero reload on tab switch. */}
           {mountedTabs.has("overview")  && <div hidden={activeTab !== "overview"}>  <OverviewTab displayName={displayName} setTab={setTab} /></div>}
+          {mountedTabs.has("sales")     && <div hidden={activeTab !== "sales"}>     <SalesTab /></div>}
           {mountedTabs.has("services")  && <div hidden={activeTab !== "services"}>  <ServicesTab /></div>}
           {mountedTabs.has("leads")     && <div hidden={activeTab !== "leads"}>     <LeadsTab /></div>}
           {mountedTabs.has("bookings")  && <div hidden={activeTab !== "bookings"}>  <BookingsTab /></div>}

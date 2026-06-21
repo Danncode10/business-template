@@ -75,13 +75,13 @@
   },
 
   "features": {
-    "blog": false,
+    "blog": true,
     "gallery": false,
     "testimonials": true,
     "pricing": true,
     "contactForm": true,
     "teamPage": false,
-    "analytics": false,
+    "analytics": true,
     "_note": "Feature flags for Phase 7 verticals. Set true to scaffold the module."
   },
 
