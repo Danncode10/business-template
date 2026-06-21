@@ -205,6 +205,7 @@ If a required MCP is missing, stop and tell the user:
 | [SKILLS.md](SKILLS.md) | Which Claude Code skills are relevant + when to invoke them |
 | `.claude/commands/` | Custom slash commands (see its README for the list) |
 | `AGENTS.md` | Cross-tool agent standard (Cursor/Antigravity/etc.) — kept for compatibility |
+| `.codex/` | Codex compatibility layer that loads `.claude/commands/` through `/claude-command` |
 
 If you don't know which custom command fits a task, run `/ask-command <your intent>`.
 
