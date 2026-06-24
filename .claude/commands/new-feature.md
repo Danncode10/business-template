@@ -15,7 +15,7 @@ Scaffold a new feature: **$ARGUMENTS**
    - What's the primary user action? (create / view / edit / delete data?)
    - Does it need a new Supabase table? If yes:
      - Suggest running `/checkpoint` first
-     - Creating the table via Supabase MCP
+     - Create the table via Supabase MCP after showing the SQL and getting confirmation
      - **CRITICAL for multi-tenancy:** table MUST have `organization_id UUID NOT NULL REFERENCES organizations(id) ON DELETE CASCADE` as the first column
      - Define RLS policies enforcing `organization_id` filter from `auth.jwt() ->> 'organization_id'`
    - Should it be a protected route (under `src/app/dashboard/`) or public?

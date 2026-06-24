@@ -3,7 +3,7 @@ description: Generates realistic, type-safe seed data from src/types/supabase.ts
 argument-hint: <table-name> or "all" (optional --count=N, default 10)
 ---
 
-Generate type-safe seed data for the table(s) named in `$ARGUMENTS`. Output as SQL INSERT statements in `supabase/seeds/`, ready to apply via Supabase MCP or `psql`.
+Generate type-safe seed data for the table(s) named in `$ARGUMENTS`. Output seed scripts under `db/` or SQL INSERT statements in `supabase/seeds/` for manual review. Do not auto-apply seed data unless the user explicitly asks.
 
 ## Procedure
 
@@ -57,7 +57,7 @@ Generate type-safe seed data for the table(s) named in `$ARGUMENTS`. Output as S
       supabase/seeds/seed-all-<ts>.sql           (dependency-ordered runner)
 
    To apply:
-     • Via MCP: I can run apply_migration with this content — say "apply"
+     • Apply manually with psql/Supabase SQL Editor after review, or ask me explicitly to apply seed data
      • Via psql: psql $DATABASE_URL -f supabase/seeds/seed-all-<ts>.sql
    ```
 
